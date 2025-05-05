@@ -3,7 +3,6 @@ import React, {Fragment, useEffect, useState} from 'react';
 import Navbar from '../../components/Navbar'
 import { useParams } from 'react-router-dom'
 import ProductSingleSec from '../../components/ProductSingleSec'
-import ProductComments from '../../components/ProductComment/productcomment.jsx' // Import the new component
 import PageTitle from '../../components/pagetitle'
 import Footer from '../../components/footer'
 import Scrollbar from '../../components/scrollbar'
@@ -41,14 +40,6 @@ const ProductDetailsPage =(props) => {
                         item={item}
                         addToCart={addToCart}
                     />
-                    {/* Add the ProductComments component here */}
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <ProductComments productId={Number(id)} />
-                            </div>
-                        </div>
-                    </div>
                 </>
             ) : null}
             <Footer/>

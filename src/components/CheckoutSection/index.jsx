@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import Grid from "@material-ui/core/Grid";
 import Collapse from "@material-ui/core/Collapse";
 import FontAwesome from "../UiStyle/FontAwesome";
@@ -28,6 +28,7 @@ import paypal from '../../images/icon/paypal.png';
 import CheckWrap from '../CheckWrap'
 
 import './style.scss';
+import PaypalButton from "../PaypalButton/PaypalButton.jsx";
 
 const cardType = [
     {
@@ -47,14 +48,14 @@ const cardType = [
 
 const CheckoutSection = ({cartList}) => {
     // states
-    const [tabs, setExpanded] = React.useState({
+    const [tabs, setExpanded] = useState({
         cupon: false,
         billing_adress: false,
         payment: true
     });
-    const [exchangeRate, setExchangeRate] = React.useState(0.000041);
-    
-    React.useEffect(() => {
+    const [exchangeRate, setExchangeRate] = useState(0.000041);
+
+    useEffect(() => {
         // Lấy tỷ giá khi component mount
         fetch('http://localhost:8080/api/paypal/exchange-rate')
             .then(res => res.json())
@@ -448,48 +449,23 @@ const CheckoutSection = ({cartList}) => {
                                                 {cardType.map((item, i) => (
                                                     <Grid
                                                         key={i}
-                                                        className={`cardItem ${forms.card_type === item.title ? 'active' : null}`}
-                                                        onClick={async () => {
-                                                            setForms({...forms, card_type: item.title});
-                                                            if (item.title === 'paypal' && forms.payment_method === 'cash') {
-                                                                try {
-                                                                    const total = totalPrice(cartList);
-                                                                    const res = await fetch('http://localhost:8080/api/paypal/create-paypal-order', {
-                                                                        method: 'POST',
-                                                                        headers: { 'Content-Type': 'application/json' },
-                                                                        body: JSON.stringify({ total })
-                                                                    });
-                                                                    
-                                                                    if (!res.ok) {
-                                                                        throw new Error('Lỗi kết nối với server');
-                                                                    }
-                                                                    
-                                                                    const data = await res.json();
-                                                                    console.log('PayPal response:', data); // Debug log
-                                                                    
-                                                                    if (!data.order || !data.order.links) {
-                                                                        throw new Error('Response không hợp lệ từ PayPal');
-                                                                    }
-                                                                    
-                                                                    const approveLink = data.order.links.find(l => l.rel === 'approve');
-                                                                    if (!approveLink) {
-                                                                        throw new Error('Không tìm thấy link thanh toán trong response');
-                                                                    }
-                                                                    
-                                                                    window.location.href = approveLink.href;
-                                                                } catch (err) {
-                                                                    console.error('Chi tiết lỗi:', err);
-                                                                    alert('Lỗi khi tạo đơn PayPal: ' + err.message);
-                                                                }
-                                                            }
+                                                        className={`cardItem ${forms.card_type === item.title ? 'active' : ''}`}
+                                                        onClick={() => {
+                                                            setForms({ ...forms, card_type: item.title });
                                                         }}
                                                     >
-                                                        <img src={item.img} alt={item.title}/>
+                                                        <img src={item.img} alt={item.title} />
                                                     </Grid>
                                                 ))}
                                             </Grid>
+
+                                            {/* Render nút PayPal nếu chọn phương thức paypal */}
+                                            {forms.card_type === 'paypal' && forms.payment_method === 'cash' && (
+                                                <PaypalButton />
+                                            )}
+
                                             <Grid>
-                                                <CheckWrap/>
+                                                <CheckWrap />
                                             </Grid>
                                         </Collapse>
                                         <Collapse in={forms.payment_method === 'card'} timeout="auto">
@@ -552,3 +528,5 @@ const CheckoutSection = ({cartList}) => {
 
 
 export default CheckoutSection;
+
+
