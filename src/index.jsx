@@ -7,15 +7,18 @@ import './css/themify-icons.css';
 import './css/flaticon.css';
 import './sass/style.scss';
 
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./store";
-import { Provider } from "react-redux";
+import {PersistGate} from "redux-persist/integration/react";
+import {store, persistor} from "./store";
+import {Provider} from "react-redux";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <App />
+            <GoogleOAuthProvider clientId="612651483215-e44j1cm38pd5focclktvonseo5lnlmec.apps.googleusercontent.com">
+                <App/>
+            </GoogleOAuthProvider>
         </PersistGate>
     </Provider>
 );

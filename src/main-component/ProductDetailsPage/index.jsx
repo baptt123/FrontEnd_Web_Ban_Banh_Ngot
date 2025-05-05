@@ -1,7 +1,9 @@
+
 import React, {Fragment, useEffect, useState} from 'react';
 import Navbar from '../../components/Navbar'
 import { useParams } from 'react-router-dom'
 import ProductSingleSec from '../../components/ProductSingleSec'
+import ProductComments from '../../components/ProductComment/productcomment.jsx' // Import the new component
 import PageTitle from '../../components/pagetitle'
 import Footer from '../../components/footer'
 import Scrollbar from '../../components/scrollbar'
@@ -14,29 +16,41 @@ const ProductDetailsPage =(props) => {
 
     const { id } = useParams()
 
-    
+
     const productsArray = api();
     const Allproduct = productsArray
 
-    
+
     const {addToCart} = props;
     const [product, setProduct] = useState({});
-    
+
     useEffect(() => {
         setProduct(Allproduct.filter(Allproduct => Allproduct.id === Number(id)))
     }, []);
-    
+
     const item = product[0];
 
 
     return(
         <Fragment>
             <Navbar hClass={'header-style-2'}/>
-            <PageTitle pageTitle={'Chi tiết sản phẩm'} pagesub={'Sản phẩm'}/> 
-            {item ? <ProductSingleSec
-                item={item}
-                addToCart={addToCart}
-            /> : null}
+            <PageTitle pageTitle={'Chi tiết sản phẩm'} pagesub={'Sản phẩm'}/>
+            {item ? (
+                <>
+                    <ProductSingleSec
+                        item={item}
+                        addToCart={addToCart}
+                    />
+                    {/* Add the ProductComments component here */}
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <ProductComments productId={Number(id)} />
+                            </div>
+                        </div>
+                    </div>
+                </>
+            ) : null}
             <Footer/>
             <Scrollbar/>
         </Fragment>

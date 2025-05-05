@@ -1,3 +1,4 @@
+
 import React, {useState} from 'react';
 import Grid from "@material-ui/core/Grid";
 import SimpleReactValidator from "simple-react-validator";
@@ -8,6 +9,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import {Link, useNavigate} from "react-router-dom";
 import { login } from '../../services/authService';
+import { GoogleLogin } from '@react-oauth/google';
 
 import './style.scss';
 
@@ -104,9 +106,9 @@ const LoginPage = (props) => {
                                 <Link to="/forgot-password">Quên mật khẩu?</Link>
                             </Grid>
                             <Grid className="formFooter">
-                                <Button 
-                                    fullWidth 
-                                    className="cBtnTheme" 
+                                <Button
+                                    fullWidth
+                                    className="cBtnTheme"
                                     type="submit"
                                     disabled={loading}
                                 >
@@ -117,6 +119,18 @@ const LoginPage = (props) => {
                         </Grid>
                     </Grid>
                 </form>
+                <div style={{marginTop: '20px'}}>
+                    {/*<h2>Đăng nhập với Google</h2>*/}
+                    <GoogleLogin
+                        onSuccess={credentialResponse => {
+                            console.log(credentialResponse);
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                        useOneTap
+                    />
+                </div>
                 <div className="shape-img">
                     <i className="fi flaticon-honeycomb"></i>
                 </div>
