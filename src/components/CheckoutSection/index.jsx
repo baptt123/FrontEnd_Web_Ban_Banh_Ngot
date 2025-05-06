@@ -28,7 +28,7 @@ import paypal from '../../images/icon/paypal.png';
 import CheckWrap from '../CheckWrap'
 
 import './style.scss';
-import PaypalButton from "../PaypalButton/PaypalButton.jsx";
+import PaypalButton from "../CheckoutSection/PaypalButton.jsx";
 
 const cardType = [
     {
