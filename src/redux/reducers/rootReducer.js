@@ -5,14 +5,16 @@ import wishlistReducer from "./wishlistReducer";
 import compareReducer from "./compareReducer";
 import { combineReducers } from "redux";
 import { createMultilanguageReducer } from "redux-multilanguage";
+import authReducer from "./authReducer";
 
 const rootReducer = combineReducers({
-  multilanguage: createMultilanguageReducer({ currentLanguageCode: "en" }),
+  multilanguage: createMultilanguageReducer({ currentLanguageCode: "vi" }),
   currencyData: currencyReducer,
   productData: productReducer,
   cartData: cartReducer,
   wishlistData: wishlistReducer,
-  compareData: compareReducer
+  compareData: compareReducer,
+  authData: authReducer
 });
 
 export default rootReducer;

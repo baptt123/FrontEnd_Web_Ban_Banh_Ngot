@@ -3,10 +3,11 @@ import { useEffect } from 'react';
 import React, { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ToastProvider } from "react-toast-notifications";
+import { ToastProvider, useToasts } from "react-toast-notifications";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { GoogleLogin } from "@react-oauth/google";
+import { setToastFunction } from "./utils/axiosInstance";
 
 // Import các trang home hiện có
 const HomeGridBanner = lazy(() => import("./pages/home/HomeGridBanner"));
@@ -46,6 +47,8 @@ const About = lazy(() => import("./pages/other/About"));
 const Contact = lazy(() => import("./pages/other/Contact"));
 const MyAccount = lazy(() => import("./pages/other/MyAccount"));
 const LoginRegister = lazy(() => import("./pages/other/LoginRegister"));
+import ForgotPassword from "./pages/other/ForgotPassword";
+import ResetPassword from "./pages/other/ResetPassword";
 const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
@@ -54,6 +57,25 @@ const NotFound = lazy(() => import("./pages/other/NotFound"));
 
 // Import trang PayPal Checkout
 const PaypalCheckout = lazy(() => import("./pages/PaypalCheckout"));
+
+// Export một context để sử dụng toast thông báo toàn ứng dụng
+export const ToastContext = React.createContext(null);
+
+// Toast Provider Wrapper component
+const ToastProviderWrapper = ({ children }) => {
+  const { addToast } = useToasts();
+  
+  // Thiết lập hàm toast cho axios interceptor
+  useEffect(() => {
+    setToastFunction(addToast);
+  }, [addToast]);
+  
+  return (
+    <ToastContext.Provider value={{ addToast }}>
+      {children}
+    </ToastContext.Provider>
+  );
+};
 
 // Component cho trang Google Login (tạm thời không sử dụng lazy để đơn giản hóa)
 const GoogleLoginPage = () => {
@@ -100,20 +122,21 @@ const App = (props) => {
   }, [props]);
 
   return (
-    <ToastProvider placement="bottom-left">
-      <BreadcrumbsProvider>
-        <Router>
-          <ScrollToTop>
-            <Suspense
-              fallback={
-                <div className="flone-preloader-wrapper">
-                  <div className="flone-preloader">
-                    <span></span>
-                    <span></span>
+    <ToastProvider placement="bottom-left" autoDismiss={true} autoDismissTimeout={5000}>
+      <ToastProviderWrapper>
+        <BreadcrumbsProvider>
+          <Router>
+            <ScrollToTop>
+              <Suspense
+                fallback={
+                  <div className="flone-preloader-wrapper">
+                    <div className="flone-preloader">
+                      <span></span>
+                      <span></span>
+                    </div>
                   </div>
-                </div>
-              }
-            >
+                }
+              >
               <Routes>
                 {/* Route mặc định */}
                 <Route
@@ -241,6 +264,14 @@ const App = (props) => {
                 <Route
                   path={`/login-register`}
                   element={<LoginRegister />}
+                  />
+                <Route
+                  path={"/forgot-password"}
+                  element={<ForgotPassword />}
+                />
+                <Route
+                  path={"/reset-password"}
+                  element={<ResetPassword />}
                 />
                 <Route
                   path={`/cart`}
@@ -267,7 +298,7 @@ const App = (props) => {
                 <Route
                   path={`/google-login`}
                   element={<GoogleLoginPage />}
-                />
+                  />
 
                 {/* Route mới cho PayPal Checkout */}
                 <Route
@@ -280,8 +311,9 @@ const App = (props) => {
               </Routes>
             </Suspense>
           </ScrollToTop>
-        </Router>
-      </BreadcrumbsProvider>
+          </Router>
+        </BreadcrumbsProvider>
+      </ToastProviderWrapper>
     </ToastProvider>
   );
 };

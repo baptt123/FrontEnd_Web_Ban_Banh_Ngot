@@ -5,6 +5,10 @@ import { connect } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import { deleteFromCart } from "../../redux/actions/cartActions";
 import { multilanguage } from "redux-multilanguage";
+import { logout } from "../../redux/actions/authActions";
+import { ToastContext } from "../../App";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const IconGroup = ({
   strings,
@@ -13,8 +17,27 @@ const IconGroup = ({
   wishlistData,
   compareData,
   deleteFromCart,
-  iconWhiteClass
+  iconWhiteClass,
+  logout,
+  auth
 }) => {
+  const { addToast } = useContext(ToastContext);
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        addToast("Đăng xuất thành công!", {
+          appearance: 'success',
+          autoDismiss: true
+        });
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  };
+
   const handleClick = e => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
@@ -52,24 +75,37 @@ const IconGroup = ({
         </button>
         <div className="account-dropdown">
           <ul>
-            <li>
-              <Link to='/login-register'>
-                {strings["login"]}
-              </Link>
-            </li>
-            <li>
-              <Link to='/login-register'>
-                {strings["register"]}
-              </Link>
-            </li>
-            <li>
-              <Link to='/my-account'>
-                {strings["my_account"]}
-              </Link>
-            </li>
+            {auth && auth.isAuthenticated ? (
+              <>
+                <li>
+                  <Link to='/my-account'>
+                    {strings["my_account"]}
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="dropdown-item">
+                    Đăng xuất
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to='/login-register'>
+                    {strings["login"]}
+                  </Link>
+                </li>
+                <li>
+                  <Link to='/login-register'>
+                    {strings["register"]}
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
+      
       <div className="same-style header-compare">
         <Link to='/compare'>
           <i className="pe-7s-shuffle" />
@@ -126,7 +162,9 @@ IconGroup.propTypes = {
   currency: PropTypes.object,
   iconWhiteClass: PropTypes.string,
   deleteFromCart: PropTypes.func,
-  wishlistData: PropTypes.array
+  wishlistData: PropTypes.array,
+  logout: PropTypes.func,
+  auth: PropTypes.object
 };
 
 const mapStateToProps = state => {
@@ -134,7 +172,8 @@ const mapStateToProps = state => {
     currency: state.currencyData,
     cartData: state.cartData,
     wishlistData: state.wishlistData,
-    compareData: state.compareData
+    compareData: state.compareData,
+    auth: state.authData
   };
 };
 
@@ -142,7 +181,8 @@ const mapDispatchToProps = dispatch => {
   return {
     deleteFromCart: (item, addToast) => {
       dispatch(deleteFromCart(item, addToast));
-    }
+    },
+    logout: () => dispatch(logout())
   };
 };
 

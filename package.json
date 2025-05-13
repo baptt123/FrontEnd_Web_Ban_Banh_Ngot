@@ -36,6 +36,7 @@
     "react-scroll": "^1.9.0",
     "react-sticky-el": "^2.1.0",
     "react-toast-notifications": "^2.5.1",
+    "react-toastify": "^11.0.5",
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.2.1",
     "redux-localstorage-simple": "^2.5.1",
