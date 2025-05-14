@@ -9,7 +9,7 @@ const HeroSliderThirtySixSingle = ({ data, sliderClassName }) => {
         sliderClassName ? sliderClassName : ""
       }`}
       style={{
-        backgroundImage: `url(${process.env.PUBLIC_URL + data.backgroundImage})`
+        backgroundImage: `url(${data.backgroundImage})`
       }}
     >
       <div className="container">
@@ -19,7 +19,7 @@ const HeroSliderThirtySixSingle = ({ data, sliderClassName }) => {
               <div className="content-img">
                 <img
                   className="animated"
-                  src={process.env.PUBLIC_URL + data.image}
+                  src={data.image}
                   alt=""
                 />
               </div>
@@ -30,7 +30,7 @@ const HeroSliderThirtySixSingle = ({ data, sliderClassName }) => {
               <div className="valentine-btn btn-hover">
                 <Link
                   className="animated"
-                  to={process.env.PUBLIC_URL + "/shop-grid-standard"}
+                  to={"/shop-grid-standard"}
                 >
                   SHOP NOW
                 </Link>

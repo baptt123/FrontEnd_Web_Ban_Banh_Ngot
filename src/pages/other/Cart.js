@@ -15,6 +15,7 @@ import {
 } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { useLocation } from "react-router-dom";
 
 const Cart = ({
   location,
@@ -27,7 +28,7 @@ const Cart = ({
 }) => {
   const [quantityCount] = useState(1);
   const { addToast } = useToasts();
-  const { pathname } = location;
+  const { pathname } = useLocation();
   let cartTotalPrice = 0;
 
   return (
@@ -40,8 +41,8 @@ const Cart = ({
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Cart
       </BreadcrumbsItem>
 
@@ -90,7 +91,7 @@ const Cart = ({
                                 <td className="product-thumbnail">
                                   <Link
                                     to={
-                                      process.env.PUBLIC_URL +
+                                      
                                       "/product/" +
                                       cartItem.id
                                     }
@@ -98,7 +99,7 @@ const Cart = ({
                                     <img
                                       className="img-fluid"
                                       src={
-                                        process.env.PUBLIC_URL +
+                                        
                                         cartItem.image[0]
                                       }
                                       alt=""
@@ -109,7 +110,7 @@ const Cart = ({
                                 <td className="product-name">
                                   <Link
                                     to={
-                                      process.env.PUBLIC_URL +
+                                      
                                       "/product/" +
                                       cartItem.id
                                     }
@@ -225,7 +226,7 @@ const Cart = ({
                     <div className="cart-shiping-update-wrapper">
                       <div className="cart-shiping-update">
                         <Link
-                          to={process.env.PUBLIC_URL + "/shop-grid-standard"}
+                          to={"/shop-grid-standard"}
                         >
                           Continue Shopping
                         </Link>
@@ -323,7 +324,7 @@ const Cart = ({
                           {currency.currencySymbol + cartTotalPrice.toFixed(2)}
                         </span>
                       </h4>
-                      <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                      <Link to={"/checkout"}>
                         Proceed to Checkout
                       </Link>
                     </div>
@@ -339,7 +340,7 @@ const Cart = ({
                     </div>
                     <div className="item-empty-area__text">
                       No items found in cart <br />{" "}
-                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                      <Link to={"/shop-grid-standard"}>
                         Shop Now
                       </Link>
                     </div>

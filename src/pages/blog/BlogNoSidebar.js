@@ -6,9 +6,10 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogPagination from "../../wrappers/blog/BlogPagination";
 import BlogPostsNoSidebar from "../../wrappers/blog/BlogPostsNoSidebar";
+import { useLocation } from "react-router-dom";
 
-const BlogNoSidebar = ({ location }) => {
-  const { pathname } = location;
+const BlogNoSidebar = () => {
+  const { pathname } = useLocation();
 
   return (
     <Fragment>
@@ -19,8 +20,8 @@ const BlogNoSidebar = ({ location }) => {
           content="Blog of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Blog
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">

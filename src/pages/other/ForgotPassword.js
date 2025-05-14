@@ -63,7 +63,7 @@ const ForgotPassword = ({ strings, forgotPassword, auth }) => {
           content="Trang quên mật khẩu của Cupabakery."
         />
       </MetaTags>
-      <BreadcrumbsItem to={import.meta.env.PUBLIC_URL + "/"}>{strings["home"]}</BreadcrumbsItem>
+      <BreadcrumbsItem to={"/"}>{strings["home"]}</BreadcrumbsItem>
       <BreadcrumbsItem to={pathname}>
         Quên Mật Khẩu
       </BreadcrumbsItem>
@@ -103,7 +103,7 @@ const ForgotPassword = ({ strings, forgotPassword, auth }) => {
                           </div>
                           
                           <div className="button-box mt-20">
-                            <Link to={import.meta.env.PUBLIC_URL + "/login-register"} className="btn btn-link">
+                            <Link to={"/login-register"} className="btn btn-link">
                               Quay lại đăng nhập
                             </Link>
                           </div>
@@ -119,7 +119,7 @@ const ForgotPassword = ({ strings, forgotPassword, auth }) => {
                             <br />Vui lòng kiểm tra hộp thư và làm theo hướng dẫn để đặt lại mật khẩu.
                           </p>
                           <div className="button-box mt-30">
-                            <Link to={import.meta.env.PUBLIC_URL + "/login-register"} className="btn-hover">
+                            <Link to={"/login-register"} className="btn-hover">
                               Quay lại đăng nhập
                             </Link>
                           </div>

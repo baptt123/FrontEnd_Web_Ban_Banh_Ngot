@@ -13,12 +13,12 @@ const FeatureIconFourSingle = ({ data, spaceBottomClass }) => {
         <div className="support-icon-2">
           <img
             className="animated"
-            src={import.meta.env.PUBLIC_URL + data.iconImage}
+            src={data.iconImage}
             alt=""
           />
         </div>
         <div className="support-content-3">
-          <img src={import.meta.env.PUBLIC_URL + data.titleImage} alt="" />
+          <img src={data.titleImage} alt="" />
           <p>{data.title}</p>
         </div>
       </div>

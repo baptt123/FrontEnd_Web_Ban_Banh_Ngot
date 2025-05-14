@@ -8,22 +8,32 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
+  LOGIN_INACTIVE_ACCOUNT,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILURE
+  RESET_PASSWORD_FAILURE,
+  VERIFY_ACCOUNT_REQUEST,
+  VERIFY_ACCOUNT_SUCCESS,
+  VERIFY_ACCOUNT_FAILURE
 } from '../actions/authActions';
 
 // Khởi tạo trạng thái ban đầu
+const initialUser = localStorage.getItem('auth_user') 
+  ? JSON.parse(localStorage.getItem('auth_user')) 
+  : null;
+
 const initialState = {
   loading: false,
-  isAuthenticated: !!localStorage.getItem('auth_token'),
-  user: JSON.parse(localStorage.getItem('auth_user')) || null,
-  token: localStorage.getItem('auth_token') || null,
-  error: null
+  isAuthenticated: !!initialUser && !initialUser.needActivation,
+  user: initialUser,
+  needActivation: initialUser?.needActivation || false,
+  error: null,
+  verifyStatus: null
 };
+
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -32,6 +42,7 @@ const authReducer = (state = initialState, action) => {
     case LOGOUT_REQUEST:
     case FORGOT_PASSWORD_REQUEST:
     case RESET_PASSWORD_REQUEST:
+    case VERIFY_ACCOUNT_REQUEST:
       return {
         ...state,
         loading: true,
@@ -44,16 +55,25 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         error: null
       };
-
-    case LOGIN_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        isAuthenticated: true,
-        user: action.payload.user,
-        token: action.payload.accessToken,
-        error: null
-      };
+    case LOGIN_INACTIVE_ACCOUNT:
+        return {
+          ...state,
+          loading: false,
+          isAuthenticated: false,
+          user: action.payload.user,
+          needActivation: true,
+          error: action.payload.message
+        };
+    
+        case LOGIN_SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            isAuthenticated: true,
+            user: action.payload.user,
+            needActivation: false,
+            error: null
+          };
       
     case LOGOUT_SUCCESS:
       return {
@@ -61,7 +81,6 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
-        token: null,
         error: null
       };
       
@@ -70,6 +89,14 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        error: null
+      };
+    
+    case VERIFY_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        verifyStatus: 'success',
         error: null
       };
 
@@ -89,7 +116,14 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
-        token: null,
+        error: action.payload
+      };
+    
+    case VERIFY_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        verifyStatus: 'failure',
         error: action.payload
       };
 

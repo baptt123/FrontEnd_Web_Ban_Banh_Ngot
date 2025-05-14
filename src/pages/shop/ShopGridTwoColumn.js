@@ -10,8 +10,9 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import ShopSidebar from "../../wrappers/product/ShopSidebar";
 import ShopTopbar from "../../wrappers/product/ShopTopbar";
 import ShopProducts from "../../wrappers/product/ShopProducts";
+import { useLocation } from "react-router-dom";
 
-const ShopGridTwoColumn = ({ location, products }) => {
+const ShopGridTwoColumn = ({products }) => {
   const [layout, setLayout] = useState("grid two-column");
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
@@ -23,7 +24,7 @@ const ShopGridTwoColumn = ({ location, products }) => {
   const [sortedProducts, setSortedProducts] = useState([]);
 
   const pageLimit = 16;
-  const { pathname } = location;
+  const { pathname } = useLocation();
 
   const getLayout = layout => {
     setLayout(layout);
@@ -61,8 +62,8 @@ const ShopGridTwoColumn = ({ location, products }) => {
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Shop
       </BreadcrumbsItem>
 

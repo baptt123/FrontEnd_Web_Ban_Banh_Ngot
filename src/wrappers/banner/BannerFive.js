@@ -10,10 +10,10 @@ const BannerFive = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="single-banner mb-20">
-                  <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                  <Link to={"/shop-grid-standard"}>
                     <img
                       src={
-                        process.env.PUBLIC_URL +
+                        
                         "/assets/img/banner/banner-21.png"
                       }
                       alt=""
@@ -24,7 +24,7 @@ const BannerFive = () => {
                     <p>
                       Starting At <span>$99.00</span>
                     </p>
-                    <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                    <Link to={"/shop-grid-standard"}>
                       <i className="fa fa-long-arrow-right" />
                     </Link>
                   </div>
@@ -32,10 +32,10 @@ const BannerFive = () => {
               </div>
               <div className="col-lg-12">
                 <div className="single-banner mb-20">
-                  <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                  <Link to={"/shop-grid-standard"}>
                     <img
                       src={
-                        process.env.PUBLIC_URL +
+                        
                         "/assets/img/banner/banner-22.png"
                       }
                       alt=""
@@ -46,7 +46,7 @@ const BannerFive = () => {
                     <p>
                       Starting At <span>$99.00</span>
                     </p>
-                    <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                    <Link to={"/shop-grid-standard"}>
                       <i className="fa fa-long-arrow-right" />
                     </Link>
                   </div>
@@ -56,10 +56,10 @@ const BannerFive = () => {
           </div>
           <div className="col-lg-4 col-md-6">
             <div className="single-banner mb-20">
-              <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+              <Link to={"/shop-grid-standard"}>
                 <img
                   src={
-                    process.env.PUBLIC_URL + "/assets/img/banner/banner-23.png"
+                    "/assets/img/banner/banner-23.png"
                   }
                   alt=""
                 />
@@ -68,7 +68,7 @@ const BannerFive = () => {
                 <span>-20% Off</span>
                 <h2>New Fruits</h2>
                 <h5>Best for your health</h5>
-                <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                <Link to={"/shop-grid-standard"}>
                   SHOP NOW
                 </Link>
               </div>
@@ -78,10 +78,10 @@ const BannerFive = () => {
             <div className="row">
               <div className="col-lg-12 col-md-6">
                 <div className="single-banner mb-20">
-                  <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                  <Link to={"/shop-grid-standard"}>
                     <img
                       src={
-                        process.env.PUBLIC_URL +
+                        
                         "/assets/img/banner/banner-24.png"
                       }
                       alt=""
@@ -92,7 +92,7 @@ const BannerFive = () => {
                     <p>
                       Starting At <span>$99.00</span>
                     </p>
-                    <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                    <Link to={"/shop-grid-standard"}>
                       <i className="fa fa-long-arrow-right" />
                     </Link>
                   </div>
@@ -100,10 +100,10 @@ const BannerFive = () => {
               </div>
               <div className="col-lg-12 col-md-6">
                 <div className="single-banner mb-20">
-                  <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                  <Link to={"/shop-grid-standard"}>
                     <img
                       src={
-                        process.env.PUBLIC_URL +
+                        
                         "/assets/img/banner/banner-25.png"
                       }
                       alt=""
@@ -114,7 +114,7 @@ const BannerFive = () => {
                     <p>
                       Starting At <span>$99.00</span>
                     </p>
-                    <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                    <Link to={"/shop-grid-standard"}>
                       <i className="fa fa-long-arrow-right" />
                     </Link>
                   </div>

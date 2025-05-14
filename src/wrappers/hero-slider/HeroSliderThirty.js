@@ -9,7 +9,7 @@ const HeroSliderThirty = () => {
         className="single-slide bg-img"
         style={{
           backgroundImage: `url(${
-            process.env.PUBLIC_URL + sliderData.backgroundImage
+            sliderData.backgroundImage
           })`
         }}
       >
@@ -21,7 +21,7 @@ const HeroSliderThirty = () => {
                 <h4 className="subtitle">{sliderData.subtitle}</h4>
                 <Link
                   className="button"
-                  to={process.env.PUBLIC_URL + sliderData.url}
+                  to={sliderData.url}
                 >
                   Shop Now
                 </Link>

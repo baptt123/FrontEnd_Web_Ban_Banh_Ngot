@@ -92,7 +92,7 @@ const ResetPassword = ({ strings, resetPassword, auth }) => {
           content="Trang đặt lại mật khẩu của Cupabakery."
         />
       </MetaTags>
-      <BreadcrumbsItem to={import.meta.env.PUBLIC_URL + "/"}>{strings["home"]}</BreadcrumbsItem>
+      <BreadcrumbsItem to={"/"}>{strings["home"]}</BreadcrumbsItem>
       <BreadcrumbsItem to={pathname}>
         Đặt Lại Mật Khẩu
       </BreadcrumbsItem>
@@ -157,7 +157,7 @@ const ResetPassword = ({ strings, resetPassword, auth }) => {
                             <br />Vui lòng thử yêu cầu đặt lại mật khẩu mới.
                           </p>
                           <div className="button-box mt-30">
-                            <Link to={import.meta.env.PUBLIC_URL + "/forgot-password"} className="btn-hover">
+                            <Link to={"/forgot-password"} className="btn-hover">
                               Quên Mật Khẩu
                             </Link>
                           </div>

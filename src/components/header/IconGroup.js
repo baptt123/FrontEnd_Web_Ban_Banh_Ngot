@@ -78,12 +78,27 @@ const IconGroup = ({
             {auth && auth.isAuthenticated ? (
               <>
                 <li>
+                  <span style={{paddingLeft: '10px', fontWeight: 'bold'}}>
+                    Xin chào, {auth.user?.username}
+                  </span>
+                </li>
+                <li>
                   <Link to='/my-account'>
                     {strings["my_account"]}
                   </Link>
                 </li>
                 <li>
-                  <button onClick={handleLogout} className="dropdown-item">
+                  <button 
+                    onClick={handleLogout}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '0 20px',
+                      cursor: 'pointer',
+                      width: '100%',
+                      textAlign: 'left'
+                    }}
+                  >
                     Đăng xuất
                   </button>
                 </li>
@@ -105,7 +120,6 @@ const IconGroup = ({
           </ul>
         </div>
       </div>
-      
       <div className="same-style header-compare">
         <Link to='/compare'>
           <i className="pe-7s-shuffle" />

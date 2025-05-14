@@ -13,7 +13,7 @@ const VideoPopup = ({ spaceBottomClass }) => {
             <div className="video-popup__image">
               <img
                 src={
-                  process.env.PUBLIC_URL + "/assets/img/banner/banner-41.jpg"
+                  "/assets/img/banner/banner-41.jpg"
                 }
                 alt=""
                 className="img-fluid"
@@ -30,7 +30,7 @@ const VideoPopup = ({ spaceBottomClass }) => {
                 eiusmod tempor incididunt.
               </p>
               <div className="link mb-30">
-                <Link to={process.env.PUBLIC_URL + "/about"}>
+                <Link to={"/about"}>
                   More About Us
                 </Link>
               </div>

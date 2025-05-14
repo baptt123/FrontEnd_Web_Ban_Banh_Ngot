@@ -8,7 +8,7 @@ const HeroSliderThirtyOneSingle = ({ data, sliderClass }) => {
       className={`single-slider slider-height-1 slider-height-res15 d-flex align-items-center slider-height-res bg-img ${
         sliderClass ? sliderClass : ""
       }`}
-      style={{ backgroundImage: `url(${process.env.PUBLIC_URL + data.image})` }}
+      style={{ backgroundImage: `url(${data.image})` }}
     >
       <div className="container">
         <div className="row">
@@ -22,7 +22,7 @@ const HeroSliderThirtyOneSingle = ({ data, sliderClass }) => {
               <div className="slider-btn btn-hover btn-hover--blue">
                 <Link
                   className="animated"
-                  to={process.env.PUBLIC_URL + data.url}
+                  to={data.url}
                 >
                   SHOP NOW
                 </Link>

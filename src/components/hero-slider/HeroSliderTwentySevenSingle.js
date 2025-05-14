@@ -9,7 +9,7 @@ const HeroSliderTwentySevenSingle = ({ data, sliderClass }) => {
         sliderClass ? sliderClass : ""
       }`}
       style={{
-        backgroundImage: `url(${process.env.PUBLIC_URL + data.image})`
+        backgroundImage: `url(${data.image})`
       }}
     >
       <div className="container">
@@ -27,7 +27,7 @@ const HeroSliderTwentySevenSingle = ({ data, sliderClass }) => {
               <div className="slider-btn btn-hover">
                 <Link
                   className="animated"
-                  to={process.env.PUBLIC_URL + data.url}
+                  to={data.url}
                 >
                   SHOP NOW
                 </Link>

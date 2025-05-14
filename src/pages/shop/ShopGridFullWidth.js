@@ -54,8 +54,8 @@ const ShopGridFullWidth = ({location, products}) => {
                 <meta name="description" content="Shop page of flone react minimalist eCommerce template." />
             </MetaTags>
 
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>Home</BreadcrumbsItem>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>Shop</BreadcrumbsItem>
+            <BreadcrumbsItem to={'/'}>Home</BreadcrumbsItem>
+            <BreadcrumbsItem to={pathname}>Shop</BreadcrumbsItem>
 
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}

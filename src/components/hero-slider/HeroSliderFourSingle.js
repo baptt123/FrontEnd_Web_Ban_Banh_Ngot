@@ -21,7 +21,7 @@ const HeroSliderFourSingle = ({ data, sliderClass }) => {
               <div className="slider-btn-11 btn-hover">
                 <Link
                   className="animated"
-                  to={process.env.PUBLIC_URL + data.url}
+                  to={data.url}
                 >
                   SHOP NOW
                 </Link>
@@ -32,7 +32,7 @@ const HeroSliderFourSingle = ({ data, sliderClass }) => {
             <div className="slider-singleimg-hm11 slider-animated-1">
               <img
                 className="animated"
-                src={process.env.PUBLIC_URL + data.image}
+                src={data.image}
                 alt=""
               />
             </div>

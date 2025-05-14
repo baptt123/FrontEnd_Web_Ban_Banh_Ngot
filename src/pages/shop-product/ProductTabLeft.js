@@ -8,9 +8,10 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
 import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
 import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
+import { useLocation } from "react-router-dom";
 
-const ProductTabLeft = ({ location, product }) => {
-  const { pathname } = location;
+const ProductTabLeft = ({ product }) => {
+  const { pathname } = useLocation();
 
   return (
     <Fragment>
@@ -22,8 +23,8 @@ const ProductTabLeft = ({ location, product }) => {
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Shop Product
       </BreadcrumbsItem>
 

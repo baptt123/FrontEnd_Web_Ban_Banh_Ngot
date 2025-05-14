@@ -18,7 +18,7 @@ const CountDownSeven = ({ bgColorClass, spaceTopClass, dateTime }) => {
             <Countdown date={new Date(dateTime)} renderer={Renderer} />
           </div>
           <div className="slider-btn-12 btn-hover">
-            <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+            <Link to={"/shop-grid-standard"}>
               MORE OFFER
             </Link>
           </div>

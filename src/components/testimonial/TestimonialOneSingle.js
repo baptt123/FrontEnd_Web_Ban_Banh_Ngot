@@ -8,7 +8,7 @@ const TestimonialOneSingle = ({ data, sliderClass, testimonialClass }) => {
         testimonialClass ? testimonialClass : "single-testimonial"
       } text-center ${sliderClass ? sliderClass : ""}`}
     >
-      <img src={process.env.PUBLIC_URL + data.image} alt="" />
+      <img src={data.image} alt="" />
       <p>{data.content}</p>
       <div className="client-info">
         <i className="fa fa-map-signs" />

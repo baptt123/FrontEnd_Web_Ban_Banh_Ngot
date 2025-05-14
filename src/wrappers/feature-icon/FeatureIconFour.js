@@ -20,7 +20,7 @@ const FeatureIconFour = ({
       }`}
       style={
         bgImg
-          ? { backgroundImage: `url(${import.meta.env.PUBLIC_URL + bgImg})` }
+          ? { backgroundImage: `url(${bgImg})` }
           : {}
       }
     >

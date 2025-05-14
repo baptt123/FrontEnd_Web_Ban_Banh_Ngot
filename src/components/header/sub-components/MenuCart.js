@@ -31,10 +31,10 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
               return (
                 <li className="single-shopping-cart" key={key}>
                   <div className="shopping-cart-img">
-                    <Link to={process.env.PUBLIC_URL + "/product/" + single.id}>
+                    <Link to={"/product/" + single.id}>
                       <img
                         alt=""
-                        src={process.env.PUBLIC_URL + single.image[0]}
+                        src={single.image[0]}
                         className="img-fluid"
                       />
                     </Link>
@@ -42,7 +42,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
                   <div className="shopping-cart-title">
                     <h4>
                       <Link
-                        to={process.env.PUBLIC_URL + "/product/" + single.id}
+                        to={"/product/" + single.id}
                       >
                         {" "}
                         {single.name}{" "}
@@ -82,12 +82,12 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
             </h4>
           </div>
           <div className="shopping-cart-btn btn-hover text-center">
-            <Link className="default-btn" to={process.env.PUBLIC_URL + "/cart"}>
+            <Link className="default-btn" to={"/cart"}>
               view cart
             </Link>
             <Link
               className="default-btn"
-              to={process.env.PUBLIC_URL + "/checkout"}
+              to={"/checkout"}
             >
               checkout
             </Link>

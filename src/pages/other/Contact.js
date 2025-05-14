@@ -5,9 +5,10 @@ import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import LocationMap from "../../components/contact/LocationMap";
+import { useLocation } from "react-router-dom";
 
-const Contact = ({ location }) => {
-  const { pathname } = location;
+const Contact = () => {
+  const { pathname } = useLocation();
 
   return (
     <Fragment>
@@ -18,8 +19,8 @@ const Contact = ({ location }) => {
           content="Contact of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Contact
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">

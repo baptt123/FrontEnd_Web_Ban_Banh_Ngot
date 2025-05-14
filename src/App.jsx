@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import React, { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -12,7 +12,6 @@ import { setToastFunction } from "./utils/axiosInstance";
 // Import các trang home hiện có
 const HomeGridBanner = lazy(() => import("./pages/home/HomeGridBanner"));
 const HomeAutoParts = lazy(() => import("./pages/home/HomeAutoParts"));
-
 const HomeCakeShop = lazy(() => import("./pages/home/HomeCakeShop"));
 const HomeBlackFriday = lazy(() => import("./pages/home/HomeBlackFriday"));
 const HomeBlackFridayTwo = lazy(() => import("./pages/home/HomeBlackFridayTwo"));
@@ -54,6 +53,8 @@ const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
 const Checkout = lazy(() => import("./pages/other/Checkout"));
 const NotFound = lazy(() => import("./pages/other/NotFound"));
+const VerifyAccount = lazy(() => import("./pages/other/VerifyAccount"));
+import { ConnectedPrivateRoute, ConnectedPublicOnlyRoute } from "./components/auth/ProtectedRoute";
 
 // Import trang PayPal Checkout
 const PaypalCheckout = lazy(() => import("./pages/PaypalCheckout"));
@@ -96,16 +97,18 @@ const GoogleLoginPage = () => {
 };
 
 const App = (props) => {
-  // Đảm bảo sử dụng đúng biến môi trường với tiền tố VITE_
-  console.log("Env variable:", import.meta.env.VITE_PUBLIC_URL);
+  // Thêm state này
+const [translationsLoaded, setTranslationsLoaded] = useState(false);
 
-  useEffect(() => {
-    const loadTranslations = async () => {
+// Sửa useEffect
+useEffect(() => {
+  const loadTranslations = async () => {
+    try {
       const en = await import("./translations/english.json");
       const fn = await import("./translations/french.json");
       const de = await import("./translations/germany.json");
       const vi = await import("./translations/vietnamese.json");
-
+      
       props.dispatch(
         loadLanguages({
           languages: {
@@ -116,11 +119,33 @@ const App = (props) => {
           }
         })
       );
-    };
+      
+      // Đánh dấu đã load xong
+      setTranslationsLoaded(true);
+      console.log("Translations loaded successfully");
+    } catch (error) {
+      console.error("Error loading translations:", error);
+    }
+  };
+  
+  loadTranslations();
+}, [props]);
 
-    loadTranslations();
-  }, [props]);
-
+// Thêm loading screen nếu chưa load xong
+if (!translationsLoaded) {
+  return (
+    <div className="preloader-active">
+      <div className="preloader d-flex align-items-center justify-content-center">
+        <div className="preloader-inner position-relative">
+          <div className="preloader-circle" />
+          <div className="preloader-img">
+            <img src={"/assets/img/icon-img/logo.png"} alt="Logo" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
   return (
     <ToastProvider placement="bottom-left" autoDismiss={true} autoDismissTimeout={5000}>
       <ToastProviderWrapper>
@@ -256,18 +281,34 @@ const App = (props) => {
                 <Route
                   path={`/contact`}
                   element={<Contact />}
+                  />
+                <Route
+                  path={`/verify`}
+                  element={<VerifyAccount />}
                 />
                 <Route
                   path={`/my-account`}
-                  element={<MyAccount />}
+                  element={
+                    <ConnectedPrivateRoute>
+                      <MyAccount />
+                    </ConnectedPrivateRoute>
+                  }
                 />
                 <Route
                   path={`/login-register`}
-                  element={<LoginRegister />}
-                  />
+                  element={
+                    <ConnectedPublicOnlyRoute>
+                      <LoginRegister />
+                    </ConnectedPublicOnlyRoute>
+                  }
+                />
                 <Route
-                  path={"/forgot-password"}
-                  element={<ForgotPassword />}
+                  path={`/forgot-password`}
+                  element={
+                    <ConnectedPublicOnlyRoute>
+                      <ForgotPassword />
+                    </ConnectedPublicOnlyRoute>
+                  }
                 />
                 <Route
                   path={"/reset-password"}

@@ -10,9 +10,10 @@ import TextGridOne from "../../wrappers/text-grid/TextGridOne";
 import FunFactOne from "../../wrappers/fun-fact/FunFactOne";
 import TeamMemberOne from "../../wrappers/team-member/TeamMemberOne";
 import BrandLogoSliderOne from "../../wrappers/brand-logo/BrandLogoSliderOne";
+import { useLocation } from "react-router-dom";
 
-const About = ({ location }) => {
-  const { pathname } = location;
+const About = () => {
+  const { pathname } = useLocation();
 
   return (
     <Fragment>
@@ -23,8 +24,8 @@ const About = ({ location }) => {
           content="About page of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         About us
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">

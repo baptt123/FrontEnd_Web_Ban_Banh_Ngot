@@ -1,27 +1,53 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { useLocation } from "react-router-dom";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout } from "../../redux/actions/authActions";
+import { ToastContext } from "../../App";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
-const MyAccount = ({ location }) => {
-  const { pathname } = location;
+const MyAccount = ({ auth, logout }) => {
+  const { pathname } = useLocation();
+  const { addToast } = useContext(ToastContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        addToast("Đăng xuất thành công!", {
+          appearance: 'success',
+          autoDismiss: true
+        });
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  };
+
+  // Chắc chắn chúng ta có dữ liệu người dùng
+  console.log("Auth state in MyAccount:", auth); // Để debug
 
   return (
     <Fragment>
       <MetaTags>
-        <title>Flone | My Account</title>
+        <title>Cupabakery | Tài khoản của tôi</title>
         <meta
           name="description"
-          content="Compare page of flone react minimalist eCommerce template."
+          content="Trang tài khoản của người dùng Cupabakery."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        My Account
+      <BreadcrumbsItem to={"/"}>Trang chủ</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
+        Tài khoản của tôi
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
@@ -31,12 +57,22 @@ const MyAccount = ({ location }) => {
             <div className="row">
               <div className="ml-auto mr-auto col-lg-9">
                 <div className="myaccount-wrapper">
+                  <div className="account-info-wrapper mb-30">
+                    <h4>Thông tin tài khoản của tôi</h4>
+                    <h5>Thông tin cá nhân</h5>
+                    <div className="mt-3">
+                      <button onClick={handleLogout} className="btn btn-danger">
+                        Đăng xuất
+                      </button>
+                    </div>
+                  </div>
+                  
                   <Accordion defaultActiveKey="0">
                     <Card className="single-my-account mb-20">
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="0">
                           <h3 className="panel-title">
-                            <span>1 .</span> Edit your account information{" "}
+                            <span>1 .</span> Thông tin tài khoản{" "}
                           </h3>
                         </Accordion.Toggle>
                       </Card.Header>
@@ -44,55 +80,58 @@ const MyAccount = ({ location }) => {
                         <Card.Body>
                           <div className="myaccount-info-wrapper">
                             <div className="account-info-wrapper">
-                              <h4>My Account Information</h4>
-                              <h5>Your Personal Details</h5>
+                              <h4>Thông tin tài khoản</h4>
                             </div>
                             <div className="row">
-                              <div className="col-lg-6 col-md-6">
+                              <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>First Name</label>
-                                  <input type="text" />
-                                </div>
-                              </div>
-                              <div className="col-lg-6 col-md-6">
-                                <div className="billing-info">
-                                  <label>Last Name</label>
-                                  <input type="text" />
+                                  <label>Username</label>
+                                  <input type="text" value={auth.user?.username || ""} readOnly />
                                 </div>
                               </div>
                               <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Email Address</label>
-                                  <input type="email" />
+                                  <label>Email</label>
+                                  <input type="email" value={auth.user?.email || ""} readOnly />
                                 </div>
                               </div>
-                              <div className="col-lg-6 col-md-6">
+                              <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Telephone</label>
-                                  <input type="text" />
+                                  <label>Số điện thoại</label>
+                                  <input type="text" value={auth.user?.phone || ""} readOnly />
                                 </div>
                               </div>
-                              <div className="col-lg-6 col-md-6">
+                              <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Fax</label>
-                                  <input type="text" />
+                                  <label>Ngày tạo tài khoản</label>
+                                  <input 
+                                    type="text" 
+                                    value={
+                                      auth.user?.createdAt 
+                                        ? new Date(auth.user.createdAt).toLocaleDateString('vi-VN') 
+                                        : ""
+                                    } 
+                                    readOnly 
+                                  />
                                 </div>
                               </div>
-                            </div>
-                            <div className="billing-back-btn">
-                              <div className="billing-btn">
-                                <button type="submit">Continue</button>
+                              <div className="col-lg-12 col-md-12">
+                                <div className="billing-info">
+                                  <label>Loại tài khoản</label>
+                                  <input type="text" value={auth.user?.role?.name || "Khách hàng"} readOnly />
+                                </div>
                               </div>
                             </div>
                           </div>
                         </Card.Body>
                       </Accordion.Collapse>
                     </Card>
+                    
                     <Card className="single-my-account mb-20">
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="1">
                           <h3 className="panel-title">
-                            <span>2 .</span> Change your password
+                            <span>2 .</span> Đổi mật khẩu
                           </h3>
                         </Accordion.Toggle>
                       </Card.Header>
@@ -100,37 +139,44 @@ const MyAccount = ({ location }) => {
                         <Card.Body>
                           <div className="myaccount-info-wrapper">
                             <div className="account-info-wrapper">
-                              <h4>Change Password</h4>
-                              <h5>Your Password</h5>
+                              <h4>Đổi mật khẩu</h4>
+                              <h5>Mật khẩu của bạn</h5>
                             </div>
                             <div className="row">
                               <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Password</label>
+                                  <label>Mật khẩu hiện tại</label>
                                   <input type="password" />
                                 </div>
                               </div>
                               <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
-                                  <label>Password Confirm</label>
+                                  <label>Mật khẩu mới</label>
+                                  <input type="password" />
+                                </div>
+                              </div>
+                              <div className="col-lg-12 col-md-12">
+                                <div className="billing-info">
+                                  <label>Xác nhận mật khẩu mới</label>
                                   <input type="password" />
                                 </div>
                               </div>
                             </div>
                             <div className="billing-back-btn">
                               <div className="billing-btn">
-                                <button type="submit">Continue</button>
+                                <button type="button">Cập nhật</button>
                               </div>
                             </div>
                           </div>
                         </Card.Body>
                       </Accordion.Collapse>
                     </Card>
+                    
                     <Card className="single-my-account mb-20">
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="2">
                           <h3 className="panel-title">
-                            <span>3 .</span> Modify your address book entries{" "}
+                            <span>3 .</span> Địa chỉ giao hàng{" "}
                           </h3>
                         </Accordion.Toggle>
                       </Card.Header>
@@ -138,30 +184,20 @@ const MyAccount = ({ location }) => {
                         <Card.Body>
                           <div className="myaccount-info-wrapper">
                             <div className="account-info-wrapper">
-                              <h4>Address Book Entries</h4>
+                              <h4>Địa chỉ giao hàng của bạn</h4>
                             </div>
                             <div className="entries-wrapper">
                               <div className="row">
-                                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                                <div className="col-lg-12 col-md-12 d-flex align-items-center justify-content-center">
                                   <div className="entries-info text-center">
-                                    <p>John Doe</p>
-                                    <p>Paul Park </p>
-                                    <p>Lorem ipsum dolor set amet</p>
-                                    <p>NYC</p>
-                                    <p>New York</p>
-                                  </div>
-                                </div>
-                                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                  <div className="entries-edit-delete text-center">
-                                    <button className="edit">Edit</button>
-                                    <button>Delete</button>
+                                    <p>Bạn chưa có địa chỉ giao hàng nào.</p>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <div className="billing-back-btn">
                               <div className="billing-btn">
-                                <button type="submit">Continue</button>
+                                <button type="button">Thêm địa chỉ mới</button>
                               </div>
                             </div>
                           </div>
@@ -180,7 +216,18 @@ const MyAccount = ({ location }) => {
 };
 
 MyAccount.propTypes = {
-  location: PropTypes.object
+  auth: PropTypes.object,
+  logout: PropTypes.func
 };
 
-export default MyAccount;
+const mapStateToProps = state => {
+  return {
+    auth: state.authData
+  };
+};
+
+const mapDispatchToProps = {
+  logout
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyAccount);

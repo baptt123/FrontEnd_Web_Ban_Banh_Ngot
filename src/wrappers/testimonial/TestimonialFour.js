@@ -32,7 +32,7 @@ const TestimonialFour = ({
           }`}
           style={{
             backgroundImage: `url(${
-              process.env.PUBLIC_URL + "/assets/img/bg/testimonial-bg-3.jpg"
+              "/assets/img/bg/testimonial-bg-3.jpg"
             })`
           }}
         >

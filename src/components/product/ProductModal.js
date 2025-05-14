@@ -107,7 +107,7 @@ function ProductModal(props) {
                         <div key={key}>
                           <div className="single-image">
                             <img
-                              src={import.meta.env.PUBLIC_URL + single}
+                              src={single}
                               className="img-fluid"
                               alt=""
                             />
@@ -125,7 +125,7 @@ function ProductModal(props) {
                         <div key={key}>
                           <div className="single-image">
                             <img
-                              src={import.meta.env.PUBLIC_URL + single}
+                              src={single}
                               className="img-fluid"
                               alt=""
                             />

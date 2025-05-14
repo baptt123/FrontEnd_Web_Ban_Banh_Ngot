@@ -15,7 +15,8 @@ import { register, login, googleLogin } from "../../redux/actions/authActions";
 import { ToastContext } from "../../App";
 import { validateRegisterForm, validateLoginForm } from "../../utils/formValidation";
 
-const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
+
+const LoginRegister = ({register, login, googleLogin, auth }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { addToast } = useContext(ToastContext);
@@ -77,7 +78,7 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
     });
   };
 
-  // Xử lý submit form đăng nhập
+  // Cập nhật hàm handleLoginSubmit trong file LoginRegister.js
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     
@@ -95,8 +96,14 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
     }
     
     login(loginData)
-      .then(() => {
-        navigate("/");
+      .then((response) => {
+        addToast("Đăng nhập thành công!", {
+          appearance: 'success',
+          autoDismiss: true
+        });
+        
+        // Đảm bảo chuyển hướng hoạt động bằng cách sử dụng window.location thay vì navigate
+        window.location.href = '/';
       })
       .catch((error) => {
         console.error("Login error:", error);
@@ -104,7 +111,6 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
       });
   };
 
-  // Xử lý submit form đăng ký
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     
@@ -125,18 +131,21 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
     register(registerData)
       .then(() => {
         // Đăng ký thành công, toast success đã được xử lý trong action
-        addToast("Đăng ký thành công! Vui lòng đăng nhập.", {
+        addToast("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.", {
           appearance: 'success',
           autoDismiss: true
         });
         
-        // Reset form
+        // Reset form và chuyển sang tab đăng nhập
         setRegisterData({
           username: "",
           password: "",
           email: "",
           phone: ""
         });
+        
+        // Reload trang để chuyển sang tab đăng nhập
+        window.location.href = '/login-register';
       })
       .catch((error) => {
         console.error("Register error:", error);
@@ -165,9 +174,9 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
           content="Trang đăng nhập và đăng ký của Cupabakery."
         />
       </MetaTags>
-      <BreadcrumbsItem to={import.meta.env.PUBLIC_URL + "/"}>{strings["home"]}</BreadcrumbsItem>
+      <BreadcrumbsItem to={"/"}>Trang Chủ</BreadcrumbsItem>
       <BreadcrumbsItem to={pathname}>
-      {strings["login_register"]}
+      Đăng Nhập
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
@@ -181,12 +190,12 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                     <Nav variant="pills" className="login-register-tab-list">
                       <Nav.Item>
                         <Nav.Link eventKey="login">
-                          <h4>{strings["login"]}</h4>
+                          <h4>Đăng Nhập</h4>
                         </Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
                         <Nav.Link eventKey="register">
-                        <h4>{strings["register"]}</h4>
+                        <h4>Đăng Ký</h4>
                         </Nav.Link>
                       </Nav.Item>
                     </Nav>
@@ -199,7 +208,7 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                                 <input
                                   type="text"
                                   name="username"
-                                  placeholder={strings["username"]}
+                                  placeholder="Tên đăng nhập"
                                   value={loginData.username}
                                   onChange={handleLoginChange}
                                   className={loginErrors.username ? "is-invalid" : ""}
@@ -213,7 +222,7 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                                 <input
                                   type="password"
                                   name="password"
-                                  placeholder={strings["password"]}
+                                  placeholder="Mật khẩu"
                                   value={loginData.password}
                                   onChange={handleLoginChange}
                                   className={loginErrors.password ? "is-invalid" : ""}
@@ -226,13 +235,13 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                               <div className="button-box">
                                 <div className="login-toggle-btn">
                                   <input type="checkbox" />
-                                  <label className="ml-10">{strings["remember_me"]}</label>
-                                  <Link to={import.meta.env.PUBLIC_URL + "/forgot-password"}>
-                                    {strings["forgot_password"]}
+                                  <label className="ml-10">Lưu đăng nhập</label>
+                                  <Link to={"/forgot-password"}>
+                                    Quên mật khẩu
                                   </Link>
                                 </div>
                                 <button type="submit" disabled={auth.loading}>
-                                  <span>{auth.loading ? "Đang xử lý..." : strings["login"]}</span>
+                                  <span>{auth.loading ? "Đang xử lý..." : "Đăng nhập"}</span>
                                 </button>
                               </div>
                               
@@ -260,7 +269,7 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                                 <input
                                   type="text"
                                   name="username"
-                                  placeholder={strings["username"]}
+                                  placeholder="Tên đăng nhập"
                                   value={registerData.username}
                                   onChange={handleRegisterChange}
                                   className={registerErrors.username ? "is-invalid" : ""}
@@ -302,7 +311,7 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                                 <input
                                   type="password"
                                   name="password"
-                                  placeholder={strings["password"]}
+                                  placeholder="Mật khẩu"
                                   value={registerData.password}
                                   onChange={handleRegisterChange}
                                   className={registerErrors.password ? "is-invalid" : ""}
@@ -314,7 +323,7 @@ const LoginRegister = ({ strings, register, login, googleLogin, auth }) => {
                               
                               <div className="button-box">
                                 <button type="submit" disabled={auth.loading}>
-                                  <span>{auth.loading ? "Đang xử lý..." : strings["register"]}</span>
+                                  <span>{auth.loading ? "Đang xử lý..." : "Đăng ký"}</span>
                                 </button>
                               </div>
                               

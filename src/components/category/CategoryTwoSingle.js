@@ -6,14 +6,14 @@ const CategoryTwoSingle = ({ data, sliderClass }) => {
   return (
     <div className={`collection-product ${sliderClass ? sliderClass : ""}`}>
       <div className="collection-img">
-        <Link to={process.env.PUBLIC_URL + data.link}>
-          <img src={process.env.PUBLIC_URL + data.image} alt="" />
+        <Link to={data.link}>
+          <img src={data.image} alt="" />
         </Link>
       </div>
       <div className="collection-content text-center">
         <span>{data.subtitle}</span>
         <h4>
-          <Link to={process.env.PUBLIC_URL + data.link}>{data.title}</Link>
+          <Link to={data.link}>{data.title}</Link>
         </h4>
       </div>
     </div>

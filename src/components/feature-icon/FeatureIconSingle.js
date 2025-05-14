@@ -8,7 +8,7 @@ const FeatureIconSingle = ({ singleFeature }) => {
         <div className="support-icon">
           <img
             className="animated"
-            src={process.env.PUBLIC_URL + singleFeature.image}
+            src={singleFeature.image}
             alt=""
           />
         </div>

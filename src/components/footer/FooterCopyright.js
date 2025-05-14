@@ -10,8 +10,8 @@ const FooterCopyright = ({ footerLogo, spaceBottomClass, colorClass }) => {
       }`}
     >
       <div className="footer-logo">
-        <Link to={import.meta.env.PUBLIC_URL + "/"}>
-          <img alt="" src={import.meta.env.PUBLIC_URL + footerLogo} />
+        <Link to={"/"}>
+          <img alt="" src={footerLogo} />
         </Link>
       </div>
       <p>

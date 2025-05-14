@@ -10,7 +10,7 @@ const FeatureIconSevenSingle = ({ data, spaceBottomClass, textAlignClass }) => {
         } ${textAlignClass ? textAlignClass : ""}`}
       >
         <div className="support-content-6">
-          <img src={process.env.PUBLIC_URL + data.image} alt="" />
+          <img src={data.image} alt="" />
           <h5>{data.title}</h5>
           <p>{data.subtitle}</p>
         </div>

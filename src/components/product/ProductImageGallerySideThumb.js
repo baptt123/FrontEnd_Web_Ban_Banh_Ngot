@@ -93,7 +93,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                       <div key={key}>
                         <LightgalleryItem
                           group="any"
-                          src={process.env.PUBLIC_URL + single}
+                          src={single}
                         >
                           <button>
                             <i className="pe-7s-expand1"></i>
@@ -101,7 +101,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                         </LightgalleryItem>
                         <div className="single-image">
                           <img
-                            src={process.env.PUBLIC_URL + single}
+                            src={single}
                             className="img-fluid"
                             alt=""
                           />
@@ -128,7 +128,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                     <div key={key}>
                       <div className="single-image">
                         <img
-                          src={process.env.PUBLIC_URL + single}
+                          src={single}
                           className="img-fluid"
                           alt=""
                         />

@@ -77,7 +77,7 @@ const ProductImageGallery = ({ product }) => {
                   <div key={key}>
                     <LightgalleryItem
                       group="any"
-                      src={process.env.PUBLIC_URL + single}
+                      src={single}
                     >
                       <button>
                         <i className="pe-7s-expand1"></i>
@@ -85,7 +85,7 @@ const ProductImageGallery = ({ product }) => {
                     </LightgalleryItem>
                     <div className="single-image">
                       <img
-                        src={process.env.PUBLIC_URL + single}
+                        src={single}
                         className="img-fluid"
                         alt=""
                       />
@@ -104,7 +104,7 @@ const ProductImageGallery = ({ product }) => {
                 <div key={key}>
                   <div className="single-image">
                     <img
-                      src={process.env.PUBLIC_URL + single}
+                      src={single}
                       className="img-fluid"
                       alt=""
                     />

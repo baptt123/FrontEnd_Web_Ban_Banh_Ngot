@@ -25,7 +25,7 @@ const CountDownFour = ({
                 <Countdown date={new Date(dateTime)} renderer={Renderer} />
               </div>
               <div className="funfact-btn funfact-btn--round-shape funfact-btn-violet btn-hover">
-                <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                <Link to={"/shop-grid-standard"}>
                   SHOP NOW
                 </Link>
               </div>
@@ -33,9 +33,9 @@ const CountDownFour = ({
           </div>
           <div className="col-md-4 col-lg-6">
             <div className="funfact-image">
-              <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+              <Link to={"/shop-grid-standard"}>
                 <img
-                  src={process.env.PUBLIC_URL + countDownImage}
+                  src={countDownImage}
                   alt=""
                   className="img-fluid"
                 />

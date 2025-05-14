@@ -16,7 +16,7 @@ const FeatureIconThreeSingle = ({
         <div className="support-content-2">
           <img
             className="animated"
-            src={process.env.PUBLIC_URL + data.image}
+            src={data.image}
             alt=""
           />
           <h5>{data.title}</h5>

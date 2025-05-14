@@ -8,9 +8,10 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
 import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
 import ProductImageDescriptionSlider from "../../wrappers/product/ProductImageDescriptionSlider";
+import { useLocation } from "react-router-dom";
 
-const ProductSlider = ({ location, product }) => {
-  const { pathname } = location;
+const ProductSlider = ({ product }) => {
+  const { pathname } = useLocation();
 
   return (
     <Fragment>
@@ -22,8 +23,8 @@ const ProductSlider = ({ location, product }) => {
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Shop Product
       </BreadcrumbsItem>
 

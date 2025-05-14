@@ -3,32 +3,25 @@ import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ReactDOM from "react-dom";
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { save, load } from "redux-localstorage-simple";
 import { Provider } from "react-redux";
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from "./redux/store";
 import { fetchProducts } from "./redux/actions/productActions";
-import rootReducer from "./redux/reducers/rootReducer";
 import products from "./data/products.json";
 import App from "./App";
 import "./assets/scss/style.scss";
 import * as serviceWorker from "./serviceWorker";
-
-// Tạm thời bỏ composeWithDevTools để kiểm tra lỗi
-const store = createStore(
-  rootReducer,
-  load(),
-  applyMiddleware(thunk, save())
-);
 
 // fetch products from json file
 store.dispatch(fetchProducts(products));
 
 ReactDOM.render(
   <Provider store={store}>
-    <GoogleOAuthProvider clientId="612651483215-e44j1cm38pd5focclktvonseo5lnlmec.apps.googleusercontent.com">
-      <App />
-    </GoogleOAuthProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <GoogleOAuthProvider clientId="612651483215-e44j1cm38pd5focclktvonseo5lnlmec.apps.googleusercontent.com">
+        <App />
+      </GoogleOAuthProvider>
+    </PersistGate>
   </Provider>,
   document.getElementById("root")
 );

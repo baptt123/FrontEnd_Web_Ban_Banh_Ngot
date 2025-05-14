@@ -18,8 +18,8 @@ const NotFound = ({ location }) => {
           content="404 page of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={import.meta.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={import.meta.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         404 page
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
@@ -48,7 +48,7 @@ const NotFound = ({ location }) => {
                       <i className="fa fa-search" />
                     </button>
                   </form>
-                  <Link to={import.meta.env.PUBLIC_URL + "/"} className="error-btn">
+                  <Link to={"/"} className="error-btn">
                     Back to home page
                   </Link>
                 </div>

@@ -21,7 +21,7 @@ const FeatureIconNine = ({
       } ${responsiveClass ? responsiveClass : ""}`}
       style={
         bgImg
-          ? { backgroundImage: `url(${process.env.PUBLIC_URL + bgImg})` }
+          ? { backgroundImage: `url(${bgImg})` }
           : {}
       }
     >

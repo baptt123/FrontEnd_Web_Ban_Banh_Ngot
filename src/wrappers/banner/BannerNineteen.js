@@ -13,10 +13,10 @@ const BannerNineteen = ({ spaceTopClass, spaceBottomClass }) => {
         <div className="row">
           <div className="col-lg-6 col-md-6">
             <div className="single-banner mb-20">
-              <Link to={import.meta.env.PUBLIC_URL + "/shop-grid-standard"}>
+              <Link to={"/shop-grid-standard"}>
                 <img
                   src={
-                    import.meta.env.PUBLIC_URL + "/assets/img/banner/banner24.jpg"
+                    "/assets/img/banner/banner24.jpg"
                   }
                   alt=""
                 />
@@ -25,7 +25,7 @@ const BannerNineteen = ({ spaceTopClass, spaceBottomClass }) => {
                 <span>-20% Off</span>
                 <h2>New Cakes</h2>
                 <h5>Best for your Mind.</h5>
-                <Link to={import.meta.env.PUBLIC_URL + "/shop-grid-standard"}>
+                <Link to={"/shop-grid-standard"}>
                   SHOP NOW
                 </Link>
               </div>
@@ -33,10 +33,10 @@ const BannerNineteen = ({ spaceTopClass, spaceBottomClass }) => {
           </div>
           <div className="col-lg-6 col-md-6">
             <div className="single-banner mb-20">
-              <Link to={import.meta.env.PUBLIC_URL + "/shop-grid-standard"}>
+              <Link to={"/shop-grid-standard"}>
                 <img
                   src={
-                    import.meta.env.PUBLIC_URL + "/assets/img/banner/banner25.jpg"
+                    "/assets/img/banner/banner25.jpg"
                   }
                   alt=""
                 />
@@ -46,16 +46,16 @@ const BannerNineteen = ({ spaceTopClass, spaceBottomClass }) => {
                 <p>
                   Starting At <span>$99.00</span>
                 </p>
-                <Link to={import.meta.env.PUBLIC_URL + "/shop-grid-standard"}>
+                <Link to={"/shop-grid-standard"}>
                   <i className="fa fa-long-arrow-right" />
                 </Link>
               </div>
             </div>
             <div className="single-banner mb-20">
-              <Link to={import.meta.env.PUBLIC_URL + "/shop-grid-standard"}>
+              <Link to={"/shop-grid-standard"}>
                 <img
                   src={
-                    import.meta.env.PUBLIC_URL + "/assets/img/banner/banner26.jpg"
+                    "/assets/img/banner/banner26.jpg"
                   }
                   alt=""
                 />
@@ -65,7 +65,7 @@ const BannerNineteen = ({ spaceTopClass, spaceBottomClass }) => {
                 <p>
                   Starting At <span>$99.00</span>
                 </p>
-                <Link to={import.meta.env.PUBLIC_URL + "/shop-grid-standard"}>
+                <Link to={"/shop-grid-standard"}>
                   <i className="fa fa-long-arrow-right" />
                 </Link>
               </div>

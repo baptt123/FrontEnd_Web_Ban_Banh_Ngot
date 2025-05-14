@@ -7,9 +7,10 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogSidebar from "../../wrappers/blog/BlogSidebar";
 import BlogPagination from "../../wrappers/blog/BlogPagination";
 import BlogPosts from "../../wrappers/blog/BlogPosts";
+import { useLocation } from "react-router-dom";
 
-const BlogRightSidebar = ({ location }) => {
-  const { pathname } = location;
+const BlogRightSidebar = () => {
+  const { pathname } = useLocation();
 
   return (
     <Fragment>
@@ -20,8 +21,8 @@ const BlogRightSidebar = ({ location }) => {
           content="Blog of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+      <BreadcrumbsItem to={"/"}>Home</BreadcrumbsItem>
+      <BreadcrumbsItem to={pathname}>
         Blog
       </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
