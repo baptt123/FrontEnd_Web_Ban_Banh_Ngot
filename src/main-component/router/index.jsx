@@ -24,6 +24,8 @@ import LoginPage from '../LoginPage/index';
 import ForgotPassword from '../ForgotPassword/index';
 import Register from '../SignUpPage/index';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import ProductPage from '../TestProductPage/ProductPage';
+import CalculateShipping from '../CartPage/CalculateShipping';
 
 
 const AllRoute = () => {
@@ -57,7 +59,7 @@ const AllRoute = () => {
           <Route path="forgot" element={<ForgotPassword />} />
           <Route path="register" element={<Register />} />
           <Route path='404' element={<ErrorPage />} />  
-       
+          <Route path="all-products" element={<ProductPage />} />
         </Routes>
       </BrowserRouter>
 
