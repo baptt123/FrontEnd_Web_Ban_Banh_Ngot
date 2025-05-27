@@ -25,14 +25,21 @@ import ForgotPassword from '../ForgotPassword/index';
 import Register from '../SignUpPage/index';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import ProductPage from '../TestProductPage/ProductPage';
-import CalculateShipping from '../CartPage/CalculateShipping';
-
-
+import  OrderHistoryDashboard  from '../OrderHistoryPage/OrderHistory.jsx';
+import Invoices from "../AdminPages/scenes/invoices/index.jsx";
+import Bar from "../AdminPages/scenes/bar/index.jsx";
+import Pie from "../AdminPages/scenes/pie/index.jsx";
+import Line from "../AdminPages/scenes/line/index.jsx";
+import FAQ from "../AdminPages/scenes/faq/index.jsx";
+import Calendar from "../AdminPages/scenes/calendar/calendar.jsx";
+import Geography from "../AdminPages/scenes/geography/index.jsx";
+import Team from "../AdminPages/scenes/team/index.jsx"
+import Contacts from "../AdminPages/scenes/contacts/index.jsx"
+import {Form} from "formik";
 const AllRoute = () => {
 
   return (
     <div className="App">
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="home" element={<Homepage />} />
@@ -41,7 +48,7 @@ const AllRoute = () => {
           <Route path="about" element={<AboutPage />} />
           <Route path="services" element={<ServicePages/>} />
           <Route path="service-single/:slug" element={<ServiceSinglePage />} />
-          <Route path="team" element={<TeamPage />} />
+          <Route path="team-page" element={<TeamPage />} />
           <Route path="testimonial" element={<TeamSinglePage />} />
           <Route path="shop" element={<ShopPage />} />
           <Route path='shop-single/:slug' element={<ProductSinglePage />} />
@@ -60,8 +67,18 @@ const AllRoute = () => {
           <Route path="register" element={<Register />} />
           <Route path='404' element={<ErrorPage />} />  
           <Route path="all-products" element={<ProductPage />} />
+          <Route path="order-history" element={<OrderHistoryDashboard/>} />
+          <Route path="team-admin" element={<Team />} />
+          <Route path="contacts-admin" element={<Contacts />} />
+          <Route path="invoices" element={<Invoices />} />
+          <Route path="form" element={<Form />} />
+          <Route path="bar" element={<Bar />} />
+          <Route path="pie" element={<Pie />} />
+          <Route path="line" element={<Line />} />
+          <Route path="faq" element={<FAQ />} />
+          <Route path="calendar" element={<Calendar />} />
+          <Route path="geography" element={<Geography />} />
         </Routes>
-      </BrowserRouter>
 
     </div>
   );
