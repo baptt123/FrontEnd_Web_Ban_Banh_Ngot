@@ -28,12 +28,12 @@ const HomePage = () => {
             <About hclass={'orico-about-section section-padding'} />
             <FunFact hclass={'orico-fun-fact-section'} />
             <ServiceSection hclass={"service_section section-padding"} />
-            <OfferSection />
+            {/* <OfferSection /> */}
             <ProductSection />
-            <TeamSection />
+            {/* <TeamSection /> */}
             <PartnersSection />
             <Testimonial />
-            <BlogSection />
+            {/* <BlogSection /> */}
             <Footer hclass={'footer-section'} />
             <Scrollbar />
         </Fragment>

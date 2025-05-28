@@ -33,7 +33,7 @@
 
 
 
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "/src/theme.jsx";
@@ -45,14 +45,12 @@ import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme as chakraTheme } from '/src/components/helpers/index.jsx';
-
 const App = () => {
-    const [theme, colorMode] = useMode();
-    const [isSidebar, setIsSidebar] = useState(true);
+    const [modeTokens, colorMode] = useMode();
 
     return (
         <ColorModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={modeTokens}>
                 <CssBaseline />
                 <Provider>
                     <ChakraProvider theme={chakraTheme}>

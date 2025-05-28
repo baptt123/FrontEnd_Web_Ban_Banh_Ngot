@@ -5,6 +5,7 @@
   "homepage": "http://nutrey-react.wpolive.com",
   "private": true,
   "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.10.9",
     "@chakra-ui/theme": "^3.4.6",
     "@emotion/react": "^11.14.0",
