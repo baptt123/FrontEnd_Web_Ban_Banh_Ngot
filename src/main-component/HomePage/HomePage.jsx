@@ -6,12 +6,12 @@ import OricoFeatures from '../../components/OricoFeatures/OricoFeatures.jsx';
 import About from '../../components/about/about.jsx';
 import FunFact from '../../components/FunFact/FunFact.jsx';
 import ServiceSection from '../../components/ServiceSection/ServiceSection.jsx';
-import OfferSection from '../../components/OfferSection/OfferSection.jsx';
+// import OfferSection from '../../components/OfferSection/OfferSection.jsx';
 import ProductSection from '../../components/ProductSection/ProductSection.jsx';
-import TeamSection from '../../components/TeamSection/TeamSection.jsx';
+// import TeamSection from '../../components/TeamSection/TeamSection.jsx';
 import PartnersSection from '../../components/PartnersSection/PartnersSection.jsx';
 import Testimonial from '../../components/Testimonial/Testimonial.jsx';
-import BlogSection from '../../components/BlogSection/BlogSection.jsx';
+// import BlogSection from '../../components/BlogSection/BlogSection.jsx';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar';
 import Logo from '../../images/logo.svg'

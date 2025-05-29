@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import logo from '../../images/cupakery.png';
 import header1 from '../../images/header-shape1.png'
 import header2 from '../../images/header-shape2.png'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 const HeaderTop = () => {
     return (
         <div className="topbar">
@@ -21,7 +23,7 @@ const HeaderTop = () => {
                         <div className="contyact-info-wrap">
                             <div className="contact-info">
                                 <div className="icon">
-                                    <i className="fi flaticon-phone-call"></i>
+                                   <FontAwesomeIcon icon={faPhone} style={{ color: '#63E6BE' }} />
                                 </div>
                                 <div className="info-text">
                                     <span>Call Us:</span>
@@ -30,7 +32,7 @@ const HeaderTop = () => {
                             </div>
                             <div className="contact-info">
                                 <div className="icon">
-                                    <i className="fi flaticon-email"></i>
+                                 <FontAwesomeIcon icon={faEnvelope} style={{color: "#63E6BE",}} />
                                 </div>
                                 <div className="info-text">
                                     <span>E-mail Now:</span>
@@ -39,7 +41,7 @@ const HeaderTop = () => {
                             </div>
                             <div className="contact-info">
                                 <div className="icon">
-                                    <i className="fi flaticon-placeholder"></i>
+                                 <FontAwesomeIcon icon={faLocationDot} style={{color: "#63E6BE",}} />
                                 </div>
                                 <div className="info-text">
                                     <span>Our Location:</span>
