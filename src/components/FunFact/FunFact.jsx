@@ -3,10 +3,7 @@ import CountUp from 'react-countup';
 
 import Fa1 from '../../images/funfact/s1.png'
 import Fa2 from '../../images/funfact/s2.png'
-import FaIcon1 from '../../images/funfact/1.svg'
-import FaIcon2 from '../../images/funfact/2.svg'
-import FaIcon3 from '../../images/funfact/3.svg'
-import FaIcon4 from '../../images/funfact/4.svg'
+import Cake from '../../images/funfact/cake_svg_funfact.svg'
 
 const FunFact = (props) => {
 
@@ -23,7 +20,7 @@ const FunFact = (props) => {
                                     <h3><CountUp end={58} enableScrollSpy />M</h3>
                                     <p>Trusted By Customers</p>
                                     <div className="icon">
-                                        <img src={FaIcon1} alt=""/>
+                                        <img src={Cake} alt=""/>
                                     </div>
                                 </div>
                             </div>
@@ -32,7 +29,7 @@ const FunFact = (props) => {
                                     <h3><CountUp end={48} enableScrollSpy />.<CountUp end={6} enableScrollSpy />k</h3>
                                     <p>Product Sale Per Day</p>
                                     <div className="icon">
-                                        <img src={FaIcon2} alt=""/>
+                                        <img src={Cake} alt=""/>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +38,7 @@ const FunFact = (props) => {
                                     <h3><CountUp end={39} enableScrollSpy />Y</h3>
                                     <p>Years Of Foundation</p>
                                     <div className="icon">
-                                        <img src={FaIcon3} alt=""/>
+                                        <img src={Cake} alt=""/>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +47,7 @@ const FunFact = (props) => {
                                     <h3><CountUp end={86} enableScrollSpy />.<CountUp end={4} enableScrollSpy />M</h3>
                                     <p>Monthly Product Order</p>
                                     <div className="icon">
-                                        <img src={FaIcon4} alt=""/>
+                                        <img src={Cake} alt=""/>
                                     </div>
                                 </div>
                             </div>

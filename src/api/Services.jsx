@@ -7,10 +7,10 @@ import img4 from '../images/service/img-4.jpg'
 
 
 
-import sion1 from '../images/service/icon-1.svg'
-import sion2 from '../images/service/icon-2.svg'
-import sion3 from '../images/service/icon-3.svg'
-import sion4 from '../images/service/icon-4.svg'
+import sion1 from '../images/service/break-cake.svg'
+import sion2 from '../images/service/donut.svg'
+import sion3 from '../images/service/donut.svg'
+import sion4 from '../images/service/break-cake.svg'
 
 
 import Simg1 from '../images/service-single/img1.jpg'

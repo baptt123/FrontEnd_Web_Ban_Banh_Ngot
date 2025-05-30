@@ -6,11 +6,11 @@ import 'swiper/css/navigation';
 import { Link } from 'react-router-dom'
 import hero1 from '../../images/slider/slide-1.jpg'
 import hero2 from '../../images/slider/slide-4.jpg'
-import Shape from '../../images/slider/shape-1.png'
-import Shape2 from '../../images/slider/shape-2.png'
-import Shape3 from '../../images/slider/shape-3.png'
-import Shape4 from '../../images/slider/shape-4.png'
-import Shape5 from '../../images/slider/shape-5.png'
+// import Cake from '../../images/img-bakery/bread.png'
+// import Cake2 from '../../images/img-bakery/circle.png'
+// import Cake3 from '../../images/img-bakery/croiisant.png'
+// import Cake4 from '../../images/img-bakery/donut.png'
+import Cake5 from '../../images/service/break-cake.svg'
 
 const HeroSlider = () => {
     return (
@@ -29,26 +29,25 @@ const HeroSlider = () => {
                     <div className="slide-inner slide-bg-image" style={{ backgroundImage: `url(${hero1})` }}>
                         <div className="container-fluid">
                             <div className="slide-content">
-                                <div className="slide-sub-title">
+                                {/* <div className="slide-sub-title">
                                     <p>“<span>100% PURE VEGETABLES</span>”</p>
-                                </div>
+                                </div> */}
                                 <div className="slide-title">
-                                    <h2>Organic Food <span>And</span> Vegetabls.</h2>
+                                    <h2>Các loại bánh ngọt <span>và</span> mọi thứ thuộc về bạn</h2>
                                 </div>
                                 <div className="slide-text">
-                                    <p>Lorem Ipsum has been the industry's standard text since the printer took
-                                        galley make.</p>
+                                    <p>Bánh ngon nguyên chất.</p>
                                 </div>
                                 <div className="slide-btns">
                                     <Link to="/about" className="theme-btn">Explore more</Link>
                                 </div>
                             </div>
                         </div>
-                        <div className="shape s1"><img src={Shape} alt=""/></div>
-                        <div className="shape s2"><img src={Shape2} alt=""/></div>
-                        <div className="shape s3"><img src={Shape3} alt=""/></div>
-                        <div className="shape s4"><img src={Shape4} alt=""/></div>
-                        <div className="shape s5"><img src={Shape5} alt=""/></div>
+                        <div className="shape s1"><img src={Cake5} alt=""/></div>
+                        <div className="shape s2"><img src={Cake5} alt=""/></div>
+                        <div className="shape s3"><img src={Cake5} alt=""/></div>
+                        <div className="shape s4"><img src={Cake5} alt=""/></div>
+                        <div className="shape s5"><img src={Cake5} alt=""/></div>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
@@ -70,11 +69,11 @@ const HeroSlider = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="shape s1"><img src={Shape} alt=""/></div>
-                        <div className="shape s2"><img src={Shape2} alt=""/></div>
-                        <div className="shape s3"><img src={Shape3} alt=""/></div>
-                        <div className="shape s4"><img src={Shape4} alt=""/></div>
-                        <div className="shape s5"><img src={Shape5} alt=""/></div>
+                        <div className="shape s1"><img src={Cake5} alt=""/></div>
+                        <div className="shape s2"><img src={Cake5} alt=""/></div>
+                        <div className="shape s3"><img src={Cake5} alt=""/></div>
+                        <div className="shape s4"><img src={Cake5} alt=""/></div>
+                        <div className="shape s5"><img src={Cake5} alt=""/></div>
                     </div>
                 </SwiperSlide>
                

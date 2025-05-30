@@ -1,0 +1,92 @@
+/* Social media icons styling */
+.social-widget ul li a {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.social-widget ul li a i {
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* Social media hover effect */
+.social-widget ul li a:hover {
+    border-color: #4CAF50;
+    background: transparent;
+}
+
+.social-widget ul li a:hover i {
+    color: #4CAF50;
+}
+
+/* Contact icons styling */
+.wpo-contact-widget .contact-ft ul li i {
+    width: 35px;
+    height: 35px;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* Contact icons hover effect */
+.wpo-contact-widget .contact-ft ul li:hover i {
+    color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+/* Quick Links hover effect */
+.link-widget ul li a {
+    transition: all 0.3s ease;
+}
+
+.link-widget ul li a:hover {
+    color: #4CAF50;
+}
+
+/* Newsletter submit button styling */
+.newsletter-widget .submit button {
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* Newsletter submit button hover */
+.newsletter-widget .submit button:hover {
+    border-color: #4CAF50;
+    background: transparent;
+}
+
+/* General list styling */
+.social-widget ul,
+.wpo-contact-widget .contact-ft ul {
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    list-style: none;
+}
+
+/* Contact list items alignment */
+.wpo-contact-widget .contact-ft ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Optional: Animation for hover effect */
+.social-widget ul li a:hover,
+.wpo-contact-widget .contact-ft ul li i:hover {
+    transform: translateY(-3px);
+}

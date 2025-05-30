@@ -104,13 +104,26 @@ const ProductSection = ({ addToCart }) => {
                                                 </div>
                                                 <div className="orico-product-text-hide">
                                                     <ul className="orico-product-link">
-                                                        <li><a href="#"><i className="fi ti-heart"></i></a></li>
-                                                        <li><button onClick={() => addToCartProduct(product)}>
-                                                                <i className="fi flaticon-shopping-cart"
-                                                                aria-hidden="true"></i></button>
+                                                        <li>
+                                                            <a href="/" className="product-icon-hover">
+                                                                <i className="fi ti-heart"></i>
+                                                            </a>
                                                         </li>
                                                         <li>
-                                                            <button onClick={() => handleProductClick(product)}><i className="fi ti-eye"></i></button>
+                                                            <button 
+                                                                onClick={() => addToCartProduct(product)} 
+                                                                className="product-icon-hover"
+                                                            >
+                                                                <i className="fi flaticon-shopping-cart" aria-hidden="true"></i>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button 
+                                                                onClick={() => handleProductClick(product)} 
+                                                                className="product-icon-hover"
+                                                            >
+                                                                <i className="fi ti-eye"></i>
+                                                            </button>
                                                         </li>
                                                     </ul>
                                                     <h2><Link onClick={ClickHandler} to={`/shop-single/${product.slug}`}>{product.title}</Link></h2>
@@ -120,7 +133,12 @@ const ProductSection = ({ addToCart }) => {
                                                             {product.delPrice && <li>${product.price}</li>}
                                                         </ul>
                                                     </div>
-                                                    <button onClick={() => addToCartProduct(product)} className="cart-btn">Add to Cart</button>
+                                                    <button 
+                                                        onClick={() => addToCartProduct(product)} 
+                                                        className="cart-btn product-icon-hover"
+                                                    >
+                                                        Add to Cart
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -131,6 +149,40 @@ const ProductSection = ({ addToCart }) => {
                 </div>
             </div>
             <PopupQuickview product={selectedProduct} handleCloseClick={handleCloseClick}/>
+            
+            {/* CSS for hover effect */}
+            <style jsx>{`
+                .orico-product-single:hover .orico-product-text-hide {
+                    background-color: rgba(34, 197, 94, 0.95) !important; /* Green background overlay on hover */
+                }
+
+                .product-icon-hover {
+                    color: #333; /* Default icon color */
+                    border-color: transparent; /* Default border color */
+                    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+                }
+
+                .product-icon-hover:hover {
+                    color: #fff !important; /* White color on hover for better contrast */
+                    border-color: rgba(255, 255, 255, 0.3) !important; /* Light border on hover */
+                }
+
+                .product-icon-hover:hover i {
+                    color: #fff !important; /* White icon on hover */
+                }
+
+                .cart-btn.product-icon-hover {
+                    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+                    color: #fff; /* White text */
+                    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+                }
+
+                .cart-btn.product-icon-hover:hover {
+                    background-color: #fff !important; /* White background on hover */
+                    color: #22c55e !important; /* Green text on hover */
+                    border-color: #fff !important; /* White border on hover */
+                }
+            `}</style>
         </section>
     );
 };

@@ -1,0 +1,61 @@
+/* Base hover effects with primary green */
+.orico-product-link li a:hover,
+.orico-product-link li button:hover {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.cart-btn:hover {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.orico-product-single:hover .orico-product-text-hide {
+    background: #4CAF50;
+}
+
+.orico-product-text h2 a:hover {
+    color: #4CAF50;
+}
+
+.product-price ul li:hover {
+    color: #4CAF50;
+}
+
+button:hover,
+.nav-link:hover,
+.nav-link.active {
+    background-color: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+}
+
+/* New styles for icons with different green shades */
+/* Heart icon hover */
+.fi.ti-heart:hover {
+    color: #45a049; /* Slightly darker green */
+}
+
+/* Shopping cart icon hover */
+.fi.flaticon-shopping-cart:hover {
+    color: #66bb6a; /* Slightly lighter green */
+}
+
+/* Eye icon hover */
+.fi.ti-eye:hover {
+    color: #388e3c; /* Another shade of green */
+}
+
+/* When hovering over the icon container */
+.orico-product-link li:hover i {
+    color: #43a047; /* Different green shade for icon container hover */
+}
+
+/* Additional hover effects for better visual feedback */
+.orico-product-link li:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.fi:hover {
+    transition: color 0.3s ease;
+}

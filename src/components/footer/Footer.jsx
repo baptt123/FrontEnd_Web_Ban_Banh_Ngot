@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import TopShape from '../../images/ft-bg.png'
-import logo from '../../images/footer-logo.svg'
-import FtShape1 from '../../images/ft-shape-1.png'
-import FtShape2 from '../../images/ft-shape-2.png'
+import logo from '../../images/cupakery.png'
 import Btnicon from '../../images/pointer.svg'
 
 
@@ -141,18 +139,11 @@ const Footer = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="ft-shape-1"><img src={FtShape1} alt="" /></div>
-                <div className="ft-shape-2"><img src={FtShape2} alt="" /></div>
+                {/* <div className="ft-shape-1"><img src={FtShape1} alt="" /></div>
+                <div className="ft-shape-2"><img src={FtShape2} alt="" /></div> */}
             </footer>
         </div>
     )
 }
 
 export default Footer;
-
-
-
-
-
-
-

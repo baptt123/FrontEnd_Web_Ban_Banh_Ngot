@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import api from "../../api";
 import { addToCart } from "../../store/actions/action";
 import PopupQuickview from '../PopupQuickview/PopupQuickview';
+import './shop-page.css'; // Assuming you have a CSS file for styles
 const ShopPageSection = ({ addToCart }) => {
     const [shopeTab, setShopeTab] = useState(0);
 
@@ -98,7 +99,7 @@ const ShopPageSection = ({ addToCart }) => {
                                                     </div>
                                                     <div className="orico-product-text-hide">
                                                         <ul className="orico-product-link">
-                                                            <li><a href="#"><i className="fi ti-heart"></i></a></li>
+                                                            <li><a href="/"><i className="fi ti-heart"></i></a></li>
                                                             <li><button onClick={() => addToCartProduct(product)}>
                                                                 <i className="fi flaticon-shopping-cart"
                                                                     aria-hidden="true"></i></button>
@@ -137,7 +138,7 @@ const ShopPageSection = ({ addToCart }) => {
                                                         </div>
                                                         <div className="orico-product-text-hide">
                                                             <ul className="orico-product-link">
-                                                                <li><a href="#"><i className="fi ti-heart"></i></a></li>
+                                                                <li><a href="/"><i className="fi ti-heart"></i></a></li>
                                                                 <li><button onClick={() => addToCartProduct(product)}>
                                                                     <i className="fi flaticon-shopping-cart"
                                                                         aria-hidden="true"></i></button>
