@@ -10,3 +10,30 @@ export const INCREMENT_QUANTITY = 'INCREMENT_QUANTITY';
 export const DECREMENT_QUANTITY = 'DECREMENT_QUANTITY';
 export const ADD_TO_COMPARE = 'ADD_TO_COMPARE';
 export const REMOVE_FROM_COMPARE_LIST = 'REMOVE_FROM_COMPARE_LIST';
+
+// Auth
+export const REGISTER_REQUEST   = 'REGISTER_REQUEST';
+export const REGISTER_SUCCESS   = 'REGISTER_SUCCESS';
+export const REGISTER_FAILURE   = 'REGISTER_FAILURE';
+
+export const VERIFY_REQUEST     = 'VERIFY_REQUEST';
+export const VERIFY_SUCCESS     = 'VERIFY_SUCCESS';
+export const VERIFY_FAILURE     = 'VERIFY_FAILURE';
+
+export const LOGIN_REQUEST      = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS      = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE      = 'LOGIN_FAILURE';
+
+export const GOOGLE_REQUEST     = 'GOOGLE_REQUEST';
+export const GOOGLE_SUCCESS     = 'GOOGLE_SUCCESS';
+export const GOOGLE_FAILURE     = 'GOOGLE_FAILURE';
+
+export const LOGOUT             = 'LOGOUT';
+
+export const FORGOT_REQUEST     = 'FORGOT_REQUEST';
+export const FORGOT_SUCCESS     = 'FORGOT_SUCCESS';
+export const FORGOT_FAILURE     = 'FORGOT_FAILURE';
+
+export const RESET_REQUEST      = 'RESET_REQUEST';
+export const RESET_SUCCESS      = 'RESET_SUCCESS';
+export const RESET_FAILURE      = 'RESET_FAILURE';
