@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Routes, Route,} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import Homepage from '../HomePage/HomePage'
 import HomePage2 from '../HomePage2/HomePage2';
 import HomePage3 from '../HomePage3/HomePage3';
@@ -26,20 +26,12 @@ import Register from '../SignUpPage/index';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import ProductPage from '../TestProductPage/ProductPage';
 import OrderHistoryDashboard from '../OrderHistoryPage/OrderHistory.jsx';
-import Invoices from "../AdminPages/scenes/invoices/index.jsx";
-import Bar from "../AdminPages/scenes/bar/index.jsx";
-import Pie from "../AdminPages/scenes/pie/index.jsx";
-import Line from "../AdminPages/scenes/line/index.jsx";
-import FAQ from "../AdminPages/scenes/faq/index.jsx";
-import Calendar from "../AdminPages/scenes/calendar/calendar.jsx";
-import Geography from "../AdminPages/scenes/geography/index.jsx";
-import Team from "../AdminPages/scenes/team/index.jsx"
-import Contacts from "../AdminPages/scenes/contacts/index.jsx"
 import {Form} from "formik";
 import Cover from "/src/components/CoverMainUserProfile/Cover.jsx";
 import Main from "/src/components/CoverMainUserProfile/Main.jsx";
 import ResetPasswordPage from "/src/main-component/ResetPasswordPage/index.jsx";
 import VerifyPage from "/src/main-component/VerifyPage/index.jsx";
+
 
 const AllRoute = () => {
 
@@ -73,23 +65,23 @@ const AllRoute = () => {
                 <Route path='404' element={<ErrorPage/>}/>
                 <Route path="all-products" element={<ProductPage/>}/>
                 <Route path="order-history" element={<OrderHistoryDashboard/>}/>
-                <Route path="team-admin" element={<Team/>}/>
-                <Route path="contacts-admin" element={<Contacts/>}/>
-                <Route path="invoices" element={<Invoices/>}/>
-                <Route path="form" element={<Form/>}/>
-                <Route path="bar" element={<Bar/>}/>
-                <Route path="pie" element={<Pie/>}/>
-                <Route path="line" element={<Line/>}/>
-                <Route path="faq" element={<FAQ/>}/>
-                <Route path="calendar" element={<Calendar/>}/>
-                <Route path="geography" element={<Geography/>}/>
+                {/*<Route path="team-admin" element={<Team/>}/>*/}
+                {/*<Route path="contacts-admin" element={<Contacts/>}/>*/}
+                {/*<Route path="invoices" element={<Invoices/>}/>*/}
+                {/*<Route path="form" element={<Form/>}/>*/}
+                {/*<Route path="bar" element={<Bar/>}/>*/}
+                {/*<Route path="pie" element={<Pie/>}/>*/}
+                {/*<Route path="line" element={<Line/>}/>*/}
+                {/*<Route path="faq" element={<FAQ/>}/>*/}
+                {/*<Route path="calendar" element={<Calendar/>}/>*/}
+                {/*<Route path="geography" element={<Geography/>}/>*/}
                 <Route path="user-profile" element={
                     <>
                         <Cover/>
                         <Main/>
                     </>
                 }/>
-                <Route path="contact" element={<ContactPage />} />
+                {/*<Route path="contact" element={<ContactPage />} />*/}
                 <Route path="login" element={<LoginPage />} />
                 <Route path="forgot" element={<ForgotPassword />} />
                 <Route path="register" element={<Register />} />
