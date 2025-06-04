@@ -604,14 +604,14 @@
                 width: 60px;
                 height: 60px;
                 line-height: 60px;
-                border: 1px solid $theme-primary-color;
+                border: 1px solid green;
                 margin: 0 auto;
-                color: $theme-primary-color;
+                color: green;
                 margin-top: 10px;
                 border-radius: 50%;
 
                 &:hover {
-                    background: $theme-primary-color;
+                    background: green;
                     color: $white;
                 }
             }
@@ -1234,7 +1234,7 @@
     .orico-testimonial-wrap {
         .orico-testimonial-item {
             display: flex !important;
-            background: $theme-primary-color;
+            background: chartreuse;
             border-radius: 20px;
             align-items: center;
 
@@ -1421,7 +1421,7 @@
 .orico-blog-area {
     .orico-blog-wrap {
         .orico-blog-item {
-            background: $section-bg-color;
+            background: $white;
             border-radius: 25px;
 
             @include media-query(991px) {
@@ -1447,7 +1447,7 @@
                     margin-bottom: 20px;
 
                     li {
-                        color: $theme-primary-color;
+                        color: darkgreen;
                         list-style: none;
                         text-transform: uppercase;
                     }
@@ -1463,22 +1463,22 @@
                     }
 
                     a {
-                        color: $dark-gray;
+                        color: darkgreen;
 
                         &:hover {
-                            color: $theme-primary-color;
+                            color: darkcyan;
                         }
                     }
                 }
 
                 .theme-btn-s2 {
-                    background: none;
-                    color: $dark-gray;
-                    border: 1px solid $theme-primary-color;
+                    background: darkcyan;
+                    color: darkgreen;
+                    border: 1px solid darkgreen;
                     padding: 8px 25px 10px;
 
                     &:hover {
-                        color: $white;
+                        color: darkgreen;
                     }
 
                     @media(max-width:1200px) {

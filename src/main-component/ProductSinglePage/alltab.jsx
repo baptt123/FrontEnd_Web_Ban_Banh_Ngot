@@ -1,24 +1,105 @@
-import React, { useState } from 'react';
+
+   import React, { useEffect, useState } from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
+import { addComment, fetchAllComments, deleteComment } from '../../api/CommentAPI.jsx';
+import { fetchAllRatings, addRating, updateRating } from '../../api/RatingAPI.jsx';
 import classnames from 'classnames';
+import moment from 'moment';
+import { FaStar } from 'react-icons/fa';
 
-import rv1 from '../../images/shop/shop-single/review/img-1.jpg'
-import rv2 from '../../images/shop/shop-single/review/img-2.jpg'
-
-
-
-const ProductTabs = (props) => {
+const ProductTabs = () => {
     const [activeTab, setActiveTab] = useState('1');
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+    const [ratings, setRatings] = useState([]);
+    const [userRating, setUserRating] = useState(0);
+    const [hover, setHover] = useState(null);
+
+    const userId = 1; // giả lập userId
+    const productId = 1; // giả lập productId
 
     const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
-    }
+    };
 
-    const SubmitHandler = (e) => {
-        e.preventDefault()
-    }
+    const loadComments = async () => {
+        try {
+            const data = await fetchAllComments();
+            setComments(data.filter(c => c.productId === productId));
+        } catch (error) {
+            console.error('Failed to load comments:', error);
+        }
+    };
 
+    const loadRatings = async () => {
+        try {
+            const data = await fetchAllRatings();
+            const filtered = data.filter(r => r.productId === productId);
+            setRatings(filtered);
 
+            // Set userRating khi load
+            const currentUserRating = filtered.find(r => r.userId === userId);
+            if (currentUserRating) {
+                setUserRating(currentUserRating.rating);
+            } else {
+                setUserRating(0);
+            }
+        } catch (error) {
+            console.error('Failed to load ratings:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (activeTab === '2') {
+            loadComments();
+            loadRatings();
+        }
+    }, [activeTab]);
+
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await addComment({ userId, productId, content: newComment });
+            setNewComment('');
+            loadComments();
+        } catch (error) {
+            console.error('Failed to add comment:', error);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteComment(id);
+            loadComments();
+        } catch (error) {
+            console.error('Failed to delete comment:', error);
+        }
+    };
+
+    const handleRatingSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Kiểm tra user đã đánh giá chưa
+            const existingRating = ratings.find(r => r.userId === userId);
+
+            if (existingRating) {
+                // Cập nhật đánh giá
+                await updateRating(existingRating.id, { userId, productId, rating: userRating });
+            } else {
+                // Thêm đánh giá mới
+                await addRating({ userId, productId, rating: userRating });
+            }
+
+            loadRatings();
+        } catch (error) {
+            console.error('Failed to submit rating:', error);
+        }
+    };
+
+    const averageRating = ratings.length > 0
+        ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
+        : '0.0';
 
     return (
         <div className="row">
@@ -26,20 +107,13 @@ const ProductTabs = (props) => {
                 <div className="product-info">
                     <Nav tabs>
                         <NavItem>
-                            <NavLink
-                                className={classnames({ active: activeTab === '1' })}
-                                onClick={() => { toggle('1'); }}
-                            >
-                               Description
+                            <NavLink className={classnames({ active: activeTab === '1' })} onClick={() => toggle('1')}>
+                                Description
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink
-                                className={classnames({ active: activeTab === '2' })}
-                                onClick={() => { toggle('2'); }}
-                            >
-
-                            Review
+                            <NavLink className={classnames({ active: activeTab === '2' })} onClick={() => toggle('2')}>
+                                Review
                             </NavLink>
                         </NavItem>
                     </Nav>
@@ -47,148 +121,72 @@ const ProductTabs = (props) => {
                         <TabPane tabId="1">
                             <Row>
                                 <Col sm="12">
-                                    <div id="Schedule">
-                                    <p>Samsa woke from troubled dreams, he found himself transformed in his bed into a
-                                        horrible vermin. He lay on his armour-like back, and if he lifted his head a
-                                        little he could see his brown belly, slightly domed and divided by arches into
-                                        stiff sections. The bedding was hardly able to cover it and seemed ready to
-                                        slide off any moment. His many legs, pitifully thin compared with the size of
-                                        the rest of him.</p>
-                                    <p>The bedding was hardly able to cover it and seemed ready to slide off any moment.
-                                        His many legs, pitifully thin compared with the size of the rest of himSamsa
-                                        woke from troubled dreams, he found himself transformed in his bed into a
-                                        horrible vermin.</p>
-                                    </div>
+                                    <p>This is a description tab.</p>
                                 </Col>
                             </Row>
                         </TabPane>
                         <TabPane tabId="2">
-                        <div className="row">
-                            <div className="col col-lg-10 col-12">
-                                <div className="client-rv">
-                                    <div className="client-pic">
-                                        <img src={rv1} alt=""/>
-                                    </div>
-                                    <div className="details">
-                                        <div className="name-rating-time">
-                                            <div className="name-rating">
-                                                <div>
-                                                    <h4>Jenefar Willium</h4>
-                                                </div>
-                                                <div className="product-rt">
-                                                    <span>25 Sep 2024</span>
-                                                    <div className="rating">
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star-1"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="review-body">
-                                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="client-rv">
-                                    <div className="client-pic">
-                                         <img src={rv2} alt=""/>
-                                    </div>
-                                    <div className="details">
-                                        <div className="name-rating-time">
-                                            <div className="name-rating">
-                                                <div>
-                                                    <h4>Maria Bannet</h4>
-                                                </div>
-                                                <div className="product-rt">
-                                                    <span>28 Sep 2024</span>
-                                                    <div className="rating">
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star"></i>
-                                                        <i className="flaticon-star-1"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="review-body">
-                                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col col-lg-12 col-12 review-form-wrapper">
-                                <div className="review-form">
-                                    <h4>Add a review</h4>
-                                    <p>Your email address will not be published. Required fields are marked *</p>
-                                    <form onSubmit={SubmitHandler}>
-                                        <div className="give-rat-sec">
-                                            <p>Your rating *</p>
-                                            <div className="give-rating">
-                                                <label>
-                                                    <input type="radio" name="stars" value="1" />
-                                                    <span className="icon">★</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="stars" value="2" />
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="stars" value="3" />
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="stars" value="4" />
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="stars" value="5" />
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                    <span className="icon">★</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <input type="text" className="form-control" placeholder="Name *"
-                                                required/>
-                                        </div>
-                                        <div>
-                                            <input type="email" className="form-control" placeholder="Email *"
-                                                required/>
-                                        </div>
-                                        <div>
-                                            <textarea className="form-control"
-                                                placeholder="Review *"></textarea>
-                                        </div>
-                                        <div className="rating-wrapper">
-                                            <div className="submit">
-                                            <button type="submit" className="theme-btn-s2">Post
-                                                    review</button>
-                                            </div>
-                                        </div>
+                            <div className="review-section">
+                                <div className="mb-4">
+                                    <h5>Average Rating: {averageRating} / 5</h5>
+                                    {[...Array(5)].map((_, index) => {
+                                        const ratingValue = index + 1;
+                                        return (
+                                            <label key={index}>
+                                                <input
+                                                    type="radio"
+                                                    name="rating"
+                                                    value={ratingValue}
+                                                    onClick={() => setUserRating(ratingValue)}
+                                                    style={{ display: 'none' }}
+                                                />
+                                                <FaStar
+                                                    color={ratingValue <= (hover || userRating) ? '#ffc107' : '#e4e5e9'}
+                                                    size={25}
+                                                    onMouseEnter={() => setHover(ratingValue)}
+                                                    onMouseLeave={() => setHover(null)}
+                                                    style={{ cursor: 'pointer' }}
+                                                />
+                                            </label>
+                                        );
+                                    })}
+                                    <form onSubmit={handleRatingSubmit}>
+                                        <button type="submit" className="btn btn-success mt-2" disabled={userRating === 0}>
+                                            Submit Rating
+                                        </button>
                                     </form>
                                 </div>
+
+                                <h5>Comments</h5>
+                                {comments.map((comment) => (
+                                    <div key={comment.id} className="border p-3 mb-2">
+                                        <div className="d-flex justify-content-between">
+                                            <h6>{comment.userName}</h6>
+                                            <small>{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</small>
+                                        </div>
+                                        <p>{comment.content}</p>
+                                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(comment.id)}>Delete</button>
+                                    </div>
+                                ))}
+
+                                <form onSubmit={handleCommentSubmit} className="mt-4">
+                                    <h6>Add a Comment</h6>
+                                    <textarea
+                                        className="form-control mb-2"
+                                        placeholder="Your comment"
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                        required
+                                    />
+                                    <button type="submit" className="btn btn-primary">Post Comment</button>
+                                </form>
                             </div>
-                        </div>
                         </TabPane>
                     </TabContent>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default ProductTabs;
