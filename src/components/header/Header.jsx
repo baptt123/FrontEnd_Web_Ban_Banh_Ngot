@@ -2,14 +2,23 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import { totalPrice } from "../../utils";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../store/actions/action";
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { Box, VStack, Link as ChakraLink, useToast, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../store/actions/action";
+import UserProfilePage from '../../main-component/UserProfilePage';
 
 const Header = (props) => {
     const [menuActive, setMenuState] = useState(false);
     const [cartActive, setcartState] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
+    const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const SubmitHandler = (e) => {
         e.preventDefault()
@@ -19,8 +28,32 @@ const Header = (props) => {
         window.scrollTo(10, 0);
     }
 
-    const { carts } = props;
+    const handleLogout = async () => {
+        try {
+            await dispatch(logout());
+            toast({
+                title: "Đăng xuất thành công.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            navigate("/login");
+        } catch (error) {
+            toast({
+                title: "Đăng xuất thất bại.",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
 
+    const handleUserProfileClick = () => {
+        onOpen(); // Open modal
+    }
+
+    const { carts } = props;
 
     return (
         <header id="header">
@@ -111,6 +144,24 @@ const Header = (props) => {
                                             </div>
                                         </div>
                                     </div>
+                                    <li className="menu-item-has-children user-profile-menu-item">
+                                        <Link onClick={ClickHandler} to="#" className="user-profile-toggle-btn">
+                                            <FontAwesomeIcon icon={faUser} />
+                                        </Link>
+                                        <ul className="sub-menu">
+                                            {user ? (
+                                                <>
+                                                    <li><Link onClick={() => { handleUserProfileClick(); ClickHandler(); }}>Thông tin cá nhân</Link></li>
+                                                    <li><Link onClick={() => { handleLogout(); ClickHandler(); }}>Đăng xuất</Link></li>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <li><Link onClick={ClickHandler} to="/login">Đăng Nhập</Link></li>
+                                                    <li><Link onClick={ClickHandler} to="/signup">Đăng Ký</Link></li>
+                                                </>
+                                            )}
+                                        </ul>
+                                    </li>
                                     <div className="mini-cart">
                                         <button className="cart-toggle-btn" onClick={() => setcartState(!cartActive)}>
                                             {" "}
@@ -158,7 +209,7 @@ const Header = (props) => {
                                         </div>
                                     </div>
                                     <div className="close-form">
-                                        <Link onClick={ClickHandler} className="theme-btn" to="/shop">Shop Now</Link>
+                                        <Link onClick={ClickHandler} className="theme-btn" to="/home">Shop Now</Link>
                                     </div>
                                 </div>
                             </div>
@@ -166,6 +217,15 @@ const Header = (props) => {
                     </div>
                 </nav>
             </div>
+            <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalCloseButton />
+                    <ModalBody p={6}>
+                        <UserProfilePage />
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
         </header>
     )
 }
@@ -174,7 +234,6 @@ const mapStateToProps = (state) => {
         carts: state.cartList.cart,
     };
 };
-
 
 export default connect(mapStateToProps, { removeFromCart })(Header);
 
