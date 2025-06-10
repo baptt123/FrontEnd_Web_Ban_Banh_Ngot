@@ -1,6 +1,6 @@
 /* src/main-component/SignUpPage/index.jsx */
 import React, { useEffect, useState } from "react";
-import { Grid, Box } from "@chakra-ui/react";
+import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
@@ -65,8 +65,8 @@ const SignUpPage = () => {
         <h2>Đăng ký</h2>
         <p>Tạo tài khoản của bạn</p>
         <form onSubmit={submitForm} noValidate>
-          <Grid templateColumns="repeat(1, 1fr)" gap={3}>
-            <Box>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 placeholder="Tên đăng nhập"
@@ -77,8 +77,8 @@ const SignUpPage = () => {
                 value={value.username}
                 onChange={changeHandler}
               />
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 placeholder="Email"
@@ -89,8 +89,8 @@ const SignUpPage = () => {
                 value={value.email}
                 onChange={changeHandler}
               />
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 placeholder="Số điện thoại"
@@ -101,8 +101,8 @@ const SignUpPage = () => {
                 value={value.phone}
                 onChange={changeHandler}
               />
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 placeholder="Mật khẩu"
@@ -114,8 +114,8 @@ const SignUpPage = () => {
                 value={value.password}
                 onChange={changeHandler}
               />
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item xs={12}>
               <div className="formFooter">
                 <Button
                   fullWidth
@@ -129,7 +129,7 @@ const SignUpPage = () => {
               <p className="noteHelp">
                 Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
               </p>
-            </Box>
+            </Grid>
           </Grid>
         </form>
       </Grid>

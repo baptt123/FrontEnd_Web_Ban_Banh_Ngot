@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Grid, Box } from "@chakra-ui/react";
+import Grid from "@mui/material/Grid";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyEmail } from "../../store/actions/action";
@@ -37,14 +37,14 @@ const VerifyPage = () => {
       <Grid className="loginForm">
         <h2>Xác thực tài khoản</h2>
         <p>Đang xác thực, vui lòng chờ...</p>
-        <Box className="formFooter">
+        <div className="formFooter">
           {loading && <p>Loading...</p>}
           {!loading && (
             <Link to="/login" className="cBtn cBtnTheme cBtnLarge">
               Quay về Đăng nhập
             </Link>
           )}
-        </Box>
+        </div>
       </Grid>
     </Grid>
   );

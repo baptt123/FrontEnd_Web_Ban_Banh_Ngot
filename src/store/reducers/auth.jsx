@@ -18,12 +18,6 @@ import {
   GOOGLE_REQUEST,
   GOOGLE_SUCCESS,
   GOOGLE_FAILURE,
-  GET_USER_PROFILE_REQUEST,
-  GET_USER_PROFILE_SUCCESS,
-  GET_USER_PROFILE_FAILURE,
-  UPDATE_USER_PROFILE_REQUEST,
-  UPDATE_USER_PROFILE_SUCCESS,
-  UPDATE_USER_PROFILE_FAILURE,
 } from "../actions/type";
 
 const initialState = {
@@ -40,55 +34,11 @@ const auth = (state = initialState, action) => {
     case GOOGLE_REQUEST:
     case FORGOT_REQUEST:
     case RESET_REQUEST:
-    case GET_USER_PROFILE_REQUEST:
-    case UPDATE_USER_PROFILE_REQUEST:
       return { ...state, loading: true, error: null };
 
     case LOGIN_SUCCESS:
     case GOOGLE_SUCCESS:
-      const { user: { userId, username, email, phone, active, createdAt, role }, profileId, ...loginPayload } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        user: {
-          userId,
-          username,
-          email,
-          phone,
-          active,
-          createdAt,
-          role,
-        },
-      };
-
-    case GET_USER_PROFILE_SUCCESS:
-      const { fullName: profileFullName, birthDate: profileBirthDate, avatarUrl: profileAvatarUrl, ...otherProfileData } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        user: {
-          ...state.user,
-          profileId: otherProfileData.profileId,
-          address: otherProfileData.address,
-          name: profileFullName,
-          dateOfBirth: profileBirthDate,
-          avatar: profileAvatarUrl,
-        },
-      };
-
-    case UPDATE_USER_PROFILE_SUCCESS:
-      const { fullName: updatedFullName, birthDate: updatedBirthDate, avatarUrl: updatedAvatarUrl, ...otherUpdatedData } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        user: {
-          ...state.user,
-          ...otherUpdatedData,
-          name: updatedFullName,
-          dateOfBirth: updatedBirthDate,
-          avatar: updatedAvatarUrl,
-        },
-      };
+      return { ...state, loading: false, user: action.payload };
 
     case REGISTER_SUCCESS:
     case VERIFY_SUCCESS:
@@ -102,8 +52,6 @@ const auth = (state = initialState, action) => {
     case GOOGLE_FAILURE:
     case FORGOT_FAILURE:
     case RESET_FAILURE:
-    case GET_USER_PROFILE_FAILURE:
-    case UPDATE_USER_PROFILE_FAILURE:
       return { ...state, loading: false, error: action.error };
 
     case LOGOUT:
