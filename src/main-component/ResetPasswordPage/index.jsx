@@ -1,6 +1,6 @@
 /* src/main-component/ResetPasswordPage/index.jsx */
 import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
+import { Grid, Box } from "@chakra-ui/react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -52,8 +52,8 @@ const ResetPasswordPage = () => {
         <h2>Đặt lại mật khẩu</h2>
         <p>Nhập mật khẩu mới của bạn</p>
         <form onSubmit={submitForm} noValidate>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
+          <Grid templateColumns="repeat(1, 1fr)" gap={3}>
+            <Box>
               <TextField
                 fullWidth
                 placeholder="Mật khẩu mới"
@@ -65,8 +65,8 @@ const ResetPasswordPage = () => {
                 value={value.password}
                 onChange={changeHandler}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 placeholder="Xác nhận mật khẩu"
@@ -78,9 +78,9 @@ const ResetPasswordPage = () => {
                 value={value.confirm}
                 onChange={changeHandler}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <div className="formFooter">
+            </Box>
+            <Box>
+              <Box className="formFooter">
                 <Button
                   fullWidth
                   className="cBtn cBtnLarge cBtnTheme"
@@ -89,11 +89,11 @@ const ResetPasswordPage = () => {
                 >
                   {loading ? "Đang xử lý..." : "Đặt lại mật khẩu"}
                 </Button>
-              </div>
+              </Box>
               <p className="noteHelp">
                 Quay về <Link to="/login">Đăng nhập</Link>
               </p>
-            </Grid>
+            </Box>
           </Grid>
         </form>
       </Grid>
