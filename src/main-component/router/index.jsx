@@ -26,11 +26,10 @@ import Register from '../SignUpPage/index';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import ProductPage from '../TestProductPage/ProductPage';
 import OrderHistoryDashboard from '../OrderHistoryPage/OrderHistory.jsx';
-import {Form} from "formik";
-import Cover from "/src/components/CoverMainUserProfile/Cover.jsx";
-import Main from "/src/components/CoverMainUserProfile/Main.jsx";
+import UserProfilePage from '../UserProfilePage/index';
 import ResetPasswordPage from "/src/main-component/ResetPasswordPage/index.jsx";
 import VerifyPage from "/src/main-component/VerifyPage/index.jsx";
+import {Form} from "formik";
 
 
 const AllRoute = () => {
@@ -75,12 +74,7 @@ const AllRoute = () => {
                 {/*<Route path="faq" element={<FAQ/>}/>*/}
                 {/*<Route path="calendar" element={<Calendar/>}/>*/}
                 {/*<Route path="geography" element={<Geography/>}/>*/}
-                <Route path="user-profile" element={
-                    <>
-                        <Cover/>
-                        <Main/>
-                    </>
-                }/>
+                <Route path="user-profile" element={<UserProfilePage />}/>
                 {/*<Route path="contact" element={<ContactPage />} />*/}
                 <Route path="login" element={<LoginPage />} />
                 <Route path="forgot" element={<ForgotPassword />} />
