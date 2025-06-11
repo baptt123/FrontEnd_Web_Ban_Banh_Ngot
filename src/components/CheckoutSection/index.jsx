@@ -1,509 +1,463 @@
-import React, { Fragment } from 'react';
-import Grid from "@mui/material/Grid";
-import Collapse from "@mui/material/Collapse";
-import FontAwesome from "../../components/UiStyle/FontAwesome";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { Link } from 'react-router-dom'
-import { totalPrice } from "../../utils";
 
-// images
+
+
+import React, {  useRef } from 'react';
+import {
+    Box,
+    Grid,
+    Button,
+    Input,
+    Radio,
+    RadioGroup,
+    Table,
+    Tbody,
+    Tr,
+    Td,
+    Text,
+    Stack,
+    Container,
+    Collapse,
+    FormControl,
+    FormLabel,
+    VStack,
+    HStack,
+    ChakraProvider,
+    extendTheme,
+} from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+
+// Import your images
 import visa from '../../images/checkout/img-1.png';
 import mastercard from '../../images/checkout/img-2.png';
 import skrill from '../../images/checkout/img-3.png';
-import paypal from '../../images/checkout/img-1.png';
+import paypal from '../../images/checkout/img-5.png';
 
-import CheckWrap from '../CheckWrap'
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
 
-import './style.scss';
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
 
-const cardType = [
-    {
-        title: 'visa',
-        img: visa
+    componentDidCatch(error, errorInfo) {
+        console.error('Error:', error);
+        console.error('Error Info:', errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return (
+                <Box p={3} textAlign="center">
+                    <Text fontSize="xl" color="red.500">
+                        Something went wrong. Please try again later.
+                    </Text>
+                </Box>
+            );
+        }
+
+        return this.props.children;
+    }
+}
+
+// PayPal Button Component
+const PaypalButton = () => {
+    const paypalRef = useRef(null);
+    const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() => {
+        let isMounted = true;
+
+        const loadPayPalScript = async () => {
+            if (window.paypal) {
+                if (isMounted) {
+                    setIsScriptLoaded(true);
+                    renderPayPalButton();
+                }
+                return;
+            }
+
+            try {
+                const script = document.createElement("script");
+                script.src = "https://www.paypal.com/sdk/js?client-id=AQwmw7pwEz6xTHlwxuaK5S1RnSt0AzdJMStk47HlVehip6qjFUkLT0XcJKEt5DnyOnJDNiFAKVdb4S7u&currency=USD&disable-funding=credit,card";
+                script.async = true;
+
+                script.onload = () => {
+                    if (isMounted) {
+                        setIsScriptLoaded(true);
+                        renderPayPalButton();
+                    }
+                };
+
+                script.onerror = () => {
+                    setError('PayPal SDK failed to load');
+                };
+
+                document.body.appendChild(script);
+            } catch (error) {
+                setError('Error loading PayPal script');
+            }
+        };
+
+        loadPayPalScript();
+
+        return () => {
+            isMounted = false;
+            if (paypalRef.current) {
+                paypalRef.current.innerHTML = '';
+            }
+        };
+    }, []);
+
+    const renderPayPalButton = () => {
+        if (!window.paypal || !paypalRef.current) return;
+
+        try {
+            paypalRef.current.innerHTML = '';
+            window.paypal.Buttons({
+                // PayPal button configuration remains the same
+                style: {
+                    layout: 'vertical',
+                    color: 'silver',
+                    shape: 'rect',
+                    tagline: false,
+                    height: 40
+                },
+                createOrder: async () => {
+                    try {
+                        const response = await fetch("http://localhost:8080/api/paypal/create-paypal-order", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        if (!response.ok) {
+                            throw new Error('Failed to create order');
+                        }
+                        const order = await response.json();
+                        return order.id;
+                    } catch (error) {
+                        setError('Error creating PayPal order');
+                        throw error;
+                    }
+                },
+                onApprove: async (data) => {
+                    try {
+                        const response = await fetch(`http://localhost:8080/api/paypal/capture-paypal-order?orderId=${data.orderID}`, {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        if (!response.ok) {
+                            throw new Error('Failed to capture payment');
+                        }
+                        window.location.href = "/Cart/PaymentSuccess";
+                    } catch (error) {
+                        setError('Error processing payment');
+                    }
+                },
+            }).render(paypalRef.current);
+        } catch (error) {
+            setError('Error rendering PayPal button');
+        }
+    };
+
+    if (error) {
+        return (
+            <Text color="red.500" mt={2}>
+                {error}
+            </Text>
+        );
+    }
+
+    return (
+        <Box maxW="100%" mt={5}>
+            {!isScriptLoaded && <Text>Loading PayPal...</Text>}
+            <div ref={paypalRef}></div>
+        </Box>
+    );
+};
+
+// Card types data
+// const cardType = [
+//     { title: 'visa', img: visa },
+//     { title: 'mastercard', img: mastercard },
+//     { title: 'skrill', img: skrill },
+//     { title: 'paypal', img: paypal },
+// ];
+
+// Custom theme
+const theme = extendTheme({
+    styles: {
+        global: {
+            body: {
+                bg: 'gray.50',
+            },
+        },
     },
-    {
-        title: 'mastercard',
-        img: mastercard
-    },
-    {
-        title: 'skrill',
-        img: skrill
-    },
-    {
-        title: 'paypal',
-        img: paypal
-    },
-];
+});
 
-
-const CheckoutSection = ({ cartList }) => {
-    // states
-    const [tabs, setExpanded] = React.useState({
+// Main Component
+const CheckoutSection = ({ cartList = [] }) => {
+    const [tabs, setTabs] = React.useState({
         cupon: false,
         billing_adress: false,
-        payment: true
+        payment: false
     });
+
     const [forms, setForms] = React.useState({
         cupon_key: '',
         fname: '',
         lname: '',
         country: '',
-        dristrict: '',
+        district: '',
         address: '',
         post_code: '',
         email: '',
         phone: '',
         note: '',
-
         payment_method: 'cash',
         card_type: '',
-
         fname2: '',
         lname2: '',
         country2: '',
-        dristrict2: '',
+        district2: '',
         address2: '',
         post_code2: '',
         email2: '',
         phone2: '',
-
-        card_holder: '',
-        card_number: '',
-        cvv: '',
-        expire_date: '',
     });
 
-    const [dif_ship, setDif_ship] = React.useState(false);
+    // const [dif_ship, setDif_ship] = React.useState(false);
 
-    // tabs handler
-    function faqHandler(name) {
-        setExpanded({
-            cupon: false,
-            billing_adress: false,
-            payment: true, [name]: !tabs[name]
-        });
-    }
-
-    // forms handler
-    const changeHandler = e => {
-        setForms({ ...forms, [e.target.name]: e.target.value })
+    const handleTabChange = (tabName) => {
+        setTabs(prev => ({
+            ...prev,
+            [tabName]: !prev[tabName]
+        }));
     };
 
+    const handleFormChange = (e) => {
+        const { name, value } = e.target;
+        setForms(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const validateForm = () => {
+        const requiredFields = ['fname', 'lname', 'address', 'email'];
+        const missingFields = requiredFields.filter(field => !forms[field]);
+        
+        if (missingFields.length > 0) {
+            alert(`Please fill in required fields: ${missingFields.join(', ')}`);
+            return false;
+        }
+        return true;
+    };
+
+    const handleCheckout = () => {
+        if (!validateForm()) return;
+        window.location.href = "/Cart/PaymentSuccess";
+    };
+
+    const calculateTotal = (items) => {
+        return items.reduce((total, item) => total + (item.price * item.qty), 0);
+    };
 
     return (
-        <Fragment>
-            <Grid className="checkoutWrapper section-padding">
-                <Grid className="container" container spacing={3}>
-                    <Grid item md={6} xs={12}>
-                        <div className="check-form-area">
-                            <Grid className="cuponWrap checkoutCard">
-                                <Button className="collapseBtn" fullWidth onClick={() => faqHandler('cupon')}>
-                                    Have a coupon ? Click here to enter your code.
-                                    <FontAwesome name={tabs.cupon ? 'minus' : 'plus'} />
-                                </Button>
-                                <Collapse in={tabs.cupon} timeout="auto"
-                                    unmountOnExit>
-                                    <Grid className="chCardBody">
-                                        <p>If you have coupon code,please apply it</p>
-                                        <form className="cuponForm">
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                className="formInput radiusNone"
-                                                value={forms.cupon_key}
-                                                name="cupon_key"
-                                                onChange={(e) => changeHandler(e)}
-                                            />
-                                            <Button className="cBtn cBtnBlack">Apply</Button>
-                                        </form>
-                                    </Grid>
-                                </Collapse>
-                            </Grid>
-                            <Grid className="cuponWrap checkoutCard">
-                                <Button className="collapseBtn" fullWidth onClick={() => faqHandler('billing_adress')}>
-                                    Billing Address
-                                    <FontAwesome name={tabs.billing_adress ? 'minus' : 'plus'} />
-                                </Button>
-                                <Collapse in={tabs.billing_adress} timeout="auto" unmountOnExit>
-                                    <Grid className="chCardBody">
-                                        <form className="cuponForm">
-                                            <Grid container spacing={3}>
-                                                <Grid item sm={6} xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="First Name"
-                                                        name="fname"
-                                                        value={forms.fname}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item sm={6} xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Last Name"
-                                                        name="lname"
-                                                        value={forms.lname}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item sm={6} xs={12}>
-                                                    <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
-                                                    <FormControl className="formSelect" fullWidth variant="filled">
-                                                        <Select
-                                                            labelId="demo-simple-select-filled-label"
-                                                            id="demo-simple-select-filled"
-                                                            value={forms.country}
-                                                            name="country"
-                                                            onChange={(e) => changeHandler(e)}
-                                                        >
-                                                            <MenuItem value="">
-                                                                <em>None</em>
-                                                            </MenuItem>
-                                                            <MenuItem value={10}>Ten</MenuItem>
-                                                            <MenuItem value={20}>Twenty</MenuItem>
-                                                            <MenuItem value={30}>Thirty</MenuItem>
-                                                        </Select>
+        <ChakraProvider theme={theme}>
+            <ErrorBoundary>
+                <Box py={10} className="checkoutWrapper">
+                    <Container maxW="container.xl">
+                        <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
+                            {/* Left Column - Forms */}
+                            <VStack spacing={4}>
+                                {/* Coupon Section */}
+                                <Box w="100%" bg="white" borderRadius="md" shadow="md">
+                                    <Button
+                                        w="100%"
+                                        onClick={() => handleTabChange('cupon')}
+                                        rightIcon={tabs.cupon ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                                        justifyContent="space-between"
+                                        p={4}
+                                        variant="ghost"
+                                    >
+                                        Have a coupon? Click here to enter your code.
+                                    </Button>
+                                    <Collapse in={tabs.cupon}>
+                                        <Box p={4}>
+                                            <HStack>
+                                                <Input
+                                                    name="cupon_key"
+                                                    value={forms.cupon_key}
+                                                    onChange={handleFormChange}
+                                                    placeholder="Enter coupon code"
+                                                />
+                                                <Button colorScheme="black">
+                                                    Apply
+                                                </Button>
+                                            </HStack>
+                                        </Box>
+                                    </Collapse>
+                                </Box>
+
+                                {/* Billing Address Section */}
+                                <Box w="100%" bg="white" borderRadius="md" shadow="md">
+                                    <Button
+                                        w="100%"
+                                        onClick={() => handleTabChange('billing_adress')}
+                                        rightIcon={tabs.billing_adress ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                                        justifyContent="space-between"
+                                        p={4}
+                                        variant="ghost"
+                                    >
+                                        Billing Address
+                                    </Button>
+                                    <Collapse in={tabs.billing_adress}>
+                                        <Box p={4}>
+                                            <VStack spacing={4}>
+                                                <Grid templateColumns="repeat(2, 1fr)" gap={4} w="100%">
+                                                    <FormControl isRequired>
+                                                        <FormLabel>First Name</FormLabel>
+                                                        <Input
+                                                            name="fname"
+                                                            value={forms.fname}
+                                                            onChange={handleFormChange}
+                                                        />
+                                                    </FormControl>
+                                                    <FormControl isRequired>
+                                                        <FormLabel>Last Name</FormLabel>
+                                                        <Input
+                                                            name="lname"
+                                                            value={forms.lname}
+                                                            onChange={handleFormChange}
+                                                        />
+                                                    </FormControl>
+                                                    <FormControl isRequired>
+                                                        <FormLabel>Address</FormLabel>
+                                                         <Input
+                                                            name="address"
+                                                            value={forms.address}
+                                                            onChange={handleFormChange}
+                                                        />
+                                                    </FormControl>
+                                                    <FormControl isRequired>
+                                                        <FormLabel>Phone</FormLabel>
+                                                        <Input
+                                                            name="phone"
+                                                            value={forms.phone}
+                                                            onChange={handleFormChange}
+                                                        />
                                                     </FormControl>
                                                 </Grid>
-                                                <Grid item sm={6} xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Dristrict"
-                                                        name="dristrict"
-                                                        value={forms.dristrict}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        multiline
-                                                        rows="3"
-                                                        label="Address"
-                                                        name="address"
-                                                        value={forms.address}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item sm={6} xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Post Code"
-                                                        name="post_code"
-                                                        value={forms.post_code}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item sm={6} xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Email Adress"
-                                                        name="email"
-                                                        value={forms.email}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="email"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        label="Phone No"
-                                                        name="phone"
-                                                        value={forms.phone}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <FormControlLabel
-                                                        className="checkBox"
-                                                        control={
-                                                            <Checkbox
-                                                                checked={dif_ship}
-                                                                onChange={() => setDif_ship(!dif_ship)}
-                                                                value={dif_ship}
-                                                                color="primary"
-                                                            />
-                                                        }
-                                                        label="Ship to a different address?"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Collapse in={dif_ship} timeout="auto" unmountOnExit>
-                                                        <Grid container spacing={3}>
-                                                            <Grid item sm={6} xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    label="First Name"
-                                                                    name="fname2"
-                                                                    value={forms.fname2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="text"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item sm={6} xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    label="Last Name"
-                                                                    name="lname2"
-                                                                    value={forms.lname2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="text"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item sm={6} xs={12}>
-                                                                <InputLabel
-                                                                    id="demo-simple-select-filled-label">Age</InputLabel>
-                                                                <FormControl className="formSelect" fullWidth
-                                                                    variant="filled">
-                                                                    <Select
-                                                                        labelId="demo-simple-select-filled-label"
-                                                                        id="demo-simple-select-filled"
-                                                                        value={forms.country2}
-                                                                        name="country2"
-                                                                        onChange={(e) => changeHandler(e)}
-                                                                    >
-                                                                        <MenuItem value="">
-                                                                            <em>None</em>
-                                                                        </MenuItem>
-                                                                        <MenuItem value={10}>Ten</MenuItem>
-                                                                        <MenuItem value={20}>Twenty</MenuItem>
-                                                                        <MenuItem value={30}>Thirty</MenuItem>
-                                                                    </Select>
-                                                                </FormControl>
-                                                            </Grid>
-                                                            <Grid item sm={6} xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    label="Dristrict"
-                                                                    name="dristrict2"
-                                                                    value={forms.dristrict2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="text"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    multiline
-                                                                    rows="3"
-                                                                    label="Address"
-                                                                    name="address2"
-                                                                    value={forms.address2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="text"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item sm={6} xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    label="Post Code"
-                                                                    name="post_code2"
-                                                                    value={forms.post_code2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="text"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item sm={6} xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    label="Email Adress"
-                                                                    name="email2"
-                                                                    value={forms.email2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="email"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField
-                                                                    fullWidth
-                                                                    label="Phone No"
-                                                                    name="phone2"
-                                                                    value={forms.phone2}
-                                                                    onChange={(e) => changeHandler(e)}
-                                                                    type="text"
-                                                                    InputLabelProps={{
-                                                                        shrink: true,
-                                                                    }}
-                                                                    className="formInput radiusNone"
-                                                                />
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Collapse>
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        fullWidth
-                                                        multiline
-                                                        label="Order Notes"
-                                                        placeholder="Note about your order"
-                                                        name="note"
-                                                        value={forms.note}
-                                                        onChange={(e) => changeHandler(e)}
-                                                        type="text"
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        className="formInput radiusNone note"
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </form>
-                                    </Grid>
-                                </Collapse>
-                            </Grid>
-                            <Grid className="cuponWrap checkoutCard">
-                                <Button className="collapseBtn" fullWidth onClick={() => faqHandler('payment')}>
-                                    Payment Method
-                                    <FontAwesome name={tabs.payment ? 'minus' : 'plus'} />
-                                </Button>
-                                <Grid className="chCardBody">
-                                    <Collapse in={tabs.payment} timeout="auto">
-                                        <RadioGroup className="paymentMethod" aria-label="Payment Method"
-                                            name="payment_method"
-                                            value={forms.payment_method}
-                                            onChange={(e) => changeHandler(e)}>
-                                            <FormControlLabel value="cash" control={<Radio color="primary" />}
-                                                label="Payment By Card " />
-                                            <FormControlLabel value="card" control={<Radio color="primary" />}
-                                                label="Cash On delivery" />
-
-                                        </RadioGroup>
-                                        <Collapse in={forms.payment_method === 'cash'} timeout="auto">
-                                            <Grid className="cardType">
-                                                {cardType.map((item, i) => (
-                                                    <Grid
-                                                        key={i}
-                                                        className={`cardItem ${forms.card_type === item.title ? 'active' : null}`}
-                                                        onClick={() => setForms({ ...forms, card_type: item.title })}>
-                                                        <img src={item.img} alt={item.title} />
-                                                    </Grid>
-                                                ))}
-                                            </Grid>
-                                            <Grid>
-                                                <CheckWrap />
-                                            </Grid>
-                                        </Collapse>
-                                        <Collapse in={forms.payment_method === 'card'} timeout="auto">
-                                            <Grid className="cardType">
-                                                <Link to='/order_received' className="cBtn cBtnLarge cBtnTheme mt-20" type="submit">Proceed to Checkout</Link>
-                                            </Grid>
-                                        </Collapse>
+                                                {/* Add other billing form fields */}
+                                            </VStack>
+                                        </Box>
                                     </Collapse>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                        <Grid className="cartStatus">
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <Grid className="cartTotals">
-                                        <h2>Cart Total</h2>
-                                        <Table>
-                                            <TableBody>
-                                                {cartList.map(item => (
-                                                    <TableRow key={item.id}>
-                                                        <TableCell>{item.title} ${item.price} x {item.qty}</TableCell>
-                                                        <TableCell
-                                                            align="right">${item.qty * item.price}</TableCell>
-                                                    </TableRow>
-                                                ))}
-                                                <TableRow className="totalProduct">
-                                                    <TableCell>Total product</TableCell>
-                                                    <TableCell align="right">{cartList.length}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell>Sub Price</TableCell>
-                                                    <TableCell align="right">${totalPrice(cartList)}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell>Total Price</TableCell>
-                                                    <TableCell
-                                                        align="right">${totalPrice(cartList)}</TableCell>
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Fragment>
-    )
-};
+                                </Box>
 
+                                {/* Payment Method Section */}
+                                <Box w="100%" bg="white" borderRadius="md" shadow="md">
+                                    <Button
+                                        w="100%"
+                                        onClick={() => handleTabChange('payment')}
+                                        rightIcon={tabs.payment ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                                        justifyContent="space-between"
+                                        p={4}
+                                        variant="ghost"
+                                    >
+                                        Payment Method
+                                    </Button>
+                                    <Collapse in={tabs.payment}>
+                                        <Box p={4}>
+                                            <RadioGroup
+                                                name="payment_method"
+                                                value={forms.payment_method}
+                                                onChange={(value) => handleFormChange({
+                                                    target: { name: 'payment_method', value }
+                                                })}
+                                            >
+                                                <Stack>
+                                                    <Radio value="cash">Cash on Delivery</Radio>
+                                                    {/* <Radio value="card">Credit Card</Radio> */}
+                                                    <Radio value="paypal">PayPal</Radio>
+                                                </Stack>
+                                            </RadioGroup>
+
+                                            {forms.payment_method === 'card' && (
+                                                <Box mt={4}>
+                                                    {/* Credit card form fields */}
+                                                </Box>
+                                            )}
+
+                                            {forms.payment_method === 'paypal' && (
+                                                <PaypalButton />
+                                            )}
+
+                                            {forms.payment_method === 'cash' && (
+                                                <Button
+                                                    onClick={handleCheckout}
+                                                    colorScheme="blue"
+                                                    w="100%"
+                                                    mt={4}
+                                                >
+                                                    Place Order
+                                                </Button>
+                                            )}
+                                        </Box>
+                                    </Collapse>
+                                </Box>
+                            </VStack>
+
+                            {/* Right Column - Cart Summary */}
+                            <Box bg="white" p={6} borderRadius="md" shadow="md">
+                                <Text fontSize="2xl" mb={4}>Order Summary</Text>
+                                <Table variant="simple">
+                                    <Tbody>
+                                        {cartList.map((item) => (
+                                            <Tr key={item.id}>
+                                                <Td>
+                                                    {item.title} (x{item.qty})
+                                                </Td>
+                                                <Td isNumeric>
+                                                    ${item.price * item.qty}
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                      
+                                          <Tr>
+                                            <Td fontWeight="bold">Tax</Td>
+                                            <Td isNumeric fontWeight="bold">
+                                                ${calculateTotal(cartList)}
+                                            </Td>
+                                        </Tr>
+                                        <Tr>
+                                            <Td fontWeight="bold">Shipping</Td>
+                                            <Td isNumeric fontWeight="bold">
+                                                ${calculateTotal(cartList) * 0.1} 
+                                            </Td>
+                                            </Tr>
+                                          <Tr>
+                                            <Td fontWeight="bold">Total</Td>
+                                            <Td isNumeric fontWeight="bold">
+                                                ${calculateTotal(cartList)}
+                                            </Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        </Grid>
+                    </Container>
+                </Box>
+            </ErrorBoundary>
+        </ChakraProvider>
+    );
+};
 
 export default CheckoutSection;

@@ -29,8 +29,11 @@ import OrderHistoryDashboard from '../OrderHistoryPage/OrderHistory.jsx';
 import UserProfilePage from '../UserProfilePage/index';
 import ResetPasswordPage from "/src/main-component/ResetPasswordPage/index.jsx";
 import VerifyPage from "/src/main-component/VerifyPage/index.jsx";
+import {Form} from "formik";
+
 
 const AllRoute = () => {
+
     return (
         <div className="App">
             <Routes>
@@ -61,10 +64,26 @@ const AllRoute = () => {
                 <Route path='404' element={<ErrorPage/>}/>
                 <Route path="all-products" element={<ProductPage/>}/>
                 <Route path="order-history" element={<OrderHistoryDashboard/>}/>
-                <Route path="user-profile" element={<UserProfilePage/>}/>
+                {/*<Route path="team-admin" element={<Team/>}/>*/}
+                {/*<Route path="contacts-admin" element={<Contacts/>}/>*/}
+                {/*<Route path="invoices" element={<Invoices/>}/>*/}
+                {/*<Route path="form" element={<Form/>}/>*/}
+                {/*<Route path="bar" element={<Bar/>}/>*/}
+                {/*<Route path="pie" element={<Pie/>}/>*/}
+                {/*<Route path="line" element={<Line/>}/>*/}
+                {/*<Route path="faq" element={<FAQ/>}/>*/}
+                {/*<Route path="calendar" element={<Calendar/>}/>*/}
+                {/*<Route path="geography" element={<Geography/>}/>*/}
+                <Route path="user-profile" element={<UserProfilePage />}/>
+                {/*<Route path="contact" element={<ContactPage />} />*/}
+                <Route path="login" element={<LoginPage />} />
+                <Route path="forgot" element={<ForgotPassword />} />
+                <Route path="register" element={<Register />} />
                 <Route path="verify" element={<VerifyPage />} />
                 <Route path="reset-password" element={<ResetPasswordPage />} />
+                <Route path="404" element={<ErrorPage />} />
             </Routes>
+
         </div>
     );
 }

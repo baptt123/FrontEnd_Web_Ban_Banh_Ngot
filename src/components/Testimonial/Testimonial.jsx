@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SectionTitle from '../SectionTitle/SectionTitle';
-import Vator from '../../images/testimonial/vector.png'
+import Vator from '../../images/funfact/cake_svg_funfact.svg'
 import Img1 from '../../images/testimonial/img-1.jpg'
 import Img2 from '../../images/testimonial/img-2.jpg'
 import Img3 from '../../images/testimonial/img-3.jpg'

@@ -1,5 +1,5 @@
 import * as types from "./type";
-import axiosInstance from "../../api/axiosConfig";
+import axiosInstance from "../../api/axiosConfig.jsx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { registerApi, verifyEmailApi, loginApi, googleLoginApi, logoutApi, forgotPasswordApi, resetPasswordApi } from "../../api/authApi";
