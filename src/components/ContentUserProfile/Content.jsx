@@ -113,7 +113,7 @@ const Content = () => {
       onOpen(); // Open the alert dialog
     } else {
       try {
-        dispatch(updateUserProfile(dataToUpdate));
+        await dispatch(updateUserProfile(dataToUpdate));
         toast({
           title: "Cập nhật thông tin thành công.",
           status: "success",
@@ -132,20 +132,15 @@ const Content = () => {
     }
   };
 
-  const handleConfirmUpdate = async () => {
-    try {
-      dispatch(updateUserProfile(pendingUpdateData));
-      dispatch(logout());
-      onClose();
-    } catch (error) {
-      toast({
-        title: "Có lỗi xảy ra khi cập nhật thông tin.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+  const handleConfirmUpdate = () => {
+    dispatch(updateUserProfile(pendingUpdateData))
+      .then(() => {
+        onClose();         
+        dispatch(logout());
+      })
+      .catch(err => { 
+        onClose();
       });
-      onClose();
-    }
   };
 
   const handleCancelUpdate = () => {
