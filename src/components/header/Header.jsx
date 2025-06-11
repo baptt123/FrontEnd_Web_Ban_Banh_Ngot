@@ -6,10 +6,9 @@ import { connect, useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../store/actions/action";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { Box, VStack, Link as ChakraLink, useToast, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure } from "@chakra-ui/react";
+import { Box, VStack, Link as ChakraLink, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/actions/action";
-import UserProfilePage from '../../main-component/UserProfilePage';
 
 const Header = (props) => {
     const [menuActive, setMenuState] = useState(false);
@@ -18,7 +17,6 @@ const Header = (props) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const toast = useToast();
-    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const SubmitHandler = (e) => {
         e.preventDefault()
@@ -48,10 +46,6 @@ const Header = (props) => {
             });
         }
     };
-
-    const handleUserProfileClick = () => {
-        onOpen(); // Open modal
-    }
 
     const { carts } = props;
 
@@ -151,7 +145,7 @@ const Header = (props) => {
                                         <ul className="sub-menu">
                                             {user ? (
                                                 <>
-                                                    <li><Link onClick={() => { handleUserProfileClick(); ClickHandler(); }}>Thông tin cá nhân</Link></li>
+                                                    <li><Link onClick={ClickHandler} to="/user-profile">Thông tin cá nhân</Link></li>
                                                     <li><Link onClick={() => { handleLogout(); ClickHandler(); }}>Đăng xuất</Link></li>
                                                 </>
                                             ) : (
@@ -217,15 +211,6 @@ const Header = (props) => {
                     </div>
                 </nav>
             </div>
-            <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalCloseButton />
-                    <ModalBody p={6}>
-                        <UserProfilePage />
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
         </header>
     )
 }

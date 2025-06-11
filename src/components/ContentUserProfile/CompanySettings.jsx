@@ -1,66 +1,117 @@
+import React, { useState } from 'react';
 import {
+  Box,
   FormControl,
   FormLabel,
-  Grid,
   Input,
-  InputGroup,
-  InputLeftAddon,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-} from '@chakra-ui/react'
+  Button,
+  VStack,
+  useToast,
+} from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfile } from '../../store/actions/action';
 
-function CompanySettings() {
+const CompanySettings = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const toast = useToast();
+
+  const [companyData, setCompanyData] = useState({
+    companyName: user?.companyName || '',
+    companyAddress: user?.companyAddress || '',
+    taxCode: user?.taxCode || '',
+    businessLicense: user?.businessLicense || '',
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCompanyData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await dispatch(updateUserProfile(companyData));
+      toast({
+        title: 'Cập nhật thông tin công ty thành công',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsEditing(false);
+    } catch (error) {
+      toast({
+        title: 'Có lỗi xảy ra khi cập nhật thông tin',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
-    <Grid
-      templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
-      gap={6}
-    >
-      <FormControl id="companyId">
-        <FormLabel>Company ID</FormLabel>
-        <InputGroup>
-          <InputLeftAddon color="gray.500">
-            <svg width="1em" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z"
-                clipRule="evenodd"
+    <Box p={4}>
+      <VStack spacing={8} align="stretch">
+        <Box as="form" onSubmit={handleSubmit}>
+          <VStack spacing={4}>
+            <FormControl>
+              <FormLabel>Tên công ty</FormLabel>
+              <Input
+                name="companyName"
+                value={companyData.companyName}
+                onChange={handleInputChange}
+                isDisabled={!isEditing}
               />
-            </svg>
-          </InputLeftAddon>
-          <Input
-            focusBorderColor="brand.blue"
-            type="text"
-            placeholder="apple"
-          />
-        </InputGroup>
-      </FormControl>
-      <FormControl id="companyName">
-        <FormLabel>Name</FormLabel>
-        <Input focusBorderColor="brand.blue" type="text" placeholder="Apple" />
-      </FormControl>
-      <FormControl id="emailCompany">
-        <FormLabel>Email Address</FormLabel>
-        <Input
-          focusBorderColor="brand.blue"
-          type="email"
-          placeholder="info@apple.com"
-        />
-      </FormControl>
-      <FormControl>
-        <FormLabel>Size</FormLabel>
-        <NumberInput>
-          <NumberInputField placeholder="6000" />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-      </FormControl>
-    </Grid>
-  )
-}
+            </FormControl>
 
-export default CompanySettings
+            <FormControl>
+              <FormLabel>Địa chỉ công ty</FormLabel>
+              <Input
+                name="companyAddress"
+                value={companyData.companyAddress}
+                onChange={handleInputChange}
+                isDisabled={!isEditing}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Mã số thuế</FormLabel>
+              <Input
+                name="taxCode"
+                value={companyData.taxCode}
+                onChange={handleInputChange}
+                isDisabled={!isEditing}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Giấy phép kinh doanh</FormLabel>
+              <Input
+                name="businessLicense"
+                value={companyData.businessLicense}
+                onChange={handleInputChange}
+                isDisabled={!isEditing}
+              />
+            </FormControl>
+
+            <Button
+              type={isEditing ? "submit" : "button"}
+              colorScheme="blue"
+              onClick={() => !isEditing && setIsEditing(true)}
+              mt={4}
+            >
+              {isEditing ? "Lưu thay đổi" : "Chỉnh sửa"}
+            </Button>
+          </VStack>
+        </Box>
+      </VStack>
+    </Box>
+  );
+};
+
+export default CompanySettings;
