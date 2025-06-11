@@ -1,7 +1,4 @@
-
-
-
-import React, {  useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
     Box,
     Grid,
@@ -23,14 +20,10 @@ import {
     HStack,
     ChakraProvider,
     extendTheme,
+    useToast,
+    Spinner,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-
-// Import your images
-import visa from '../../images/checkout/img-1.png';
-import mastercard from '../../images/checkout/img-2.png';
-import skrill from '../../images/checkout/img-3.png';
-import paypal from '../../images/checkout/img-5.png';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -64,43 +57,52 @@ class ErrorBoundary extends React.Component {
 }
 
 // PayPal Button Component
-const PaypalButton = () => {
+const PaypalButton = ({ cartTotal, onSuccess, onError }) => {
     const paypalRef = useRef(null);
-    const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
-    const [error, setError] = React.useState(null);
+    const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const toast = useToast();
 
-    React.useEffect(() => {
+    // Load PayPal SDK
+    useEffect(() => {
         let isMounted = true;
 
-        const loadPayPalScript = async () => {
+        const loadPayPalScript = () => {
             if (window.paypal) {
                 if (isMounted) {
                     setIsScriptLoaded(true);
-                    renderPayPalButton();
+                    setIsLoading(false);
                 }
                 return;
             }
 
-            try {
-                const script = document.createElement("script");
-                script.src = "https://www.paypal.com/sdk/js?client-id=AQwmw7pwEz6xTHlwxuaK5S1RnSt0AzdJMStk47HlVehip6qjFUkLT0XcJKEt5DnyOnJDNiFAKVdb4S7u&currency=USD&disable-funding=credit,card";
-                script.async = true;
+            const script = document.createElement("script");
+            script.src = "https://www.paypal.com/sdk/js?client-id=AQwmw7pwEz6xTHlwxuaK5S1RnSt0AzdJMStk47HlVehip6qjFUkLT0XcJKEt5DnyOnJDNiFAKVdb4S7u&currency=USD&disable-funding=credit,card";
+            script.async = true;
 
-                script.onload = () => {
-                    if (isMounted) {
-                        setIsScriptLoaded(true);
-                        renderPayPalButton();
-                    }
-                };
+            script.onload = () => {
+                if (isMounted) {
+                    setIsScriptLoaded(true);
+                    setIsLoading(false);
+                }
+            };
 
-                script.onerror = () => {
-                    setError('PayPal SDK failed to load');
-                };
+            script.onerror = () => {
+                if (isMounted) {
+                    setError('Failed to load PayPal SDK');
+                    setIsLoading(false);
+                    toast({
+                        title: "PayPal Error",
+                        description: "Failed to load PayPal payment system",
+                        status: "error",
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                }
+            };
 
-                document.body.appendChild(script);
-            } catch (error) {
-                setError('Error loading PayPal script');
-            }
+            document.head.appendChild(script);
         };
 
         loadPayPalScript();
@@ -111,85 +113,171 @@ const PaypalButton = () => {
                 paypalRef.current.innerHTML = '';
             }
         };
-    }, []);
+    }, [toast]);
 
-    const renderPayPalButton = () => {
-        if (!window.paypal || !paypalRef.current) return;
+    // Render PayPal Button when SDK is loaded and cartTotal changes
+    useEffect(() => {
+        if (isScriptLoaded && window.paypal && paypalRef.current) {
+            try {
+                paypalRef.current.innerHTML = '';
+                window.paypal.Buttons({
+                    style: {
+                        layout: 'vertical',
+                        color: 'silver',
+                        shape: 'rect',
+                        tagline: false,
+                        height: 45
+                    },
+                    createOrder: async () => {
+                        try {
+                            // Convert VND to USD for demo (1 USD ~ 25,000 VND)
+                            const usdAmount = Math.floor((cartTotal || 0) / 25000);
+                            const response = await fetch("http://localhost:8080/api/paypal/create-paypal-order", {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ amount: usdAmount })
+                            });
 
-        try {
-            paypalRef.current.innerHTML = '';
-            window.paypal.Buttons({
-                // PayPal button configuration remains the same
-                style: {
-                    layout: 'vertical',
-                    color: 'silver',
-                    shape: 'rect',
-                    tagline: false,
-                    height: 40
-                },
-                createOrder: async () => {
-                    try {
-                        const response = await fetch("http://localhost:8080/api/paypal/create-paypal-order", {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        });
-                        if (!response.ok) {
-                            throw new Error('Failed to create order');
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.message || 'Failed to create PayPal order');
+                            }
+
+                            const order = await response.json();
+                            return order.id;
+                        } catch (error) {
+                            toast({
+                                title: "Payment Error",
+                                description: "Failed to create PayPal order. Please try again.",
+                                status: "error",
+                                duration: 5000,
+                                isClosable: true,
+                            });
+                            throw error;
                         }
-                        const order = await response.json();
-                        return order.id;
-                    } catch (error) {
-                        setError('Error creating PayPal order');
-                        throw error;
-                    }
-                },
-                onApprove: async (data) => {
-                    try {
-                        const response = await fetch(`http://localhost:8080/api/paypal/capture-paypal-order?orderId=${data.orderID}`, {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        });
-                        if (!response.ok) {
-                            throw new Error('Failed to capture payment');
+                    },
+                    onApprove: async (data) => {
+                        try {
+                            const response = await fetch(`http://localhost:8080/api/paypal/capture-paypal-order?orderId=${data.orderID}`, {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            });
+
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.message || 'Failed to capture payment');
+                            }
+
+                            toast({
+                                title: "Payment Successful",
+                                description: "Your PayPal payment has been processed successfully!",
+                                status: "success",
+                                duration: 5000,
+                                isClosable: true,
+                            });
+
+                            if (onSuccess) onSuccess(data);
+                            setTimeout(() => {
+                                window.location.href = "/Cart/PaymentSuccess";
+                            }, 1000);
+                        } catch (error) {
+                            toast({
+                                title: "Payment Failed",
+                                description: error.message || "Failed to process payment. Please try again.",
+                                status: "error",
+                                duration: 5000,
+                                isClosable: true,
+                            });
+                            if (onError) onError(error);
                         }
-                        window.location.href = "/Cart/PaymentSuccess";
-                    } catch (error) {
-                        setError('Error processing payment');
+                    },
+                    onError: (err) => {
+                        toast({
+                            title: "PayPal Error",
+                            description: "An error occurred with PayPal payment system.",
+                            status: "error",
+                            duration: 5000,
+                            isClosable: true,
+                        });
+                        if (onError) onError(err);
+                    },
+                    onCancel: () => {
+                        toast({
+                            title: "Payment Cancelled",
+                            description: "PayPal payment was cancelled.",
+                            status: "warning",
+                            duration: 3000,
+                            isClosable: true,
+                        });
                     }
-                },
-            }).render(paypalRef.current);
-        } catch (error) {
-            setError('Error rendering PayPal button');
+                }).render(paypalRef.current);
+            } catch (err) {
+                setError('Error rendering PayPal button');
+                toast({
+                    title: "PayPal Error",
+                    description: "Failed to render PayPal payment button",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            }
         }
-    };
+    }, [isScriptLoaded, cartTotal, onSuccess, onError, toast]);
+
+    if (isLoading) {
+        return (
+            <Box textAlign="center" py={4}>
+                <Spinner size="md" color="blue.500" />
+                <Text mt={2} fontSize="sm" color="gray.600">
+                    Loading PayPal...
+                </Text>
+            </Box>
+        );
+    }
 
     if (error) {
         return (
-            <Text color="red.500" mt={2}>
-                {error}
-            </Text>
+            <Box textAlign="center" py={4}>
+                <Text color="red.500" fontSize="sm">
+                    {error}
+                </Text>
+                <Button 
+                    size="sm" 
+                    mt={2} 
+                    onClick={() => window.location.reload()}
+                    colorScheme="blue"
+                    variant="outline"
+                >
+                    Retry
+                </Button>
+            </Box>
         );
     }
 
     return (
-        <Box maxW="100%" mt={5}>
-            {!isScriptLoaded && <Text>Loading PayPal...</Text>}
-            <div ref={paypalRef}></div>
+        <Box maxW="100%" mt={4}>
+            <Text fontSize="sm" color="gray.600" mb={3} textAlign="center">
+                Total: {new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(cartTotal || 0)}
+            </Text>
+            <div 
+                ref={paypalRef} 
+                style={{ 
+                    maxWidth: '100%',
+                    minHeight: '45px'
+                }}
+            />
         </Box>
     );
 };
-
-// Card types data
-// const cardType = [
-//     { title: 'visa', img: visa },
-//     { title: 'mastercard', img: mastercard },
-//     { title: 'skrill', img: skrill },
-//     { title: 'paypal', img: paypal },
-// ];
 
 // Custom theme
 const theme = extendTheme({
@@ -203,14 +291,17 @@ const theme = extendTheme({
 });
 
 // Main Component
-const CheckoutSection = ({ cartList = [] }) => {
-    const [tabs, setTabs] = React.useState({
+const CheckoutSection = () => {
+    const [cartList, setCartList] = useState([]);
+    const toast = useToast();
+    
+    const [tabs, setTabs] = useState({
         cupon: false,
         billing_adress: false,
         payment: false
     });
 
-    const [forms, setForms] = React.useState({
+    const [forms, setForms] = useState({
         cupon_key: '',
         fname: '',
         lname: '',
@@ -233,7 +324,40 @@ const CheckoutSection = ({ cartList = [] }) => {
         phone2: '',
     });
 
-    // const [dif_ship, setDif_ship] = React.useState(false);
+    // Load cart data from localStorage on component mount
+    useEffect(() => {
+        const loadCartFromStorage = () => {
+            try {
+                const storedCart = localStorage.getItem('cartItems');
+                if (storedCart) {
+                    const parsedCart = JSON.parse(storedCart);
+                    const formattedCart = parsedCart.map(item => ({
+                        id: item.id || Math.random().toString(36).substr(2, 9),
+                        title: item.title || item.name || 'Unknown Product',
+                        price: parseFloat(item.price) || 0,
+                        quantity: parseInt(item.quantity) || 1,
+                        ...item
+                    }));
+                    setCartList(formattedCart);
+                } else {
+                    setCartList([]);
+                }
+            } catch (error) {
+                setCartList([]);
+            }
+        };
+
+        loadCartFromStorage();
+
+        const handleStorageChange = (e) => {
+            if (e.key === 'cartItems') {
+                loadCartFromStorage();
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, []);
 
     const handleTabChange = (tabName) => {
         setTabs(prev => ({
@@ -253,9 +377,14 @@ const CheckoutSection = ({ cartList = [] }) => {
     const validateForm = () => {
         const requiredFields = ['fname', 'lname', 'address', 'email'];
         const missingFields = requiredFields.filter(field => !forms[field]);
-        
         if (missingFields.length > 0) {
-            alert(`Please fill in required fields: ${missingFields.join(', ')}`);
+            toast({
+                title: "Form Validation Error",
+                description: `Please fill in required fields: ${missingFields.join(', ')}`,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
             return false;
         }
         return true;
@@ -263,11 +392,55 @@ const CheckoutSection = ({ cartList = [] }) => {
 
     const handleCheckout = () => {
         if (!validateForm()) return;
-        window.location.href = "/Cart/PaymentSuccess";
+        toast({
+            title: "Order Placed",
+            description: "Your order has been placed successfully!",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+        });
+        localStorage.removeItem('cartItems');
+        setCartList([]);
+        setTimeout(() => {
+            window.location.href = "/Cart/PaymentSuccess";
+        }, 1000);
+    };
+
+    const handlePayPalSuccess = (data) => {
+        localStorage.removeItem('cartItems');
+        setCartList([]);
+    };
+
+    const handlePayPalError = (error) => {
+        // Optional: handle PayPal error
+    };
+
+    const formatVND = (amount) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount);
+    };
+
+    const calculateSubTotal = (items) => {
+        return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
+
+    const calculateShipping = (subtotal) => {
+        return subtotal * 0.1;
+    };
+
+    const calculateTax = (subtotal) => {
+        return subtotal * 0.08;
     };
 
     const calculateTotal = (items) => {
-        return items.reduce((total, item) => total + (item.price * item.qty), 0);
+        const subtotal = calculateSubTotal(items);
+        const shipping = calculateShipping(subtotal);
+        const tax = calculateTax(subtotal);
+        return subtotal + shipping + tax;
     };
 
     return (
@@ -299,7 +472,7 @@ const CheckoutSection = ({ cartList = [] }) => {
                                                     onChange={handleFormChange}
                                                     placeholder="Enter coupon code"
                                                 />
-                                                <Button colorScheme="black">
+                                                <Button colorScheme="blue">
                                                     Apply
                                                 </Button>
                                             </HStack>
@@ -341,13 +514,22 @@ const CheckoutSection = ({ cartList = [] }) => {
                                                     </FormControl>
                                                     <FormControl isRequired>
                                                         <FormLabel>Address</FormLabel>
-                                                         <Input
+                                                        <Input
                                                             name="address"
                                                             value={forms.address}
                                                             onChange={handleFormChange}
                                                         />
                                                     </FormControl>
                                                     <FormControl isRequired>
+                                                        <FormLabel>Email</FormLabel>
+                                                        <Input
+                                                            name="email"
+                                                            type="email"
+                                                            value={forms.email}
+                                                            onChange={handleFormChange}
+                                                        />
+                                                    </FormControl>
+                                                    <FormControl>
                                                         <FormLabel>Phone</FormLabel>
                                                         <Input
                                                             name="phone"
@@ -355,8 +537,15 @@ const CheckoutSection = ({ cartList = [] }) => {
                                                             onChange={handleFormChange}
                                                         />
                                                     </FormControl>
+                                                    <FormControl>
+                                                        <FormLabel>Country</FormLabel>
+                                                        <Input
+                                                            name="country"
+                                                            value={forms.country}
+                                                            onChange={handleFormChange}
+                                                        />
+                                                    </FormControl>
                                                 </Grid>
-                                                {/* Add other billing form fields */}
                                             </VStack>
                                         </Box>
                                     </Collapse>
@@ -385,19 +574,16 @@ const CheckoutSection = ({ cartList = [] }) => {
                                             >
                                                 <Stack>
                                                     <Radio value="cash">Cash on Delivery</Radio>
-                                                    {/* <Radio value="card">Credit Card</Radio> */}
                                                     <Radio value="paypal">PayPal</Radio>
                                                 </Stack>
                                             </RadioGroup>
 
-                                            {forms.payment_method === 'card' && (
-                                                <Box mt={4}>
-                                                    {/* Credit card form fields */}
-                                                </Box>
-                                            )}
-
                                             {forms.payment_method === 'paypal' && (
-                                                <PaypalButton />
+                                                <PaypalButton 
+                                                    cartTotal={calculateTotal(cartList)}
+                                                    onSuccess={handlePayPalSuccess}
+                                                    onError={handlePayPalError}
+                                                />
                                             )}
 
                                             {forms.payment_method === 'cash' && (
@@ -406,6 +592,7 @@ const CheckoutSection = ({ cartList = [] }) => {
                                                     colorScheme="blue"
                                                     w="100%"
                                                     mt={4}
+                                                    isDisabled={cartList.length === 0}
                                                 >
                                                     Place Order
                                                 </Button>
@@ -418,39 +605,65 @@ const CheckoutSection = ({ cartList = [] }) => {
                             {/* Right Column - Cart Summary */}
                             <Box bg="white" p={6} borderRadius="md" shadow="md">
                                 <Text fontSize="2xl" mb={4}>Order Summary</Text>
-                                <Table variant="simple">
-                                    <Tbody>
-                                        {cartList.map((item) => (
-                                            <Tr key={item.id}>
-                                                <Td>
-                                                    {item.title} (x{item.qty})
+                                
+                                {cartList.length === 0 ? (
+                                    <Text textAlign="center" color="gray.500" py={8}>
+                                        Your cart is empty
+                                    </Text>
+                                ) : (
+                                    <Table variant="simple">
+                                        <Tbody>
+                                            {cartList.map((item, index) => (
+                                                <Tr key={item.id || index}>
+                                                    <Td>
+                                                        <Text fontWeight="medium">
+                                                            {item.title}
+                                                        </Text>
+                                                        <Text fontSize="sm" color="gray.500">
+                                                            Số lượng: {item.quantity}
+                                                        </Text>
+                                                    </Td>
+                                                    <Td isNumeric>
+                                                        <Text fontWeight="medium">
+                                                            {formatVND(item.price * item.quantity)}
+                                                        </Text>
+                                                        <Text fontSize="sm" color="gray.500">
+                                                            {formatVND(item.price)} 
+                                                        </Text>
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                            
+                                            <Tr borderTop="2px solid" borderColor="gray.200">
+                                                <Td fontWeight="medium">Tổng cộng(chưa tính các phí khác)</Td>
+                                                <Td isNumeric fontWeight="medium">
+                                                    {formatVND(calculateSubTotal(cartList))}
                                                 </Td>
+                                            </Tr>
+                                            
+                                            <Tr>
+                                                <Td>Thuế (8%)</Td>
                                                 <Td isNumeric>
-                                                    ${item.price * item.qty}
+                                                    {formatVND(calculateTax(calculateSubTotal(cartList)))}
                                                 </Td>
                                             </Tr>
-                                        ))}
-                                      
-                                          <Tr>
-                                            <Td fontWeight="bold">Tax</Td>
-                                            <Td isNumeric fontWeight="bold">
-                                                ${calculateTotal(cartList)}
-                                            </Td>
-                                        </Tr>
-                                        <Tr>
-                                            <Td fontWeight="bold">Shipping</Td>
-                                            <Td isNumeric fontWeight="bold">
-                                                ${calculateTotal(cartList) * 0.1} 
-                                            </Td>
+                                            
+                                            <Tr>
+                                                <Td>Phí ship (10%)</Td>
+                                                <Td isNumeric>
+                                                    {formatVND(calculateShipping(calculateSubTotal(cartList)))}
+                                                </Td>
                                             </Tr>
-                                          <Tr>
-                                            <Td fontWeight="bold">Total</Td>
-                                            <Td isNumeric fontWeight="bold">
-                                                ${calculateTotal(cartList)}
-                                            </Td>
-                                        </Tr>
-                                    </Tbody>
-                                </Table>
+                                            
+                                            <Tr borderTop="2px solid" borderColor="gray.200">
+                                                <Td fontWeight="bold" fontSize="lg">Total</Td>
+                                                <Td isNumeric fontWeight="bold" fontSize="lg" color="blue.600">
+                                                    {formatVND(calculateTotal(cartList))}
+                                                </Td>
+                                            </Tr>
+                                        </Tbody>
+                                    </Table>
+                                )}
                             </Box>
                         </Grid>
                     </Container>
