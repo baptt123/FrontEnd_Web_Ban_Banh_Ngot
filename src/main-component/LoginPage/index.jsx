@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Box } from "@chakra-ui/react";
+import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -69,8 +69,8 @@ const LoginPage = () => {
         <h2>Đăng nhập</h2>
         <p>Đăng nhập vào tài khoản của bạn</p>
         <form onSubmit={submitForm} noValidate>
-          <Grid templateColumns="repeat(1, 1fr)" gap={3}>
-            <Box>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
               <TextField
                 className="inputOutline"
                 fullWidth
@@ -88,8 +88,8 @@ const LoginPage = () => {
                 value.username,
                 "required|alpha_num"
               )}
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 className="inputOutline"
                 fullWidth
@@ -104,9 +104,9 @@ const LoginPage = () => {
                 onBlur={changeHandler}
               />
               {validator.message("password", value.password, "required")}
-            </Box>
-            <Box>
-              <Box className="formAction">
+            </Grid>
+            <Grid item xs={12}>
+              <Grid className="formAction">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -117,8 +117,8 @@ const LoginPage = () => {
                   label="Ghi nhớ đăng nhập"
                 />
                 <Link to="/forgot">Quên mật khẩu?</Link>
-              </Box>
-              <Box className="formFooter">
+              </Grid>
+              <Grid className="formFooter">
                 <Button
                   fullWidth
                   className="cBtnTheme"
@@ -127,20 +127,23 @@ const LoginPage = () => {
                 >
                   {loading ? "Đang tải..." : "Đăng nhập"}
                 </Button>
-              </Box>
-              <Box className="loginWithSocial">
+              </Grid>
+              <Grid className="loginWithSocial">
                 <GoogleLogin
                   onSuccess={handleGoogleLoginSuccess}
                   onError={() => {
-                    console.error("Google login failed");
+                    addToast("Đăng nhập Google thất bại", {
+                      appearance: "error",
+                      autoDismiss: true,
+                    });
                   }}
                   useOneTap
                 />
-              </Box>
+              </Grid>
               <p className="noteHelp">
                 Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
               </p>
-            </Box>
+            </Grid>
           </Grid>
         </form>
         <div className="shape-img">

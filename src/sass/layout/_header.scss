@@ -530,6 +530,12 @@ nav.navigation.navbar.navbar-expand-lg.navbar-light.sticky-header.sticky-on {
 	font-size: 18px;
 }
 
+.wpo-site-header .header-right .search-toggle-btn {
+	@media(max-width:450px) {
+		display: none;
+	}
+}
+
 .wpo-site-header .header-right .search-toggle-btn,
 .wpo-site-header .header-right .cart-toggle-btn {
 	background-color: transparent;
@@ -569,100 +575,7 @@ nav.navigation.navbar.navbar-expand-lg.navbar-light.sticky-header.sticky-on {
 		position: relative;
 		top: -2px
 	}
-}
 
-.wpo-site-header .header-right .user-profile-menu-item {
-	position: relative;
-	margin-right: 8px;
-	list-style: none;
-}
-
-.wpo-site-header .header-right .user-profile-menu-item .user-profile-toggle-btn {
-	background-color: #F78914; /* Màu cam */
-	color: #fff; /* Màu trắng cho biểu tượng */
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: none;
-	cursor: pointer;
-	padding: 0;
-	font-size: 20px;
-
-    @media(max-width:1200px) {
-		width: 50px;
-		height: 50px;
-	}
-
-	@media(max-width:991px) {
-		width: 40px;
-		height: 40px;
-	}
-
-    svg {
-		@media(max-width:991px) {
-			font-size: 16px;
-		}
-	}
-}
-
-.wpo-site-header .header-right .user-profile-menu-item .sub-menu {
-	background-color: #fff;
-	box-shadow: 0px 2px 20px 0px rgba(62, 65, 159, 0.09);
-	width: 225px;
-	position: absolute;
-	padding: 20px 0;
-	left: 0;
-	top: 100%;
-	z-index: 10;
-	visibility: hidden;
-	opacity: 0;
-	transition: all 0.3s;
-	list-style: none; /* Ensure no bullet points */
-	@media screen and (max-width: 767px) {
-		right: 0;
-		left: auto;
-	}
-}
-
-.wpo-site-header .header-right .user-profile-menu-item:hover > .sub-menu {
-	top: 100%;
-	visibility: visible;
-	opacity: 1;
-}
-
-.wpo-site-header .header-right .user-profile-menu-item .sub-menu li a {
-	font-size: 16px;
-	display: block;
-	padding: 10px 15px;
-	color: $dark-gray;
-	position: relative;
-	overflow: hidden;
-	font-weight: 700;
-
-	&:after {
-		position: absolute;
-		left: 15px;
-		bottom: 4px;
-		width: 0px;
-		height: 2px;
-		content: "";
-		background: $theme-primary-color;
-		transition: all .3s;
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	&:hover,
-	&.active {
-		&:after {
-			width: 40px;
-			opacity: 1;
-			visibility: visible;
-		}
-	}
 }
 
 /*** cart-search-contact ***/
@@ -704,15 +617,15 @@ nav.navigation.navbar.navbar-expand-lg.navbar-light.sticky-header.sticky-on {
 		@include transition-time(0.5s);
 		box-shadow: -2px 18px 40px -9px rgba(153, 153, 153, 1);
 
-		@media(max-width:991px) {
+		@include media-query(991px) {
 			top: 65px;
 		}
 
-		@media(max-width:767px) {
+		@include media-query(767px) {
 			right: 15px;
 		}
 
-		@media(max-width:575px) {
+		@include media-query(575px) {
 			width: 260px;
 			padding: 15px;
 		}
@@ -1288,8 +1201,8 @@ nav.navigation.navbar.navbar-expand-lg.navbar-light.sticky-header.sticky-on {
 			span {
 				background-color: $white;
 				width: 20px;
-				height: 2px;
 				display: block;
+				height: 2px;
 				margin-bottom: 5px;
 
 				&:last-child {

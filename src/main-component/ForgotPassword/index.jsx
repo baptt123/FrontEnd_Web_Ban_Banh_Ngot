@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Box } from "@chakra-ui/react";
+import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
@@ -40,8 +40,8 @@ const ForgotPassword = () => {
         <h2>Quên mật khẩu</h2>
         <p>Nhập email để đặt lại mật khẩu</p>
         <form onSubmit={submitForm} noValidate>
-          <Grid templateColumns="repeat(1, 1fr)" gap={3}>
-            <Box>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 placeholder="Email"
@@ -52,9 +52,9 @@ const ForgotPassword = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-            </Box>
-            <Box>
-              <Box className="formFooter">
+            </Grid>
+            <Grid item xs={12}>
+              <div className="formFooter">
                 <Button
                   fullWidth
                   className="cBtn cBtnLarge cBtnTheme"
@@ -63,11 +63,11 @@ const ForgotPassword = () => {
                 >
                   {loading ? "Đang gửi..." : "Gửi yêu cầu"}
                 </Button>
-              </Box>
+              </div>
               <p className="noteHelp">
                 Đã nhớ mật khẩu? <Link to="/login">Đăng nhập</Link>
               </p>
-            </Box>
+            </Grid>
           </Grid>
         </form>
       </Grid>
