@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Avatar,
   AvatarBadge,
@@ -16,39 +16,94 @@ import {
   Text,
   useDisclosure,
   VStack,
+  Input,
+  useToast,
 } from '@chakra-ui/react'
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile } from "../../store/actions/action";
 
 function Profile() {
-  const [userProfile, setUserProfile] = useState(null)
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const toast = useToast();
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const profileImage = useRef(null)
+  const profileImageInputRef = useRef(null)
+
+  const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+  useEffect(() => {
+    if (user && user.avatar) {
+      setPreviewUrl(user.avatar);
+    }
+  }, [user]);
 
   const openChooseImage = () => {
-    profileImage.current.click()
+    profileImageInputRef.current.click()
   }
 
-  const changeProfileImage = event => {
+  const changeProfileImage = async (event) => {
     const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
     const selected = event.target.files[0]
 
     if (selected && ALLOWED_TYPES.includes(selected.type)) {
+      setSelectedImage(selected);
       let reader = new FileReader()
-      reader.onloadend = () => setUserProfile(reader.result)
-      return reader.readAsDataURL(selected)
-    }
+      reader.onloadend = () => setPreviewUrl(reader.result)
+      reader.readAsDataURL(selected)
 
-    onOpen()
+      try {
+        const formData = new FormData();
+        formData.append('file', selected);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+        const cloudinaryResponse = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
+
+        if (!cloudinaryResponse.ok) {
+          throw new Error('Failed to upload image to Cloudinary');
+        }
+
+        const cloudinaryData = await cloudinaryResponse.json();
+        const newAvatarUrl = cloudinaryData.secure_url;
+
+        await dispatch(updateUserProfile({ avatarUrl: newAvatarUrl }));
+        toast({
+          title: "Cập nhật ảnh đại diện thành công.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } catch (error) {
+        toast({
+          title: "Có lỗi xảy ra khi cập nhật ảnh đại diện.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } else {
+      onOpen()
+    }
   }
 
   return (
     <VStack spacing={3} py={5} borderBottomWidth={1} borderColor="brand.light">
       <Avatar
         size="2xl"
-        name="Tim Cook"
+        name={String(user?.name) || "Người dùng"}
         cursor="pointer"
         onClick={openChooseImage}
-        src={userProfile ? userProfile : '/img/tim-cook.jpg'}
+        src={previewUrl || '/img/tim-cook.jpg'}
       >
         <AvatarBadge bg="brand.blue" boxSize="1em">
           <svg width="0.4em" fill="currentColor" viewBox="0 0 20 20">
@@ -60,22 +115,23 @@ function Profile() {
           </svg>
         </AvatarBadge>
       </Avatar>
-      <input
+      <Input
         hidden
         type="file"
-        ref={profileImage}
+        ref={profileImageInputRef}
         onChange={changeProfileImage}
+        accept="image/*"
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Something went wrong</ModalHeader>
+          <ModalHeader>Đã xảy ra lỗi</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>File not supported!</Text>
+            <Text>File không được hỗ trợ!</Text>
             <HStack mt={1}>
               <Text color="brand.cadet" fontSize="sm">
-                Supported types:
+                Các định dạng được hỗ trợ:
               </Text>
               <Badge colorScheme="green">PNG</Badge>
               <Badge colorScheme="green">JPG</Badge>
@@ -84,17 +140,14 @@ function Profile() {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose}>Đóng</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
       <VStack spacing={1}>
         <Heading as="h3" fontSize="xl" color="brand.dark">
-          Tim Cook
+          {String(user?.name) || "Người dùng"}
         </Heading>
-        <Text color="brand.gray" fontSize="sm">
-          CEO of Apple
-        </Text>
       </VStack>
     </VStack>
   )
