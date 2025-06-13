@@ -1,61 +1,101 @@
-import { FormControl, FormLabel, Grid, Input, Select } from '@chakra-ui/react'
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  VStack,
+  Text,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserProfile, updateUserProfile } from "../../store/actions/action";
 
-function AccountSettings() {
+const AccountSettings = ({ userData, handleInputChange }) => {
+  const dispatch = useDispatch();
+  const { user, loading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!user.profileId) {
+      dispatch(getUserProfile());
+    }
+  }, [dispatch, user]);
+
+  if (loading) {
+    return <Text>Đang tải thông tin...</Text>;
+  }
+
+  if (!user) {
+    return <Text>Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.</Text>;
+  }
+
   return (
-    <Grid
-      templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
-      gap={6}
-    >
-      <FormControl id="firstName">
-        <FormLabel>First Name</FormLabel>
-        <Input focusBorderColor="brand.blue" type="text" placeholder="Tim" />
-      </FormControl>
-      <FormControl id="lastName">
-        <FormLabel>Last Name</FormLabel>
-        <Input focusBorderColor="brand.blue" type="text" placeholder="Cook" />
-      </FormControl>
-      <FormControl id="phoneNumber">
-        <FormLabel>Phone Number</FormLabel>
-        <Input
-          focusBorderColor="brand.blue"
-          type="tel"
-          placeholder="(408) 996–1010"
-        />
-      </FormControl>
-      <FormControl id="emailAddress">
-        <FormLabel>Email Address</FormLabel>
-        <Input
-          focusBorderColor="brand.blue"
-          type="email"
-          placeholder="tcook@apple.com"
-        />
-      </FormControl>
-      <FormControl id="city">
-        <FormLabel>City</FormLabel>
-        <Select focusBorderColor="brand.blue" placeholder="Select city">
-          <option value="california">California</option>
-          <option value="washington">Washington</option>
-          <option value="toronto">Toronto</option>
-          <option value="newyork" selected>
-            New York
-          </option>
-          <option value="london">London</option>
-          <option value="netherland">Netherland</option>
-          <option value="poland">Poland</option>
-        </Select>
-      </FormControl>
-      <FormControl id="country">
-        <FormLabel>Country</FormLabel>
-        <Select focusBorderColor="brand.blue" placeholder="Select country">
-          <option value="america" selected>
-            America
-          </option>
-          <option value="england">England</option>
-          <option value="poland">Poland</option>
-        </Select>
-      </FormControl>
-    </Grid>
-  )
-}
+    <Box p={4}>
+      <VStack spacing={8} align="stretch">
+        <Box as="form">
+          <VStack spacing={4}>
+            <Grid templateColumns="repeat(2, 1fr)" gap={4} width="full">
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Họ và tên</FormLabel>
+                  <Input
+                    name="fullName"
+                    value={userData.fullName}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </GridItem>
 
-export default AccountSettings
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    name="email"
+                    type="email"
+                    value={userData.email}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Số điện thoại</FormLabel>
+                  <Input
+                    name="phone"
+                    value={userData.phone}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Ngày sinh</FormLabel>
+                  <Input
+                    name="dateOfBirth"
+                    type="date"
+                    value={userData.dateOfBirth}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </GridItem>
+            </Grid>
+
+            <FormControl mt={4}>
+              <FormLabel>Địa chỉ</FormLabel>
+              <Input
+                name="address"
+                value={userData.address}
+                onChange={handleInputChange}
+              />
+            </FormControl>
+          </VStack>
+        </Box>
+      </VStack>
+    </Box>
+  );
+};
+
+export default AccountSettings;
