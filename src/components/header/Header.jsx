@@ -1,22 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import MobileMenu from '../MobileMenu/MobileMenu'
 import { totalPrice } from "../../utils";
-import { connect, useSelector, useDispatch } from "react-redux";
-import { removeFromCart } from "../../store/actions/action";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { Box, VStack, Link as ChakraLink, useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../store/actions/action";
 
 const Header = (props) => {
     const [menuActive, setMenuState] = useState(false);
     const [cartActive, setcartState] = useState(false);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
-    const toast = useToast();
+    const [carts, setCarts] = useState([]);
+
+    // Load sản phẩm từ localStorage khi component mount
+    useEffect(() => {
+        const loadCartFromLocalStorage = () => {
+            try {
+                const savedCart = localStorage.getItem('cartItems');
+                if (savedCart) {
+                    const parsedCart = JSON.parse(savedCart);
+                    setCarts(parsedCart);
+                } else {
+                    setCarts([]);
+                }
+            } catch (error) {
+                console.error('Lỗi khi load giỏ hàng từ localStorage:', error);
+                setCarts([]);
+            }
+        };
+
+        loadCartFromLocalStorage();
+    }, []);
 
     const SubmitHandler = (e) => {
         e.preventDefault()
@@ -26,28 +36,16 @@ const Header = (props) => {
         window.scrollTo(10, 0);
     }
 
-    const handleLogout = async () => {
+    // Xử lý xóa sản phẩm khỏi giỏ hàng
+    const removeFromCart = (itemId) => {
         try {
-            await dispatch(logout());
-            toast({
-                title: "Đăng xuất thành công.",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-            });
-            navigate("/login");
+            const updatedCart = carts.filter(item => item.id !== itemId);
+            setCarts(updatedCart);
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart));
         } catch (error) {
-            toast({
-                title: "Đăng xuất thất bại.",
-                description: error.message,
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            });
+            console.error('Lỗi khi cập nhật localStorage:', error);
         }
-    };
-
-    const { carts } = props;
+    }
 
     return (
         <header id="header">
@@ -138,24 +136,6 @@ const Header = (props) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <li className="menu-item-has-children user-profile-menu-item">
-                                        <Link onClick={ClickHandler} to="#" className="user-profile-toggle-btn">
-                                            <FontAwesomeIcon icon={faUser} />
-                                        </Link>
-                                        <ul className="sub-menu">
-                                            {user ? (
-                                                <>
-                                                    <li><Link onClick={ClickHandler} to="/user-profile">Thông tin cá nhân</Link></li>
-                                                    <li><Link onClick={() => { handleLogout(); ClickHandler(); }}>Đăng xuất</Link></li>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <li><Link onClick={ClickHandler} to="/login">Đăng Nhập</Link></li>
-                                                    <li><Link onClick={ClickHandler} to="/signup">Đăng Ký</Link></li>
-                                                </>
-                                            )}
-                                        </ul>
-                                    </li>
                                     <div className="mini-cart">
                                         <button className="cart-toggle-btn" onClick={() => setcartState(!cartActive)}>
                                             {" "}
@@ -171,39 +151,38 @@ const Header = (props) => {
                                                         <div className="mini-cart-item clearfix" key={crt}>
                                                             <div className="mini-cart-item-image">
                                                                 <span>
-                                                                    <img src={catItem.proImg} alt="icon" />
+                                                                    <img src={catItem.imageUrl} alt="icon" />
                                                                 </span>
                                                             </div>
                                                             <div className="mini-cart-item-des">
                                                                 <p>{catItem.title} </p>
                                                                 <span className="mini-cart-item-price">
-                                                                    ${catItem.price} x {" "} {catItem.qty}
+                                                                    {catItem.price} x {" "} {catItem.quantity}
                                                                 </span>
                                                                 <span className="mini-cart-item-quantity">
                                                                     <button
-                                                                        onClick={() =>
-                                                                            props.removeFromCart(catItem.id)
-                                                                        }
+                                                                        onClick={() => removeFromCart(catItem.id)}
                                                                         className="btn btn-sm btn-danger"
                                                                     >
                                                                         <i className="ti-close"></i>
                                                                     </button>{" "}
                                                                 </span>
+                                                                <p>{catItem.name}</p>
                                                             </div>
                                                         </div>
                                                     ))}
                                             </div>
                                             <div className="mini-cart-action clearfix">
-                                                <span className="mini-checkout-price">Subtotal: <span> ${totalPrice(carts)}</span></span>
+                                                <span className="mini-checkout-price">Tổng tiền: <span> {totalPrice(carts)}</span></span>
                                                 <div className="mini-btn">
-                                                    <Link to="/checkout" className="view-cart-btn s1">Checkout</Link>
-                                                    <Link to="/cart" className="view-cart-btn">View Cart</Link>
+                                                    <Link to="/checkout" className="view-cart-btn s1">Thanh toán</Link>
+                                                    <Link to="/cart" className="view-cart-btn">Giỏ hàng</Link>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="close-form">
-                                        <Link onClick={ClickHandler} className="theme-btn" to="/home">Shop Now</Link>
+                                        <Link onClick={ClickHandler} className="theme-btn" to="/shop">Quay lại mua hàng</Link>
                                     </div>
                                 </div>
                             </div>
@@ -214,27 +193,5 @@ const Header = (props) => {
         </header>
     )
 }
-const mapStateToProps = (state) => {
-    return {
-        carts: state.cartList.cart,
-    };
-};
 
-export default connect(mapStateToProps, { removeFromCart })(Header);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Header
