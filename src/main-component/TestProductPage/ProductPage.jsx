@@ -20,7 +20,7 @@ const ProductPage = () => {
   }, []);
 
   const handleAddToCart = (product) => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
     const existingItem = storedCart.find(item => item.productId === product.productId);
 
     let updatedCart;
@@ -37,12 +37,13 @@ const ProductPage = () => {
           productId: product.productId,
           name: product.name,
           imageUrl: product.imageUrl,
+          price: product.price,
           quantity: 1
         }
       ];
     }
 
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
     alert(`Đã thêm "${product.name}" vào giỏ hàng.`);
   };
 

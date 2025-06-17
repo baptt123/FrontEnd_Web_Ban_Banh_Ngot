@@ -19,13 +19,13 @@ const CartPage = () => {
   const [carts, setCarts] = useState([]);
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
     setCarts(storedCart);
   }, []);
 
   // Cập nhật localStorage mỗi khi carts thay đổi
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(carts));
+    localStorage.setItem('cartItems', JSON.stringify(carts));
   }, [carts]);
 
   const incrementQuantity = (id) => {
