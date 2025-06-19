@@ -9,6 +9,7 @@ import ServiceSinglePage from '../ServiceSinglePage/ServiceSinglePage';
 import TeamPage from '../TeamPage/TeamPage';
 import TeamSinglePage from '../TestimonialPage/TestimonialPage';
 import ShopPage from '../ShopPage'
+import ShopDetailPage from '../ShopPage/product-detail'
 import ProductSinglePage from '../ProductSinglePage';
 import CartPage from '../CartPage';
 import CheckoutPage from '../CheckoutPage';
@@ -47,7 +48,8 @@ const AllRoute = () => {
                 <Route path="service-single/:slug" element={<ServiceSinglePage/>}/>
                 <Route path="team-page" element={<TeamPage/>}/>
                 <Route path="testimonial" element={<TeamSinglePage/>}/>
-                <Route path="shop" element={<ShopPage/>}/>
+                <Route path="products" element={<ShopPage/>}/>
+                <Route path="products/:id" element={<ShopDetailPage/>}/>
                 <Route path='shop-single/:slug' element={<ProductSinglePage/>}/>
                 <Route path='cart' element={<CartPage/>}/>
                 <Route path='checkout' element={<CheckoutPage/>}/>
