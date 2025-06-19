@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import axios from 'axios';
 import { addToCart } from "../../store/actions/action";
+import { Link } from 'react-router-dom';
 import './shop-page.css';
 import FilterSidebar from './filterSlideBar.jsx';
 
@@ -212,14 +213,16 @@ const ShopPageSection = ({ addToCart }) => {
                             <div className="myshop-product-single">
                                 <div className="myshop-product-item">
                                     <div className="myshop-product-img">
-                                        <img src={product.proImg} alt={product.name} />
+                                        <Link to={`/products/${product.productId}`}>
+                                            <img src={product.proImg} alt={product.name} />
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className="myshop-product-text">
                                     <h2>
-                                        <a href="#">
+                                        <Link to={`/products/${product.productId}`}>
                                             {product.name}
-                                        </a>
+                                        </Link>
                                     </h2>
                                     <div className="myshop-product-price">
                                         <ul>
