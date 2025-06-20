@@ -31,14 +31,14 @@ const HeaderTopS2 = () => {
                                         <i className="fi flaticon-placeholder"></i>
                                     </div>
                                     <div className="info-text">
-                                        <p>Nagata Kundo, 82-A, USA.</p>
+                                        <p>Viet Nam</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-4 col-12">
                             <ul className="social">
-                                <li>Visit our social pages</li>
+                                <li>Ghé thăm chúng tôi</li>
                                 <li><Link to="#"><i className="ti-facebook"></i></Link></li>
                                 <li><Link to="#"><i className="ti-twitter-alt"></i></Link></li>
                                 <li><Link to="#"><i className="ti-linkedin"></i></Link></li>

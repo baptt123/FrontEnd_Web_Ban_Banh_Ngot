@@ -66,54 +66,54 @@ const Header = (props) => {
                                 <div id="navbar" className="collapse navbar-collapse navigation-holder">
                                     <button className="menu-close"><i className="ti-close"></i></button>
                                     <ul className="nav navbar-nav mb-2 mb-lg-0">
-                                        <li className="menu-item-has-children">
-                                            <Link onClick={ClickHandler} to="/#">Home</Link>
-                                            <ul className="sub-menu">
-                                                <li><Link onClick={ClickHandler} to="/home">Home style 1</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/home-2">Home style 2</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/home-3">Home style 3</Link></li>
-                                            </ul>
-                                        </li>
-                                        <li><Link onClick={ClickHandler} to="/about">About</Link></li>
+                                        {/*<li className="menu-item-has-children">*/}
+                                        {/*    <Link onClick={ClickHandler} to="/#">Home</Link>*/}
+                                        {/*    <ul className="sub-menu">*/}
+                                        {/*        <li><Link onClick={ClickHandler} to="/home">Home style 1</Link></li>*/}
+                                        {/*        <li><Link onClick={ClickHandler} to="/home-2">Home style 2</Link></li>*/}
+                                        {/*        <li><Link onClick={ClickHandler} to="/home-3">Home style 3</Link></li>*/}
+                                        {/*    </ul>*/}
+                                        {/*</li>*/}
+                                        <li><Link onClick={ClickHandler} to="/about">Về chúng toi</Link></li>
                                         <li className="menu-item-has-children">
                                             <Link onClick={ClickHandler} to="#">Pages</Link>
                                             <ul className="sub-menu">
-                                                <li><Link onClick={ClickHandler} to="/services">Services</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/service-single/Agriculture-Products">Services single</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/team">Team</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/testimonial">Testimonial</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/login">Login</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/404">404 Error</Link></li>
+                                                <li><Link onClick={ClickHandler} to="/services">Dịch vụ</Link></li>
+                                                {/*<li><Link onClick={ClickHandler} to="/service-single/Agriculture-Products">Services single</Link></li>*/}
+                                                {/*<li><Link onClick={ClickHandler} to="/team">Team</Link></li>*/}
+                                                <li><Link onClick={ClickHandler} to="/testimonial">Khách hang moi</Link></li>
+                                                <li><Link onClick={ClickHandler} to="/login">Đăng nhap</Link></li>
+                                                {/*<li><Link onClick={ClickHandler} to="/404">404 Error</Link></li>*/}
                                             </ul>
                                         </li>
                                         <li className="menu-item-has-children">
-                                            <Link onClick={ClickHandler} to="#">Shop</Link>
+                                            <Link onClick={ClickHandler} to="#">Sản phẩm</Link>
                                             <ul className="sub-menu">
-                                                <li><Link onClick={ClickHandler} to="/products">Shop</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/cart">Cart</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/checkout">Checkout</Link></li>
+                                                <li><Link onClick={ClickHandler} to="/products">Sản phẩm</Link></li>
+                                                <li><Link onClick={ClickHandler} to="/cart">Giỏ hàng</Link></li>
+                                                <li><Link onClick={ClickHandler} to="/checkout">Thanh toán</Link></li>
                                             </ul>
                                         </li>
-                                        <li className="menu-item-has-children">
-                                            <Link onClick={ClickHandler} to="#">Blog</Link>
-                                            <ul className="sub-menu">
-                                                <li><Link onClick={ClickHandler} to="/blog">Blog right sidebar</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/blog-left-sidebar">Blog left sidebar</Link></li>
-                                                <li><Link onClick={ClickHandler} to="/blog-fullwidth">Blog fullwidth</Link></li>
-                                                <li className="menu-item-has-children">
-                                                    <Link onClick={ClickHandler} to="#">Blog details</Link>
-                                                    <ul className="sub-menu">
-                                                        <li><Link onClick={ClickHandler} to="/blog-single/Why-Industry-Are-A-Juicy-Target-For-Cyberattack">Blog details right sidebar</Link>
-                                                        </li>
-                                                        <li><Link onClick={ClickHandler} to="/blog-single-left-sidebar/Why-Industry-Are-A-Juicy-Target-For-Cyberattack">Blog details left
-                                                            sidebar</Link></li>
-                                                        <li><Link onClick={ClickHandler} to="/blog-single-fullwidth/Why-Industry-Are-A-Juicy-Target-For-Cyberattack">Blog details
-                                                            fullwidth</Link></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><Link onClick={ClickHandler} to="/contact">Contact</Link></li>
+                                        {/*<li className="menu-item-has-children">*/}
+                                        {/*    <Link onClick={ClickHandler} to="#">Blog</Link>*/}
+                                        {/*    <ul className="sub-menu">*/}
+                                        {/*        <li><Link onClick={ClickHandler} to="/blog">Blog right sidebar</Link></li>*/}
+                                        {/*        <li><Link onClick={ClickHandler} to="/blog-left-sidebar">Blog left sidebar</Link></li>*/}
+                                        {/*        <li><Link onClick={ClickHandler} to="/blog-fullwidth">Blog fullwidth</Link></li>*/}
+                                        {/*        <li className="menu-item-has-children">*/}
+                                        {/*            <Link onClick={ClickHandler} to="#">Blog details</Link>*/}
+                                        {/*            <ul className="sub-menu">*/}
+                                        {/*                <li><Link onClick={ClickHandler} to="/blog-single/Why-Industry-Are-A-Juicy-Target-For-Cyberattack">Blog details right sidebar</Link>*/}
+                                        {/*                </li>*/}
+                                        {/*                <li><Link onClick={ClickHandler} to="/blog-single-left-sidebar/Why-Industry-Are-A-Juicy-Target-For-Cyberattack">Blog details left*/}
+                                        {/*                    sidebar</Link></li>*/}
+                                        {/*                <li><Link onClick={ClickHandler} to="/blog-single-fullwidth/Why-Industry-Are-A-Juicy-Target-For-Cyberattack">Blog details*/}
+                                        {/*                    fullwidth</Link></li>*/}
+                                        {/*            </ul>*/}
+                                        {/*        </li>*/}
+                                        {/*    </ul>*/}
+                                        {/*</li>*/}
+                                        <li><Link onClick={ClickHandler} to="/contact">Liên hệ</Link></li>
                                     </ul>
                                 </div>
                             </div>

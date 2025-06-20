@@ -48,10 +48,7 @@ const Footer = (props) => {
                                     <div className="logo widget-title">
                                         <img src={logo} alt="blog" />
                                     </div>
-                                    <p>It was popularised in the 1960s with the
-                                        release of Letraset sheets containing Lorem
-                                        passages and more recently with desktop
-                                        publishing software like including.</p>
+                                    <p>Không có thông tin chinh xac</p>
                                     <div className="social-widget">
                                         <ul>
                                             <li><Link onClick={ClickHandler} to="#"><i className="ti-facebook" aria-hidden="true"></i></Link></li>
@@ -66,29 +63,29 @@ const Footer = (props) => {
                             <div className="col col-lg-3 col-md-6 col-sm-12 col-12">
                                 <div className="widget link-widget">
                                     <div className="widget-title">
-                                        <h3>Quick Links</h3>
+                                        <h3>Liên ket nhanh</h3>
                                     </div>
                                     <ul>
-                                        <li><Link onClick={ClickHandler} to="/about">About Us</Link></li>
-                                        <li><Link onClick={ClickHandler} to="/blog">Newsroom </Link></li>
-                                        <li><Link onClick={ClickHandler} to="/checkout">Checkout</Link></li>
-                                        <li><Link onClick={ClickHandler} to="/product">Product</Link></li>
-                                        <li><Link onClick={ClickHandler} to="/contact">Contact Us</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/about">Về chúng tôi</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/blog">Tin tuc</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/checkout">Thanh toán</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/product">Sản pham</Link></li>
+                                        <li><Link onClick={ClickHandler} to="/contact">Lien he</Link></li>
                                     </ul>
                                 </div>
                             </div>
                             <div className="col col-lg-3 col-md-6 col-sm-12 col-12">
                                 <div className="widget wpo-contact-widget">
                                     <div className="widget-title">
-                                        <h3>Contact</h3>
+                                        <h3>Lien he</h3>
                                     </div>
                                     <div className="contact-ft">
                                         <ul>
-                                            <li><i className="fi flaticon-placeholder"></i>7 Green Lake Street Crawfordsville,
-                                                IN 47933
+                                            <li><i className="fi flaticon-placeholder"></i>
+                                                Chưa xác định
                                             </li>
-                                            <li><i className="fi flaticon-phone-call"></i>+1 800 123 456 789</li>
-                                            <li><i className="fi flaticon-email"></i>Organtio@gmail.com</li>
+                                            <li><i className="fi flaticon-phone-call"></i>+1 334 568 774</li>
+                                            <li><i className="fi flaticon-email"></i>bapttan123@gmail.com</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -96,9 +93,9 @@ const Footer = (props) => {
                             <div className="col col-lg-3 col-md-6 col-sm-12 col-12">
                                 <div className="widget newsletter-widget">
                                     <div className="widget-title">
-                                        <h3>Newsletter</h3>
+                                        <h3>Báo cáo</h3>
                                     </div>
-                                    <p>You will be notified when somthing new will be appear.</p>
+                                    <p>Bạn sẽ được thông báo mỗi khi có cập nhật mới.</p>
                                     <form onSubmit={handleSubmit}>
                                         <div className="input-1">
                                             <input
@@ -128,13 +125,13 @@ const Footer = (props) => {
                     <div className="container">
                         <div className="row align-items-center">
                             <div className="col-lg-6 col-md-12  col-12">
-                                <p className="copyright">Copyright &copy;<span>2024</span>
+                                <p className="copyright">Copyright &copy;<span>2025</span>
                                     <span className="copyright-icon">|</span> All Rights Reserved.
                                 </p>
                             </div>
                             <div className="col-lg-6 col-md-12  col-12">
-                                <p className="link"><Link onClick={ClickHandler} to="/blog">Term and Service</Link> <span>||</span> <a
-                                    href="blog">Privacy Policy</a></p>
+                                <p className="link"><Link onClick={ClickHandler} to="/blog"></Link> Điều khoản<span>||</span> <a
+                                    href="blog">Chinh sách</a></p>
                             </div>
                         </div>
                     </div>

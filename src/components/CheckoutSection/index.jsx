@@ -1,52 +1,32 @@
-import React, {useRef, useState, useEffect} from 'react';
+// ==== Các thư viện và hook ====
+import React, { useRef, useState, useEffect } from 'react';
 import {
-    Box,
-    Grid,
-    Button,
-    Input,
-    Radio,
-    RadioGroup,
-    Table,
-    Tbody,
-    Tr,
-    Td,
-    Text,
-    Stack,
-    Container,
-    Collapse,
-    FormControl,
-    FormLabel,
-    VStack,
-    ChakraProvider,
-    extendTheme,
-    useToast,
-    Spinner,
+    Box, Grid, Button, Input, Radio, RadioGroup, Table, Tbody, Tr, Td, Text, Stack,
+    Container, Collapse, FormControl, FormLabel, VStack, ChakraProvider, extendTheme,
+    useToast, Spinner
 } from '@chakra-ui/react';
-import {ChevronDownIcon, ChevronUpIcon} from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
-// Error Boundary Component
+// ==== Thành phần xử lý lỗi ====
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {hasError: false};
+        this.state = { hasError: false };
     }
 
     static getDerivedStateFromError(error) {
-        return {hasError: true};
+        return { hasError: true };
     }
 
     componentDidCatch(error, errorInfo) {
-        console.error('Error:', error);
-        console.error('Error Info:', errorInfo);
+        console.error('Lỗi:', error, errorInfo);
     }
 
     render() {
         if (this.state.hasError) {
             return (
                 <Box p={3} textAlign="center">
-                    <Text fontSize="xl" color="red.500">
-                        Something went wrong. Please try again later.
-                    </Text>
+                    <Text fontSize="xl" color="red.500">Đã xảy ra lỗi. Vui lòng thử lại sau.</Text>
                 </Box>
             );
         }
@@ -54,8 +34,8 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-// PayPal Button Component (ĐÃ CẬP NHẬT)
-const PaypalButton = ({cartTotal, cartList, billingDetails, onSuccess, onError}) => {
+// ==== Nút thanh toán PayPal ====
+const PaypalButton = ({ cartTotal, cartList, billingDetails, onSuccess, onError }) => {
     const paypalRef = useRef(null);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -83,14 +63,12 @@ const PaypalButton = ({cartTotal, cartList, billingDetails, onSuccess, onError})
             };
             script.onerror = () => {
                 if (isMounted) {
-                    setError('Failed to load PayPal SDK');
+                    setError('Không tải được PayPal');
                     setIsLoading(false);
                     toast({
-                        title: "PayPal Error",
-                        description: "Failed to load PayPal payment system",
-                        status: "error",
-                        duration: 5000,
-                        isClosable: true
+                        title: "Lỗi PayPal",
+                        description: "Không thể tải hệ thống thanh toán PayPal",
+                        status: "error", duration: 5000, isClosable: true
                     });
                 }
             };
@@ -108,360 +86,209 @@ const PaypalButton = ({cartTotal, cartList, billingDetails, onSuccess, onError})
             try {
                 paypalRef.current.innerHTML = '';
                 window.paypal.Buttons({
-                    style: {layout: 'vertical', color: 'silver', shape: 'rect', tagline: false, height: 45},
+                    style: { layout: 'vertical', color: 'silver', shape: 'rect', height: 45 },
                     createOrder: async () => {
-                        console.log("Creating order with details:", {cartTotal, cartList, billingDetails});
-                        try {
-                            const payload = {cartTotal, cartList, billingDetails};
-                            const response = await fetch("http://localhost:8080/api/paypal/create-paypal-order", {
-                                method: "POST",
-                                headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify(payload)
-                            });
-                            if (!response.ok) {
-                                const errorData = await response.json();
-                                throw new Error(errorData.message || 'Failed to create PayPal order');
-                            }
-                            const order = await response.json();
-                            console.log("Order created on backend, PayPal Order ID:", order.id);
-                            return order.id;
-                        } catch (error) {
-                            toast({
-                                title: "Payment Error",
-                                description: error.message || "Failed to create PayPal order.",
-                                status: "error",
-                                duration: 5000,
-                                isClosable: true
-                            });
-                            throw error;
-                        }
+                        const payload = { cartTotal, cartList, billingDetails };
+                        const res = await fetch("http://localhost:8080/api/paypal/create-paypal-order", {
+                            method: "POST",
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!res.ok) throw new Error("Không thể tạo đơn PayPal");
+                        const order = await res.json();
+                        return order.id;
                     },
                     onApprove: async (data) => {
                         try {
-                            const response = await fetch(`http://localhost:8080/api/paypal/capture-paypal-order?orderId=${data.orderID}`, {
+                            const res = await fetch(`http://localhost:8080/api/paypal/capture-paypal-order?orderId=${data.orderID}`, {
                                 method: "POST",
-                                headers: {'Content-Type': 'application/json'},
+                                headers: { 'Content-Type': 'application/json' }
                             });
-                            if (!response.ok) {
-                                const errorData = await response.json();
-                                throw new Error(errorData.message || 'Failed to capture payment');
-                            }
+                            if (!res.ok) throw new Error("Không thể xử lý thanh toán");
                             toast({
-                                title: "Payment Successful",
-                                description: "Your PayPal payment has been processed!",
-                                status: "success",
-                                duration: 5000,
-                                isClosable: true
+                                title: "Thanh toán thành công",
+                                description: "Bạn đã thanh toán qua PayPal!",
+                                status: "success", duration: 5000, isClosable: true
                             });
-                            if (onSuccess) onSuccess(data);
-                            setTimeout(() => {
-                                window.location.href = "http://localhost:5173";
-                            }, 1000);
-                        } catch (error) {
+                            onSuccess?.(data);
+                            setTimeout(() => window.location.href = "http://localhost:5173", 1000);
+                        } catch (err) {
                             toast({
-                                title: "Payment Failed",
-                                description: error.message || "Failed to process payment.",
-                                status: "error",
-                                duration: 5000,
-                                isClosable: true
+                                title: "Lỗi thanh toán",
+                                description: err.message,
+                                status: "error", duration: 5000, isClosable: true
                             });
-                            if (onError) onError(error);
+                            onError?.(err);
                         }
                     },
                     onError: (err) => {
                         toast({
-                            title: "PayPal Error",
-                            description: "An error occurred with PayPal.",
-                            status: "error",
-                            duration: 5000,
-                            isClosable: true
+                            title: "Lỗi PayPal",
+                            description: "Đã có lỗi xảy ra trong quá trình thanh toán.",
+                            status: "error", duration: 5000, isClosable: true
                         });
-                        if (onError) onError(err);
+                        onError?.(err);
                     },
                     onCancel: () => {
                         toast({
-                            title: "Payment Cancelled",
-                            description: "PayPal payment was cancelled.",
-                            status: "warning",
-                            duration: 3000,
-                            isClosable: true
+                            title: "Hủy thanh toán",
+                            description: "Bạn đã hủy thanh toán qua PayPal.",
+                            status: "warning", duration: 3000, isClosable: true
                         });
                     }
                 }).render(paypalRef.current);
             } catch (err) {
-                setError('Error rendering PayPal button');
+                setError('Không thể hiển thị nút PayPal');
                 toast({
-                    title: "PayPal Error",
-                    description: "Failed to render PayPal button",
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true
+                    title: "Lỗi PayPal",
+                    description: "Không thể hiển thị nút PayPal",
+                    status: "error", duration: 5000, isClosable: true
                 });
             }
         }
     }, [isScriptLoaded, cartTotal, cartList, billingDetails, onSuccess, onError, toast]);
 
-    if (isLoading) return <Box textAlign="center" py={4}><Spinner size="md" color="blue.500"/><Text mt={2} fontSize="sm"
-                                                                                                    color="gray.600">Loading
-        PayPal...</Text></Box>;
-    if (error) return <Box textAlign="center" py={4}><Text color="red.500" fontSize="sm">{error}</Text><Button size="sm"
-                                                                                                               mt={2}
-                                                                                                               onClick={() => window.location.reload()}
-                                                                                                               colorScheme="blue"
-                                                                                                               variant="outline">Retry</Button></Box>;
+    if (isLoading) return <Box textAlign="center" py={4}><Spinner color="blue.500" /><Text mt={2}>Đang tải PayPal...</Text></Box>;
+    if (error) return <Box textAlign="center" py={4}><Text color="red.500">{error}</Text><Button size="sm" mt={2} onClick={() => window.location.reload()} colorScheme="blue">Thử lại</Button></Box>;
 
-    return (
-        <Box maxW="100%" mt={4}>
-            <div ref={paypalRef} style={{maxWidth: '100%', minHeight: '45px'}}/>
-        </Box>
-    );
+    return <Box mt={4}><div ref={paypalRef} /></Box>;
 };
 
-// Custom theme
-const theme = extendTheme({
-    styles: {
-        global: {
-            body: {bg: 'gray.50'},
-        },
-    },
-});
-
-// Main Component (ĐÃ CẬP NHẬT)
+// ==== Giao diện thanh toán chính ====
 const CheckoutSection = () => {
-    const [cartList, setCartList] = useState([]);
     const toast = useToast();
-
-    const [tabs, setTabs] = useState({cupon: false, billing_adress: true, payment: true});
+    const [cartList, setCartList] = useState([]);
+    const [tabs, setTabs] = useState({ cupon: false, billing_adress: true, payment: true });
     const [forms, setForms] = useState({
         cupon_key: '',
-        fname: 'John',
-        lname: 'Doe',
-        country: 'Vietnam',
-        address: '123 Nguyen Hue, District 1',
-        email: 'john.doe@example.com',
+        fname: 'Nguyễn',
+        lname: 'Văn A',
+        country: 'Việt Nam',
+        address: '123 Nguyễn Huệ, Quận 1',
+        email: 'example@gmail.com',
         phone: '0901234567',
         payment_method: 'cash',
     });
 
     useEffect(() => {
-        const loadCartFromStorage = () => {
-            try {
-                const storedCart = localStorage.getItem('cartItems');
-                if (storedCart) {
-                    const parsedCart = JSON.parse(storedCart);
-                    const formattedCart = parsedCart.map(item => ({
-                        title: item.title || item.name || 'Unknown Product',
-                        price: parseFloat(item.price) || 0,
-                        quantity: parseInt(item.quantity) || 1,
-                        ...item
-                    }));
-                    setCartList(formattedCart);
-                } else {
-                    setCartList([]);
-                }
-            } catch (error) {
-                setCartList([]);
-            }
-        };
-        loadCartFromStorage();
-        const handleStorageChange = (e) => {
-            if (e.key === 'cartItems') loadCartFromStorage();
-        };
-        window.addEventListener('storage', handleStorageChange);
-        return () => window.removeEventListener('storage', handleStorageChange);
+        const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const format = storedCart.map(i => ({
+            ...i,
+            title: i.name || 'Sản phẩm',
+            price: parseFloat(i.price) || 0,
+            quantity: parseInt(i.quantity) || 1
+        }));
+        setCartList(format);
     }, []);
 
-    const handleTabChange = (tabName) => setTabs(prev => ({...prev, [tabName]: !prev[tabName]}));
-    const handleFormChange = (e) => {
-        const {name, value} = e.target;
-        setForms(prev => ({...prev, [name]: value}));
-    };
+    const handleFormChange = e => setForms({ ...forms, [e.target.name]: e.target.value });
+    const handleTabChange = tab => setTabs(prev => ({ ...prev, [tab]: !prev[tab] }));
 
     const validateForm = () => {
-        const requiredFields = ['fname', 'lname', 'address', 'email'];
-        const missingFields = requiredFields.filter(field => !forms[field]);
-        if (missingFields.length > 0) {
-            toast({
-                title: "Form Validation Error",
-                description: `Please fill in: ${missingFields.join(', ')}`,
-                status: "error",
-                duration: 5000,
-                isClosable: true
-            });
+        const missing = ['fname', 'lname', 'address', 'email'].filter(f => !forms[f]);
+        if (missing.length) {
+            toast({ title: "Thiếu thông tin", description: `Vui lòng điền: ${missing.join(', ')}`, status: "error", duration: 5000 });
             return false;
         }
         return true;
     };
-    //hàm tạo đơn  hàng
-    const buildOrderPayload = () => {
-        // const userId = localStorage.getItem('userId'); // Lấy userId từ localStorage hoặc nơi bạn lưu thông tin đăng nhập
-        const userId = 1 // Giả sử bạn có userId là 1, nếu có hệ thống đăng nhập thì lấy từ đó
-        const storeId = 1; // Bạn có thể lấy động nếu cần, ví dụ theo từng sản phẩm
-        return {
-            userId: Number(userId),
-            storeId: Number(storeId),
-            address: forms.address,
-            phone: forms.phone,
-            email: forms.email,
-            items: cartList.map(item => ({
-                productId: item.productId || item.id, // Tùy dữ liệu cart của bạn
-                quantity: item.quantity,
-                customization: item.customization || "",
-            })),
-        };
-    };
-    // === BỔ SUNG GẦN ĐẦU FILE HOẶC TRÊN HÀM handleCheckout ===
-    async function placeOrder(orderPayload) {
-        const response = await fetch("http://localhost:8080/api/orders/place-order", {
+
+    const buildOrderPayload = () => ({
+        userId: 1,
+        storeId: 1,
+        address: forms.address,
+        phone: forms.phone,
+        email: forms.email,
+        items: cartList.map(i => ({ productId: i.productId || i.id, quantity: i.quantity }))
+    });
+
+    const placeOrder = async (orderPayload) => {
+        const res = await fetch("http://localhost:8080/api/orders/place-order", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderPayload),
         });
-        if (!response.ok) {
-            let message = 'Failed to place order';
-            try { message = (await response.json()).message || message; } catch {}
-            throw new Error(message);
-        }
-        return response.json();
-    }
+        if (!res.ok) throw new Error("Không thể tạo đơn hàng");
+        return res.json();
+    };
+
     const handleCheckout = async () => {
         if (!validateForm()) return;
         try {
             const payload = buildOrderPayload();
             await placeOrder(payload);
-            toast({
-                title: "Order Placed",
-                description: "Your order has been placed successfully!",
-                status: "success",
-                duration: 5000,
-                isClosable: true
-            });
+            toast({ title: "Đặt hàng thành công", status: "success", duration: 5000 });
             localStorage.removeItem('cartItems');
-            setCartList([]);
-            setTimeout(() => {
-                window.location.href = "http://localhost:5173";
-            }, 1000);
-        } catch (error) {
-            toast({
-                title: "Order Failed",
-                description: error.message || "Failed to place order.",
-                status: "error",
-                duration: 5000,
-                isClosable: true
-            });
+            setTimeout(() => window.location.href = "http://localhost:5173", 1000);
+        } catch (err) {
+            toast({ title: "Thất bại", description: err.message, status: "error", duration: 5000 });
         }
     };
 
-    const handlePayPalSuccess = () => localStorage.removeItem('cartItems');
-    const handlePayPalError = () => {
-    };
-    const formatVND = (amount) => new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(amount);
-    const calculateSubTotal = (items) => items.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const calculateShipping = (subtotal) => subtotal * 0.1;
-    const calculateTax = (subtotal) => subtotal * 0.08;
-    const calculateTotal = (items) => calculateSubTotal(items) + calculateShipping(calculateSubTotal(items)) + calculateTax(calculateSubTotal(items));
-
-    const subTotal = calculateSubTotal(cartList);
-    const total = calculateTotal(cartList);
+    const formatVND = amount => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    const subTotal = cartList.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const shipping = subTotal * 0.1;
+    const tax = subTotal * 0.08;
+    const total = subTotal + tax + shipping;
 
     return (
-        <ChakraProvider theme={theme}>
+        <ChakraProvider theme={extendTheme({ styles: { global: { body: { bg: 'gray.50' } } } })}>
             <ErrorBoundary>
-                <Box py={10} className="checkoutWrapper">
+                <Box py={10}>
                     <Container maxW="container.xl">
-                        <Grid templateColumns={{base: "1fr", md: "repeat(2, 1fr)"}} gap={6}>
-                            {/* Left Column - Forms */}
+                        <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={6}>
+                            {/* Thông tin thanh toán */}
                             <VStack spacing={4}>
-                                <Box w="100%" bg="white" borderRadius="md" shadow="md">
-                                    <Button w="100%" onClick={() => handleTabChange('billing_adress')}
-                                            rightIcon={tabs.billing_adress ? <ChevronUpIcon/> : <ChevronDownIcon/>}
-                                            justifyContent="space-between" p={4} variant="ghost">Billing
-                                        Address</Button>
+                                <Box bg="white" borderRadius="md" shadow="md" w="100%">
+                                    <Button w="100%" onClick={() => handleTabChange('billing_adress')} rightIcon={tabs.billing_adress ? <ChevronUpIcon /> : <ChevronDownIcon />} justifyContent="space-between" p={4} variant="ghost">Thông tin giao hàng</Button>
                                     <Collapse in={tabs.billing_adress}>
-                                        <Box p={4}><VStack spacing={4}>
-                                            <Grid templateColumns="repeat(2, 1fr)" gap={4} w="100%">
-                                                <FormControl isRequired><FormLabel>First Name</FormLabel><Input
-                                                    name="fname" value={forms.fname}
-                                                    onChange={handleFormChange}/></FormControl>
-                                                <FormControl isRequired><FormLabel>Last Name</FormLabel><Input
-                                                    name="lname" value={forms.lname}
-                                                    onChange={handleFormChange}/></FormControl>
-                                                <FormControl isRequired><FormLabel>Address</FormLabel><Input
-                                                    name="address" value={forms.address}
-                                                    onChange={handleFormChange}/></FormControl>
-                                                <FormControl isRequired><FormLabel>Email</FormLabel><Input name="email"
-                                                                                                           type="email"
-                                                                                                           value={forms.email}
-                                                                                                           onChange={handleFormChange}/></FormControl>
+                                        <Box p={4}>
+                                            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                                                <FormControl><FormLabel>Họ</FormLabel><Input name="fname" value={forms.fname} onChange={handleFormChange} /></FormControl>
+                                                <FormControl><FormLabel>Tên</FormLabel><Input name="lname" value={forms.lname} onChange={handleFormChange} /></FormControl>
+                                                <FormControl><FormLabel>Địa chỉ</FormLabel><Input name="address" value={forms.address} onChange={handleFormChange} /></FormControl>
+                                                <FormControl><FormLabel>Email</FormLabel><Input name="email" type="email" value={forms.email} onChange={handleFormChange} /></FormControl>
                                             </Grid>
-                                        </VStack></Box>
+                                        </Box>
                                     </Collapse>
                                 </Box>
 
-                                <Box w="100%" bg="white" borderRadius="md" shadow="md">
-                                    <Button w="100%" onClick={() => handleTabChange('payment')}
-                                            rightIcon={tabs.payment ? <ChevronUpIcon/> : <ChevronDownIcon/>}
-                                            justifyContent="space-between" p={4} variant="ghost">Payment Method</Button>
+                                {/* Phương thức thanh toán */}
+                                <Box bg="white" borderRadius="md" shadow="md" w="100%">
+                                    <Button w="100%" onClick={() => handleTabChange('payment')} rightIcon={tabs.payment ? <ChevronUpIcon /> : <ChevronDownIcon />} justifyContent="space-between" p={4} variant="ghost">Phương thức thanh toán</Button>
                                     <Collapse in={tabs.payment}>
                                         <Box p={4}>
-                                            <RadioGroup name="payment_method" value={forms.payment_method}
-                                                        onChange={(value) => handleFormChange({
-                                                            target: {
-                                                                name: 'payment_method',
-                                                                value
-                                                            }
-                                                        })}>
-                                                <Stack><Radio value="cash">Cash on Delivery</Radio><Radio
-                                                    value="paypal">PayPal</Radio></Stack>
+                                            <RadioGroup value={forms.payment_method} onChange={(v) => setForms(prev => ({ ...prev, payment_method: v }))}>
+                                                <Stack>
+                                                    <Radio value="cash">Thanh toán khi nhận hàng</Radio>
+                                                    <Radio value="paypal">Thanh toán qua PayPal</Radio>
+                                                </Stack>
                                             </RadioGroup>
-
-                                            {forms.payment_method === 'paypal' && (
-                                                <PaypalButton cartTotal={total} cartList={cartList}
-                                                              billingDetails={forms} onSuccess={handlePayPalSuccess}
-                                                              onError={handlePayPalError}/>
-                                            )}
-
-                                            {forms.payment_method === 'cash' && (
-                                                <Button onClick={handleCheckout} colorScheme="blue" w="100%" mt={4}
-                                                        isDisabled={cartList.length === 0}>Place Order</Button>
-                                            )}
+                                            {forms.payment_method === 'paypal' && <PaypalButton cartTotal={total} cartList={cartList} billingDetails={forms} onSuccess={() => localStorage.removeItem('cartItems')} onError={() => {}} />}
+                                            {forms.payment_method === 'cash' && <Button onClick={handleCheckout} colorScheme="blue" w="100%" mt={4}>Đặt hàng</Button>}
                                         </Box>
                                     </Collapse>
                                 </Box>
                             </VStack>
 
-                            {/* Right Column - Cart Summary */}
+                            {/* Tóm tắt đơn hàng */}
                             <Box bg="white" p={6} borderRadius="md" shadow="md">
-                                <Text fontSize="2xl" mb={4}>Order Summary</Text>
+                                <Text fontSize="2xl" mb={4}>Tóm tắt đơn hàng</Text>
                                 {cartList.length === 0 ? (
-                                    <Text textAlign="center" color="gray.500" py={8}>Your cart is empty</Text>
+                                    <Text textAlign="center" color="gray.500">Giỏ hàng trống</Text>
                                 ) : (
                                     <Table variant="simple">
                                         <Tbody>
-                                            {cartList.map((item, index) => (
-                                                <Tr key={item.id || index}>
-                                                    <Td><Text fontWeight="medium">{item.title}</Text><Text fontSize="sm"
-                                                                                                           color="gray.500">Số
-                                                        lượng: {item.quantity}</Text></Td>
-                                                    <Td isNumeric><Text
-                                                        fontWeight="medium">{formatVND(item.price * item.quantity)}</Text></Td>
+                                            {cartList.map((item, idx) => (
+                                                <Tr key={idx}>
+                                                    <Td>{item.title} <br /><Text fontSize="sm" color="gray.500">Số lượng: {item.quantity}</Text></Td>
+                                                    <Td isNumeric>{formatVND(item.price * item.quantity)}</Td>
                                                 </Tr>
                                             ))}
-                                            <Tr borderTop="2px solid" borderColor="gray.200"><Td fontWeight="medium">Tổng
-                                                cộng</Td><Td isNumeric
-                                                             fontWeight="medium">{formatVND(subTotal)}</Td></Tr>
-                                            <Tr><Td>Thuế (8%)</Td><Td isNumeric>{formatVND(calculateTax(subTotal))}</Td></Tr>
-                                            <Tr><Td>Phí ship (10%)</Td><Td
-                                                isNumeric>{formatVND(calculateShipping(subTotal))}</Td></Tr>
-                                            <Tr borderTop="2px solid" borderColor="gray.200"><Td fontWeight="bold"
-                                                                                                 fontSize="lg">Total</Td><Td
-                                                isNumeric fontWeight="bold" fontSize="lg"
-                                                color="blue.600">{formatVND(total)}</Td></Tr>
+                                            <Tr><Td>Tạm tính</Td><Td isNumeric>{formatVND(subTotal)}</Td></Tr>
+                                            <Tr><Td>Thuế (8%)</Td><Td isNumeric>{formatVND(tax)}</Td></Tr>
+                                            <Tr><Td>Phí giao hàng (10%)</Td><Td isNumeric>{formatVND(shipping)}</Td></Tr>
+                                            <Tr><Td fontWeight="bold">Tổng cộng</Td><Td isNumeric fontWeight="bold" color="blue.600">{formatVND(total)}</Td></Tr>
                                         </Tbody>
                                     </Table>
                                 )}
