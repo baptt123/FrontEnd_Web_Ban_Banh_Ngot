@@ -13,7 +13,7 @@ const testimonials = [
     {
         id: '01',
         img: Img1,
-        Des: " “It uses a dictionary of over 200 Latin words, combined with handful the model sentence structures, to generate lorem ipsum which looks reasonable.The generated lorem ipsum is therefore always free from repetition sentence structures, tom generate lorem ipsum which looks..",
+        Des:  "Khong xac dinh",
         title: 'Modern Sater',
         sub: "CEO of Digital Studio",
     },
@@ -21,14 +21,14 @@ const testimonials = [
     {
         id: '02',
         img: Img2,
-        Des: " “It uses a dictionary of over 200 Latin words, combined with handful the model sentence structures, to generate lorem ipsum which looks reasonable.The generated lorem ipsum is therefore always free from repetition sentence structures, tom generate lorem ipsum which looks..",
+        Des: " Khong xac dinh",
         title: 'Marry Jenefer',
         sub: "CEO Of Golden Bravo",
     },
     {
         id: '03',
         img: Img3,
-        Des: " “It uses a dictionary of over 200 Latin words, combined with handful the model sentence structures, to generate lorem ipsum which looks reasonable.The generated lorem ipsum is therefore always free from repetition sentence structures, tom generate lorem ipsum which looks..",
+        Des: " Khong xac dinh",
         title: 'William Robert',
         sub: "CEO Of Bexima",
     },
@@ -60,7 +60,7 @@ const Testimonial = (props) => {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-                        <SectionTitle subtitle={'CLIENT TESTIMONIAL'} title={'happy customer'} />
+                        <SectionTitle subtitle={'Khách hàng mới'} title={'Chúc mừng khách hàng mới'} />
                     </div>
                 </div>
                 <div className="orico-testimonial-wrap">

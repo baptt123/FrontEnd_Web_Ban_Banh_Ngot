@@ -16,7 +16,7 @@ const AboutPage = () => {
         <Fragment>
             <HeaderTop />
             <Navbar hclass={'wpo-site-header'} Logo={Logo} />
-            <PageTitle pageTitle={'About Us'} pagesub={'About'} />
+            <PageTitle pageTitle={'Về chúng tôi'} pagesub={'About'} />
             <About hclass={'orico-about-section section-padding'} />
             <FunFact hclass={'orico-fun-fact-section'} />
             <Testimonial />

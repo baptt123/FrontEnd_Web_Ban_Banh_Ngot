@@ -14,7 +14,7 @@ const BlogSection = (props) => {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-                        <SectionTitle subtitle={'BLOG AND ARTICE'} title={'LATEST BLOG and article.'} />
+                        <SectionTitle subtitle={'Bài viết'} title={'Mới nhất'} />
                     </div>
                 </div>
                 <div className="orico-blog-wrap">

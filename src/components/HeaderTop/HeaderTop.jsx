@@ -26,7 +26,7 @@ const HeaderTop = () => {
                                    <FontAwesomeIcon icon={faPhone} style={{ color: '#63E6BE' }} />
                                 </div>
                                 <div className="info-text">
-                                    <span>Call Us:</span>
+                                    <span>Lien he</span>
                                     <p>00 567 458 796 47</p>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@ const HeaderTop = () => {
                                  <FontAwesomeIcon icon={faEnvelope} style={{color: "#63E6BE",}} />
                                 </div>
                                 <div className="info-text">
-                                    <span>E-mail Now:</span>
+                                    <span>Email</span>
                                     <p>infoorgco@gmail.com</p>
                                 </div>
                             </div>
@@ -44,8 +44,8 @@ const HeaderTop = () => {
                                  <FontAwesomeIcon icon={faLocationDot} style={{color: "#63E6BE",}} />
                                 </div>
                                 <div className="info-text">
-                                    <span>Our Location:</span>
-                                    <p>Nagata Kundo, 82-A, USA.</p>
+                                    <span>Dia chi:</span>
+                                    <p>Chua xac dinh</p>
                                 </div>
                             </div>
                         </div>

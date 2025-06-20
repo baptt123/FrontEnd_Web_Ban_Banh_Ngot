@@ -12,7 +12,7 @@ const CheckoutPage =({cartList}) => {
         <Fragment>
             <HeaderTop />
             <Navbar hclass={'wpo-site-header'} Logo={Logo} />
-            <PageTitle pageTitle={'Checkout'} pagesub={'Checkout'}/> 
+            <PageTitle pageTitle={'Thanh toán'} pagesub={'Checkout'}/>
             <CheckoutSection cartList={cartList}/>
             <Footer FooterShape={false} />
             <Scrollbar/>
