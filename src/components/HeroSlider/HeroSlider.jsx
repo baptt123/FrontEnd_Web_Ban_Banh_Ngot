@@ -55,14 +55,13 @@ const HeroSlider = () => {
                         <div className="container-fluid">
                             <div className="slide-content">
                                 <div className="slide-sub-title">
-                                    <p>“<span>100% PURE VEGETABLES</span>”</p>
+                                    <p>“<span>Bánh ngọt</span>”</p>
                                 </div>
                                 <div className="slide-title">
-                                    <h2>Organic Food <span>And</span> Vegetabls.</h2>
+                                    <h2>Bánh ngọt cho mọi nhà<span>And</span> </h2>
                                 </div>
                                 <div className="slide-text">
-                                    <p>Lorem Ipsum has been the industry's standard text since the printer took
-                                        galley make.</p>
+                                    <p>Bánh ngot</p>
                                 </div>
                                 <div className="slide-btns">
                                     <Link to="/about" className="theme-btn">Explore more</Link>

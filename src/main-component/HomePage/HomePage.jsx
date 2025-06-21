@@ -29,7 +29,7 @@ const HomePage = () => {
             <FunFact hclass={'orico-fun-fact-section'} />
             <ServiceSection hclass={"service_section section-padding"} />
             {/* <OfferSection /> */}
-            <ProductSection />
+            {/*<ProductSection />*/}
             {/* <TeamSection /> */}
             <PartnersSection />
             <Testimonial />
