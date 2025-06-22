@@ -1,15 +1,16 @@
-import AdminAddProduct from "../views/AdminAddProduct.jsx";
 import AdminProductList from "../views/AdminProductList.jsx";
+import AdminCategories from "../views/AdminCategories.jsx";
+import AdminUserList from "../views/AdminUserList.jsx";
 
 const routes = [
 
-  // {
-  //   path: "/userList",
-  //   name: "Danh sách người dùng",
-  //   icon: "ni ni-bullet-list-67 text-red",
-  //   component: <AdminUserList />,
-  //   layout: "/admin",
-  // },
+  {
+    path: "/userList",
+    name: "Danh sách người dùng",
+    icon: "ni ni-single-02 text-red",
+    component: <AdminUserList />,
+    layout: "/admin",
+  },
   {
     path: "/productList",
     name: "Danh sách sản phẩm",
@@ -18,10 +19,10 @@ const routes = [
     layout: "/admin",
   },
   {
-    path: "/addProduct",
-    name: "Thêm sản phẩm",
-    icon: "ni ni-single-02 text-yellow",
-    component: <AdminAddProduct/>,
+    path: "/categories",
+    name: "Quản lý danh mục",
+    icon: "ni ni-bullet-list-67 text-yellow",
+    component: <AdminCategories/>,
     layout: "/admin",
   },
   // {

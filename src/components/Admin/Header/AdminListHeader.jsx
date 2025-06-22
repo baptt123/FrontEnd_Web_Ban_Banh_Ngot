@@ -23,13 +23,13 @@ const UserHeader = () => {
           <Row style={{width:'100%'}}>
             <Col lg="7" md="10" style={{width:'100%'}}>
               <h1 className="display-2 text-white" style={{width:'100%', marginBottom:'100px'}}>Danh sách</h1>
-              <Button
-                color="info"
-                href="/admin/addProduct"
-                // onClick={(e) => e.preventDefault()}
-              >
-                Thêm
-              </Button>
+              {/*<Button*/}
+              {/*  color="info"*/}
+              {/*  href="/admin/addProduct"*/}
+              {/*  // onClick={(e) => e.preventDefault()}*/}
+              {/*>*/}
+              {/*  Thêm*/}
+              {/*</Button>*/}
             </Col>
           </Row>
         </Container>
