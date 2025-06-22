@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import { totalPrice } from '../../utils';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/actions/action';
 
 const Header = (props) => {
     const [menuActive, setMenuState] = useState(false);
     const [cartActive, setCartState] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [cartDetails, setCartDetails] = useState([]);
-    const [user, setUser] = useState(null);
+    const user = useSelector(state => state.auth.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const savedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -38,20 +41,6 @@ const Header = (props) => {
             .catch(() => setCartDetails([]));
     }, [cartItems]);
 
-    // Lấy thông tin người dùng nếu đã đăng nhập
-    useEffect(() => {
-        fetch('http://localhost:8080/api/auth/me', {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error();
-                return res.json();
-            })
-            .then((data) => setUser(data))
-            .catch(() => setUser(null));
-    }, []);
-
     const ClickHandler = () => window.scrollTo(10, 0);
 
     const removeFromCart = (productId, storeId) => {
@@ -66,15 +55,8 @@ const Header = (props) => {
     };
 
     const handleLogout = () => {
-        fetch('http://localhost:8080/api/auth/logout', {
-            method: 'POST',
-            credentials: 'include',
-        })
-            .then(() => {
-                setUser(null);
-                navigate('/login');
-            })
-            .catch((err) => console.error('Logout failed:', err));
+        dispatch(logout());
+        navigate('/login');
     };
 
     return (
@@ -102,13 +84,6 @@ const Header = (props) => {
                                             <ul className="sub-menu">
                                                 <li><Link onClick={ClickHandler} to="/services">Dịch vụ</Link></li>
                                                 <li><Link onClick={ClickHandler} to="/testimonial">Khách hàng mới</Link></li>
-                                                {
-                                                    user ? (
-                                                        <li><span style={{ padding: '8px 20px', color: '#333' }}>Xin chào, {user.username}</span></li>
-                                                    ) : (
-                                                        <li><Link onClick={ClickHandler} to="/login">Đăng nhập</Link></li>
-                                                    )
-                                                }
                                             </ul>
                                         </li>
                                         <li className="menu-item-has-children">
@@ -120,11 +95,6 @@ const Header = (props) => {
                                             </ul>
                                         </li>
                                         <li><Link onClick={ClickHandler} to="/contact">Liên hệ</Link></li>
-                                        {
-                                            user && (
-                                                <li><button className="btn btn-sm btn-warning" onClick={handleLogout}>Đăng xuất</button></li>
-                                            )
-                                        }
                                     </ul>
                                 </div>
                             </div>
@@ -216,6 +186,29 @@ const Header = (props) => {
                                                     </div>
                                                 </div>
                                             )}
+                                        </div>
+                                    </div>
+
+                                    {/* Tài khoản */}
+                                    <div className="mini-account menu-item-has-children" style={{display: 'inline-block', position: 'relative', marginLeft: 16}}>
+                                        <div className="user-menu-trigger" style={{display: 'inline-block', position: 'relative'}}>
+                                            <button className="cart-toggle-btn user-toggle-btn" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}}>
+                                                <i className="fi flaticon-user" style={{fontSize: 30, color: '#232f4b'}}></i>
+                                            </button>
+                                            <ul className="account-sub-menu">
+                                                {!user ? (
+                                                    <>
+                                                        <li><Link onClick={ClickHandler} to="/login">Đăng nhập</Link></li>
+                                                        <li><Link onClick={ClickHandler} to="/register">Đăng ký</Link></li>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <li><Link onClick={ClickHandler} to="/user-profile">Thông tin cá nhân</Link></li>
+                                                        <li><Link onClick={ClickHandler} to="/forgot">Đổi mật khẩu</Link></li>
+                                                        <li><Link onClick={handleLogout} to="/">Đăng xuất</Link></li>
+                                                    </>
+                                                )}
+                                            </ul>
                                         </div>
                                     </div>
 

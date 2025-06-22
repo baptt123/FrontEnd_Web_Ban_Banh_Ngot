@@ -59,6 +59,12 @@ const SignUpPage = () => {
     });
   };
 
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   return (
     <Grid className="loginWrapper">
       <Grid className="loginForm">
