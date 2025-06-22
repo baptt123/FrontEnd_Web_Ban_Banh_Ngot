@@ -32,13 +32,14 @@ import Cover from "/src/components/CoverMainUserProfile/Cover.jsx";
 import Main from "/src/components/CoverMainUserProfile/Main.jsx";
 import ResetPasswordPage from "/src/main-component/ResetPasswordPage/index.jsx";
 import VerifyPage from "/src/main-component/VerifyPage/index.jsx";
-
+import AdminLayout from "../Admin/layouts/Admin.jsx";
 
 const AllRoute = () => {
 
     return (
         <div className="App">
             <Routes>
+                <Route path="/admin/*" element={<AdminLayout />} />
                 <Route path="/" element={<Homepage/>}/>
                 <Route path="home" element={<Homepage/>}/>
                 <Route path="home-2" element={<HomePage2/>}/>

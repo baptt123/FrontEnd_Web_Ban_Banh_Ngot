@@ -15,4 +15,7 @@ export default defineConfig({
             // ...svgr options (https://react-svgr.com/docs/options/)
         }),
     ],
+    css: {
+        devSourcemap: false
+    }
 });
