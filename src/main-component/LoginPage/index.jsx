@@ -54,9 +54,6 @@ const LoginPage = () => {
       .then(() => {
         navigate("/");
       })
-      .catch((error) => {
-        console.error("Google login error:", error);
-      });
   };
 
   useEffect(() => {

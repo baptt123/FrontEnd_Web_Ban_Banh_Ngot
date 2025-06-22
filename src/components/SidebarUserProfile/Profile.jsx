@@ -76,12 +76,13 @@ function Profile() {
         const cloudinaryData = await cloudinaryResponse.json();
         const newAvatarUrl = cloudinaryData.secure_url;
 
-        await dispatch(updateUserProfile({ avatarUrl: newAvatarUrl }));
-        toast({
-          title: "Cập nhật ảnh đại diện thành công.",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
+        dispatch(updateUserProfile({ avatarUrl: newAvatarUrl })).then(() => {
+          toast({
+            title: "Cập nhật ảnh đại diện thành công.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
         });
       } catch (error) {
         toast({

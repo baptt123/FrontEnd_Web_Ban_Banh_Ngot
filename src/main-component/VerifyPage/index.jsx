@@ -18,19 +18,12 @@ const VerifyPage = () => {
       toast.error("Thiếu token xác thực");
       return;
     }
-    dispatch(verifyEmail(token));
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    if (user === null && !loading && error) {
-      // verify thất bại
-      toast.error(error.message || "Xác thực thất bại");
-    }
-    if (user && !loading) {
+    dispatch(verifyEmail(token))
+      .then(() => {
       toast.success("Xác thực thành công, vui lòng đăng nhập");
       navigate("/login");
-    }
-  }, [user, loading, error, navigate]);
+    });
+  }, [dispatch, token]);
 
   return (
     <Grid className="loginWrapper">
