@@ -39,7 +39,7 @@ const HeroSlider = () => {
                                     <p>Bánh ngon nguyên chất.</p>
                                 </div>
                                 <div className="slide-btns">
-                                    <Link to="/about" className="theme-btn">Explore more</Link>
+                                    <Link to="/about" className="theme-btn">Khám phá thêm</Link>
                                 </div>
                             </div>
                         </div>

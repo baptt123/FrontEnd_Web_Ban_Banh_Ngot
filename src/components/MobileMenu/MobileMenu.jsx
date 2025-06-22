@@ -5,146 +5,202 @@ import Collapse from "@mui/material/Collapse";
 import { NavLink } from "react-router-dom";
 import './style.css';
 
+// const menus = [
+//     {
+//         id: 1,
+//         title: 'Home',
+//         link: '/home',
+//         submenu: [
+//             {
+//                 id: 11,
+//                 title: 'Home style 1',
+//                 link: '/home'
+//             },
+//             {
+//                 id: 12,
+//                 title: 'Home style 2',
+//                 link: '/home-2'
+//             },
+//             {
+//                 id: 13,
+//                 title: 'Home style 3',
+//                 link: '/home-3'
+//             },
+//
+//
+//         ]
+//     },
+//     {
+//         id: 88,
+//         title: 'About',
+//         link: '/about',
+//     },
+//     {
+//         id: 3,
+//         title: 'Pages',
+//         link: '#',
+//         submenu: [
+//             {
+//                 id: 31,
+//                 title: 'Services',
+//                 link: '/services',
+//             },
+//             {
+//                 id: 32,
+//                 title: 'Services single',
+//                 link: '/service-single/Agriculture-Products',
+//             },
+//             {
+//                 id: 33,
+//                 title: 'Team',
+//                 link: '/team',
+//             },
+//             {
+//                 id: 34,
+//                 title: 'Testimonial',
+//                 link: '/testimonial',
+//             },
+//             {
+//                 id: 35,
+//                 title: 'Login',
+//                 link: '/login',
+//             },
+//             {
+//                 id: 35,
+//                 title: '404 Error',
+//                 link: '/404',
+//             },
+//         ]
+//     },
+//
+//     {
+//         id: 44,
+//         title: 'Shop',
+//         link: '#',
+//         submenu: [
+//             {
+//                 id: 41,
+//                 title: 'Shop',
+//                 link: '/shop',
+//             },
+//             {
+//                 id: 42,
+//                 title: 'Shop Single',
+//                 link: '/shop-single/Fresh-key-Lime'
+//             },
+//             {
+//                 id: 43,
+//                 title: 'Cart',
+//                 link: '/cart'
+//             },
+//             {
+//                 id: 45,
+//                 title: 'Checkout',
+//                 link: '/checkout'
+//             },
+//         ]
+//     },
+//     {
+//         id: 5,
+//         title: 'Blog',
+//         link: '/blog',
+//         submenu: [
+//             {
+//                 id: 51,
+//                 title: 'Blog',
+//                 link: '/blog'
+//             },
+//             {
+//                 id: 52,
+//                 title: 'Blog Left sidebar',
+//                 link: '/blog-left-sidebar'
+//             },
+//             {
+//                 id: 53,
+//                 title: 'Blog full width',
+//                 link: '/blog-fullwidth'
+//             },
+//             {
+//                 id: 54,
+//                 title: 'Blog single',
+//                 link: '/blog-single/Why-Industry-Are-A-Juicy-Target-For'
+//             },
+//             {
+//                 id: 55,
+//                 title: 'Blog single Left sidebar',
+//                 link: '/blog-single-left-sidebar/Why-Industry-Are-A-Juicy-Target-For'
+//             },
+//             {
+//                 id: 56,
+//                 title: 'Blog single Left sidebar',
+//                 link: '/blog-single-fullwidth/Why-Industry-Are-A-Juicy-Target-For'
+//             },
+//         ]
+//     },
+//     {
+//         id: 88,
+//         title: 'Contact',
+//         link: '/contact',
+//     }
+//
+//
+// ]
+
 const menus = [
     {
         id: 1,
         title: 'Home',
         link: '/home',
         submenu: [
-            {
-                id: 11,
-                title: 'Home style 1',
-                link: '/home'
-            },
-            {
-                id: 12,
-                title: 'Home style 2',
-                link: '/home-2'
-            },
-            {
-                id: 13,
-                title: 'Home style 3',
-                link: '/home-3'
-            },
-          
-          
+            { id: 11, title: 'Home style 1', link: '/home' },
+            // { id: 12, title: 'Home style 2', link: '/home-2' },
+            // { id: 13, title: 'Home style 3', link: '/home-3' },
         ]
     },
-    {
-        id: 88,
-        title: 'About',
-        link: '/about',
-    },
+    { id: 88, title: 'About', link: '/about' },
     {
         id: 3,
         title: 'Pages',
         link: '#',
         submenu: [
-            {
-                id: 31,
-                title: 'Services',
-                link: '/services',
-            },
-            {
-                id: 32,
-                title: 'Services single',
-                link: '/service-single/Agriculture-Products',
-            },
-            {
-                id: 33,
-                title: 'Team',
-                link: '/team',
-            },
-            {
-                id: 34,
-                title: 'Testimonial',
-                link: '/testimonial',
-            },
-            {
-                id: 35,
-                title: 'Login',
-                link: '/login',
-            },
-            {
-                id: 35,
-                title: '404 Error',
-                link: '/404',
-            },
+            { id: 31, title: 'Services', link: '/services' },
+            // { id: 32, title: 'Services single', link: '/service-single/Agriculture-Products' },
+            // { id: 33, title: 'Team', link: '/team' },
+            { id: 34, title: 'Testimonial', link: '/testimonial' },
+            { id: 35, title: 'Login', link: '/login' },
+            { id: 36, title: '404 Error', link: '/404' },
         ]
     },
-  
     {
         id: 44,
         title: 'Shop',
         link: '#',
         submenu: [
-            {
-                id: 41,
-                title: 'Shop',
-                link: '/shop',
-            },
-            {
-                id: 42,
-                title: 'Shop Single',
-                link: '/shop-single/Fresh-key-Lime'
-            },
-            {
-                id: 43,
-                title: 'Cart',
-                link: '/cart'
-            },
-            {
-                id: 45,
-                title: 'Checkout',
-                link: '/checkout'
-            },
+            { id: 41, title: 'Shop', link: '/shop' },
+            // { id: 42, title: 'Shop Single', link: '/shop-single/Fresh-key-Lime' },
+            { id: 43, title: 'Cart', link: '/cart' },
+            { id: 45, title: 'Checkout', link: '/checkout' },
         ]
     },
-    {
-        id: 5,
-        title: 'Blog',
-        link: '/blog',
-        submenu: [
-            {
-                id: 51,
-                title: 'Blog',
-                link: '/blog'
-            },
-            {
-                id: 52,
-                title: 'Blog Left sidebar',
-                link: '/blog-left-sidebar'
-            },
-            {
-                id: 53,
-                title: 'Blog full width',
-                link: '/blog-fullwidth'
-            },
-            {
-                id: 54,
-                title: 'Blog single',
-                link: '/blog-single/Why-Industry-Are-A-Juicy-Target-For'
-            },
-            {
-                id: 55,
-                title: 'Blog single Left sidebar',
-                link: '/blog-single-left-sidebar/Why-Industry-Are-A-Juicy-Target-For'
-            },
-            {
-                id: 56,
-                title: 'Blog single Left sidebar',
-                link: '/blog-single-fullwidth/Why-Industry-Are-A-Juicy-Target-For'
-            },
-        ]
-    },
-    {
-        id: 88,
-        title: 'Contact',
-        link: '/contact',
-    }
+    // {
+    //     id: 5,
+    //     title: 'Blog',
+    //     link: '/blog',
+    //     submenu: [
+    //         { id: 51, title: 'Blog', link: '/blog' },
+    //         { id: 52, title: 'Blog Left sidebar', link: '/blog-left-sidebar' },
+    //         { id: 53, title: 'Blog full width', link: '/blog-fullwidth' },
+    //         { id: 54, title: 'Blog single', link: '/blog-single/Why-Industry-Are-A-Juicy-Target-For' },
+    //         { id: 55, title: 'Blog single Left sidebar', link: '/blog-single-left-sidebar/Why-Industry-Are-A-Juicy-Target-For' },
+    //         { id: 56, title: 'Blog single full width', link: '/blog-single-fullwidth/Why-Industry-Are-A-Juicy-Target-For' },
+    //     ]
+    // },
+    { id: 99, title: 'Contact', link: '/contact' }
+];
 
 
-]
+
+
 
 
 const MobileMenu = () => {

@@ -22,36 +22,36 @@ const Services = [
         icon: sion1,
         simage: img1,
         imag: Simg1,
-        title: 'Sản phẩm nông nghiệp',
+        title: 'Bánh kem',
         description: 'Chúng tôi có đội ngũ chuyên gia giàu kinh nghiệm, luôn sẵn sàng hỗ trợ bạn với chất lượng dịch vụ tốt nhất.',
-        slug: 'Agriculture-Products'
+        slug: 'Bánh kem'
     },
     {
         id: 2,
         icon: sion2,
         simage: img2,
         imag: Simg2,
-        title: 'Sản phẩm từ sữa',
+        title: 'Banh ngọt',
         description: 'Chúng tôi có đội ngũ chuyên gia giàu kinh nghiệm, luôn sẵn sàng hỗ trợ bạn với chất lượng dịch vụ tốt nhất.',
-        slug: 'Dairy-Products'
+        slug: 'Banh ngot'
     },
     {
         id: 3,
         icon: sion3,
         simage: img3,
         imag: Simg3,
-        title: 'Trái cây hữu cơ',
+        title: 'Banh ngọt',
         description: 'Chúng tôi có đội ngũ chuyên gia giàu kinh nghiệm, luôn sẵn sàng hỗ trợ bạn với chất lượng dịch vụ tốt nhất.',
-        slug: 'Organic-Fruits'
+        slug: 'Banh ngọt'
     },
     {
         id: 4,
         icon: sion4,
         simage: img4,
         imag: Simg4,
-        title: 'Rau củ tươi',
+        title: 'Banh healthy',
         description: 'Chúng tôi có đội ngũ chuyên gia giàu kinh nghiệm, luôn sẵn sàng hỗ trợ bạn với chất lượng dịch vụ tốt nhất.',
-        slug: 'Fresh-Vegetables'
+        slug: 'Banh healthy'
     }
 ];
 

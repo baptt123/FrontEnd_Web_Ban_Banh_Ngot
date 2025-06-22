@@ -92,7 +92,7 @@ const About = (props) => {
                                 margin: '20px 0',
                                 color: '#333'
                             }}>
-                                Kết nối của chúng tôi với trái cây và rau hữu cơ.
+                                Kết nối của chúng tôi với thế giới bánh ngọt đầy màu sắc
                             </h2>
 
                             <p style={{
@@ -101,7 +101,7 @@ const About = (props) => {
                                 color: '#666',
                                 marginBottom: '30px'
                             }}>
-                                Lorem Ipsum đã trở thành đoạn văn mẫu tiêu chuẩn của ngành in ấn kể từ khi một thợ in vô danh lấy một bản in mẫu và xáo trộn nó để tạo ra một quyển mẫu. Nó đã tồn tại qua hơn năm thế kỷ.
+                              Thế giới bánh kem đầy mau sac
                             </p>
 
                             <ul style={{
@@ -133,7 +133,7 @@ const About = (props) => {
                                             }}
                                         />
                                     </div>
-                                    <span>Nó đã tồn tại qua nhiều thế kỷ và vẫn tiếp tục phát triển.</span>
+                                    <span>Bánh kem tuyệt vời</span>
                                 </li>
                                 <li style={{
                                     display: 'flex',
@@ -158,7 +158,7 @@ const About = (props) => {
                                             }}
                                         />
                                     </div>
-                                    <span>Nó đã tồn tại qua nhiều thế kỷ và vẫn tiếp tục phát triển.</span>
+                                    <span>Chúng tôi ở day va luon muon doi ban</span>
                                 </li>
                             </ul>
 

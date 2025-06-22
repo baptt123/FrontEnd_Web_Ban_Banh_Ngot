@@ -14,7 +14,7 @@ import Testimonial from '../../components/Testimonial/Testimonial.jsx';
 // import BlogSection from '../../components/BlogSection/BlogSection.jsx';
 import Footer from '../../components/footer/Footer';
 import Scrollbar from '../../components/scrollbar/scrollbar';
-import Logo from '../../images/logo.svg'
+import Logo from '../../images/cupakery.png'
 
 const HomePage = () => {
     return (

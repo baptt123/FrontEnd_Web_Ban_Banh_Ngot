@@ -16,7 +16,7 @@ const ServiceSection = (props) => {
                 {SectionTitleShow &&  (
                 <div className="row justify-content-center">
                     <div className="col-lg-6">
-                        <SectionTitle subtitle={'BEST PRODUCT'} title={'LATEST PRODUCTS'} />
+                        <SectionTitle subtitle={'Các sản pham theo danh muc'} title={'Danh muc'} />
                     </div>
                 </div>
                 )}
