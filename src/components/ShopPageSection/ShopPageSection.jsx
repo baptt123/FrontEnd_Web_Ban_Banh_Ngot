@@ -79,7 +79,7 @@ const ShopPageSection = ({ addToCart }) => {
 
     const fetchStores = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/store');
+            const response = await axios.get('http://localhost:8080/api/list-store/all');
             setStores(response.data);
             console.log('Stores fetched:', response.data);
         } catch (error) {
