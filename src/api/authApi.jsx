@@ -7,10 +7,9 @@ const API_BASE = import.meta.env.VITE_API_ROOT;
 export const registerApi = async (data) => {
   try {
     const res = await axiosInstance.post(`${API_BASE}/auth/register`, data);
-    toast.success("Đăng ký thành công");
+    toast.success("Đăng ký thành công, vui lòng xác thực email !");
     return { success: true, data: res.data };
   } catch (err) {
-    toast.error(err.response?.data?.message || "Đăng ký thất bại");
     return { success: false, error: err.response?.data };
   }
 };
@@ -40,9 +39,6 @@ export const googleLoginApi = async (token) => {
     const res = await axiosInstance.post(`${API_BASE}/auth/google-login`, {
       token,
     });
-    if (res.data.user && !res.data.user.active) {
-      return { success: false, error: res.response?.data };
-    }
     return { success: true, data: res.data };
   } catch (error) {
     return { success: false, error: error.response?.data };
@@ -62,10 +58,7 @@ export const forgotPasswordApi = async (email) => {
   try {
     const res = await axiosInstance.post(
       `${API_BASE}/auth/forgot-password`,
-      null,
-      {
-        params: { email },
-      }
+      { email }
     );
     return { success: true, data: res.data };
   } catch (err) {

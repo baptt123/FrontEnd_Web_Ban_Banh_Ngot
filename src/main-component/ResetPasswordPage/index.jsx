@@ -1,4 +1,3 @@
-/* src/main-component/ResetPasswordPage/index.jsx */
 import React, { useState, useEffect } from "react";
 import { Grid, Box } from "@chakra-ui/react";
 import TextField from "@mui/material/TextField";

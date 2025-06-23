@@ -1646,8 +1646,9 @@ nav.navigation.navbar.navbar-expand-lg.navbar-light.sticky-header.sticky-on {
 		position: absolute;
 		content: "";
 		top: 100%;
-		left: 0;
-		width: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 150%;
 		height: 20px;
 	}
 }
